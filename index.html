@@ -50,9 +50,9 @@
                 radial-gradient(1px 1px at 130px 80px, #00f2fe, transparent);
             background-repeat: repeat;
             background-size: 200px 100px;
-            animation: stars 25s linear infinite;
+            animation: stars 22s linear infinite;
             z-index: -1;
-            opacity: 0.45;
+            opacity: 0.5;
         }
 
         @keyframes stars {
@@ -149,7 +149,7 @@
             background: rgba(255,255,255,0.25);
         }
 
-        /* HERO */
+        /* HERO - PHẦN CHÀO MỪNG SIÊU CHI TIẾT */
         .hero {
             height: 100vh;
             display: flex;
@@ -168,17 +168,17 @@
             bottom: 10%;
             left: 50%;
             transform: translateX(-50%);
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%);
-            filter: blur(80px);
+            width: 420px;
+            height: 420px;
+            background: radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 70%);
+            filter: blur(90px);
             z-index: 1;
-            animation: pulse-ring 6s ease-in-out infinite;
+            animation: pulse-ring 5s ease-in-out infinite;
         }
 
         @keyframes pulse-ring {
-            0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(0.9); }
-            50% { opacity: 1; transform: translateX(-50%) scale(1.15); }
+            0%, 100% { opacity: 0.3; transform: translateX(-50%) scale(0.85); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
         }
 
         .hero h1 {
@@ -189,7 +189,7 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
             animation: hero-glow 3s ease-in-out infinite alternate;
             filter: drop-shadow(0 0 60px rgba(59,130,246,0.8));
             position: relative;
@@ -201,6 +201,49 @@
         @keyframes hero-glow {
             from { filter: drop-shadow(0 0 30px rgba(59,130,246,0.6)); }
             to { filter: drop-shadow(0 0 80px rgba(139,92,246,1)); }
+        }
+
+        /* CHÀO MỪNG - TEXT LETTER BY LETTER SIÊU TỈ MỈ */
+        #welcomeSubtitle {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2.4rem, 6.5vw, 3.8rem);
+            font-weight: 800;
+            background: var(--primary-glow);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 50px rgba(0,242,254,0.9);
+            margin-bottom: 2.2rem;
+            letter-spacing: 6px;
+            line-height: 1.1;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+        }
+
+        .letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(40px) scale(0.6);
+            filter: blur(6px);
+            animation: letterPop 1.1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        @keyframes letterPop {
+            0% {
+                opacity: 0;
+                transform: translateY(40px) scale(0.6);
+                filter: blur(6px);
+            }
+            50% {
+                transform: translateY(-12px) scale(1.15);
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
         }
 
         #userStatus {
@@ -253,49 +296,13 @@
             box-shadow: 0 30px 70px rgba(139,92,246,0.8);
         }
 
-        /* SECTIONS */
-        section {
-            padding: 140px 5%;
-            max-width: 1480px;
-            margin: 0 auto;
-        }
+        /* CÁC PHẦN KHÁC GIỮ NGUYÊN (đã tối ưu hover trước đó) */
+        section { padding: 140px 5%; max-width: 1480px; margin: 0 auto; }
+        h2 { font-family: 'Orbitron', monospace; font-size: 4.2rem; text-align: center; margin-bottom: 4.5rem; background: var(--primary-glow); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; position: relative; font-weight: 800; }
+        h2::after { content: ''; position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); width: 140px; height: 6px; background: var(--primary-glow); border-radius: 3px; box-shadow: 0 0 30px var(--primary-glow); }
 
-        h2 {
-            font-family: 'Orbitron', monospace;
-            font-size: 4.2rem;
-            text-align: center;
-            margin-bottom: 4.5rem;
-            background: var(--primary-glow);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-            font-weight: 800;
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: -18px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 140px;
-            height: 6px;
-            background: var(--primary-glow);
-            border-radius: 3px;
-            box-shadow: 0 0 30px var(--primary-glow);
-        }
-
-        /* GRID & CARDS - HOVER SIÊU MỊN */
-        .grid, .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 3rem;
-        }
-
-        .grid-2 {
-            grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
-        }
+        .grid, .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 3rem; }
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); }
 
         .card {
             background: var(--glass-dark);
@@ -322,15 +329,8 @@
             transition: 0.7s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .card:hover::before {
-            left: 120%;
-        }
-
-        .card:hover {
-            transform: translateY(-22px) scale(1.04);
-            box-shadow: 0 45px 90px rgba(59,130,246,0.4);
-            border-color: rgba(255,255,255,0.5);
-        }
+        .card:hover::before { left: 120%; }
+        .card:hover { transform: translateY(-22px) scale(1.04); box-shadow: 0 45px 90px rgba(59,130,246,0.4); border-color: rgba(255,255,255,0.5); }
 
         .card-icon {
             font-size: 4.8rem;
@@ -346,10 +346,6 @@
             filter: drop-shadow(0 0 50px currentColor);
         }
 
-        .card h3, .card p {
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
         .checkin-card { background: linear-gradient(135deg, rgba(16,185,129,0.18), rgba(34,197,94,0.1)); border-color: rgba(16,185,129,0.5); }
         .checkin-card .card-icon { color: #10b981; }
         .activity-card { background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(251,191,36,0.1)); border-color: rgba(245,158,11,0.5); }
@@ -357,37 +353,9 @@
         .achievement-card { background: linear-gradient(135deg, rgba(239,68,68,0.18), rgba(248,113,113,0.1)); border-color: rgba(239,68,68,0.5); }
         .achievement-card .card-icon { color: #ef4444; }
 
-        /* MESSAGE SYSTEM */
-        .msg-input {
-            max-width: 860px;
-            margin: 0 auto 4rem;
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        #msgInput {
-            flex: 1;
-            padding: 1.6rem 2.8rem;
-            border: none;
-            border-radius: 30px;
-            background: rgba(255,255,255,0.13);
-            color: white;
-            font-size: 1.25rem;
-            backdrop-filter: blur(25px);
-            min-width: 420px;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            border: 1px solid rgba(255,255,255,0.15);
-            will-change: box-shadow, transform;
-        }
-
-        #msgInput:focus {
-            outline: none;
-            box-shadow: 0 0 45px var(--card-glow);
-            transform: scale(1.03);
-            border-color: var(--accent-glow);
-        }
+        .msg-input { max-width: 860px; margin: 0 auto 4rem; display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+        #msgInput { flex: 1; padding: 1.6rem 2.8rem; border: none; border-radius: 30px; background: rgba(255,255,255,0.13); color: white; font-size: 1.25rem; backdrop-filter: blur(25px); min-width: 420px; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); border: 1px solid rgba(255,255,255,0.15); will-change: box-shadow, transform; }
+        #msgInput:focus { outline: none; box-shadow: 0 0 45px var(--card-glow); transform: scale(1.03); border-color: var(--accent-glow); }
 
         .btn-post {
             padding: 1.6rem 3.5rem;
@@ -416,22 +384,10 @@
             transition: 0.7s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .btn-post:hover:not(:disabled)::before {
-            left: 100%;
-        }
+        .btn-post:hover:not(:disabled)::before { left: 100%; }
+        .btn-post:hover:not(:disabled) { transform: scale(1.1); box-shadow: 0 25px 60px rgba(59,130,246,0.7); }
 
-        .btn-post:hover:not(:disabled) {
-            transform: scale(1.1);
-            box-shadow: 0 25px 60px rgba(59,130,246,0.7);
-        }
-
-        /* MESSAGES GRID */
-        .messages-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(410px, 1fr));
-            gap: 2.8rem;
-        }
-
+        .messages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(410px, 1fr)); gap: 2.8rem; }
         .msg-card {
             animation: msgSlideIn 0.8s cubic-bezier(0.23, 1, 0.32, 1);
             background: var(--glass-dark);
@@ -442,18 +398,13 @@
             box-shadow: 0 15px 45px rgba(0,0,0,0.3);
             will-change: transform, box-shadow;
         }
-
-        .msg-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 30px 70px rgba(139,92,246,0.3);
-        }
+        .msg-card:hover { transform: translateY(-12px); box-shadow: 0 30px 70px rgba(139,92,246,0.3); }
 
         @keyframes msgSlideIn {
             from { opacity: 0; transform: translateY(60px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* CHECKIN BUTTON */
         .checkin-btn {
             background: var(--success-glow);
             border: none;
@@ -475,6 +426,37 @@
         .checkin-btn:hover {
             transform: scale(1.05);
             box-shadow: 0 20px 50px rgba(16,185,129,0.7);
+        }
+
+        /* MUSIC VISUALIZER & AUDIO */
+        #musicVisualizer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: rgba(10,10,35,0.92);
+            display: none;
+            z-index: 999;
+            backdrop-filter: blur(25px);
+            align-items: flex-end;
+            padding: 0 5%;
+            gap: 6px;
+            box-shadow: 0 -10px 30px rgba(0,242,254,0.4);
+        }
+
+        .visualizer-bar {
+            width: 6px;
+            background: linear-gradient(to top, var(--accent-glow), #3b82f6, #ec4899);
+            border-radius: 9999px 9999px 0 0;
+            box-shadow: 0 0 12px var(--accent-glow);
+            animation: soundwave 1.2s ease-in-out infinite;
+            transition: height 0.08s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @keyframes soundwave {
+            0%, 100% { height: 12px; }
+            50% { height: 68px; }
         }
 
         /* SUCCESS POPUP */
@@ -530,51 +512,6 @@
             min-width: 520px;
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
-
-        .login-box:hover {
-            transform: scale(1.03);
-        }
-
-        .login-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 2.8rem;
-            margin-bottom: 2.5rem;
-            background: var(--primary-glow);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* MUSIC VISUALIZER */
-        #musicVisualizer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 80px;
-            background: rgba(10,10,35,0.85);
-            display: none;
-            z-index: 999;
-            backdrop-filter: blur(25px);
-            align-items: flex-end;
-            padding: 0 5%;
-            gap: 6px;
-            box-shadow: 0 -10px 30px rgba(0,242,254,0.3);
-        }
-
-        .visualizer-bar {
-            width: 6px;
-            background: linear-gradient(to top, var(--accent-glow), #3b82f6, #ec4899);
-            border-radius: 9999px 9999px 0 0;
-            box-shadow: 0 0 12px var(--accent-glow);
-            animation: soundwave 1.2s ease-in-out infinite;
-            transition: height 0.08s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        @keyframes soundwave {
-            0%, 100% { height: 12px; }
-            50% { height: 68px; }
-        }
     </style>
 </head>
 <body>
@@ -594,19 +531,25 @@
         </div>
     </nav>
 
-    <!-- HERO -->
+    <!-- HERO - PHẦN CHÀO MỪNG MỚI SIÊU SỐNG ĐỘNG -->
     <section class="hero" id="hero">
         <h1>10A4<br>ULTRA GENIUS</h1>
-        <div id="userStatus">Chào mừng trở lại, <span style="color:#00f2fe">Hải</span>! 🔥 Hôm nay bạn đã là thiên tài chưa?</div>
-        <button class="btn" onclick="startJourney()">KHỞI ĐỘNG SỨ MỆNH THIÊN TÀI</button>
         
-        <div style="position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); z-index: 3; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.1); padding: 12px 28px; border-radius: 50px; backdrop-filter: blur(15px); cursor: pointer;" onclick="toggleVisualizer()">
-            <i class="fas fa-music" style="color: #00f2fe;"></i>
-            <span style="font-weight: 600; font-size: 1.1rem;">Bật nhạc tương lai</span>
+        <!-- CHÀO MỪNG LETTER-BY-LETTER -->
+        <div id="welcomeSubtitle">CHÀO MỪNG ĐẾN VỚI LỚP 10A4 ULTRA GENIUS</div>
+        
+        <div id="userStatus">Hải ơi, bạn đã sẵn sàng trở thành <span style="color:#00f2fe">THIÊN TÀI</span> của lớp chưa? 🔥</div>
+        
+        <button class="btn" onclick="startJourney()">KHỞI ĐỘNG SỨ MỆNH THIÊN TÀI NGAY BÂY GIỜ</button>
+        
+        <!-- Music toggle -->
+        <div onclick="toggleVisualizer()" style="position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); z-index: 3; display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.12); padding: 14px 32px; border-radius: 50px; backdrop-filter: blur(20px); cursor: pointer; box-shadow: 0 0 30px rgba(0,242,254,0.4);">
+            <i class="fas fa-music" style="color: #00f2fe; font-size: 1.4rem;"></i>
+            <span style="font-weight: 700; font-size: 1.15rem; letter-spacing: 1px;">BẬT NHẠC TƯƠNG LAI • HIỆU ỨNG SỐNG ĐỘNG</span>
         </div>
     </section>
 
-    <!-- CHECK-IN SECTION -->
+    <!-- CÁC SECTION CÒN LẠI (giữ nguyên như bản tối ưu trước) -->
     <section id="checkin">
         <h2>CHECK-IN HÀNG NGÀY</h2>
         <div class="grid">
@@ -629,7 +572,6 @@
         </div>
     </section>
 
-    <!-- HOẠT ĐỘNG SECTION -->
     <section id="activity">
         <h2>HOẠT ĐỘNG SIÊU CẤP</h2>
         <div class="grid-2">
@@ -651,7 +593,6 @@
         </div>
     </section>
 
-    <!-- THÀNH TỰU SECTION -->
     <section id="achievement">
         <h2>THÀNH TỰU VĨ ĐẠI</h2>
         <div class="grid">
@@ -673,7 +614,6 @@
         </div>
     </section>
 
-    <!-- TIN NHẮN SECTION -->
     <section id="messages">
         <h2>HỆ THỐNG TIN NHẮN CỘNG ĐỒNG</h2>
         <div class="msg-input">
@@ -697,6 +637,11 @@
     <!-- MUSIC VISUALIZER -->
     <div id="musicVisualizer"></div>
 
+    <!-- NHẠC NỀN (nhạc hiệu ứng sống động) -->
+    <audio id="bgMusic" loop preload="none">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-18.mp3" type="audio/mpeg">
+    </audio>
+
     <!-- SUCCESS POPUP -->
     <div id="successPopup" class="success-popup">
         <i class="fas fa-rocket" style="font-size: 2.5rem;"></i>
@@ -718,35 +663,52 @@
             document.body.classList.toggle('light');
         }
 
+        // ANIMATE LETTERS - TỈ MỈ TỪNG CHỮ
+        function animateLetters(element) {
+            const text = element.innerText;
+            element.innerHTML = '';
+            text.split('').forEach((char, i) => {
+                const span = document.createElement('span');
+                span.className = 'letter';
+                span.style.animationDelay = `${i * 35}ms`;
+                span.textContent = char === ' ' ? '\u00A0' : char;
+                element.appendChild(span);
+            });
+            element.style.opacity = '1';
+        }
+
+        // CONFETTI CHÀO MỪNG (nhẹ nhàng, sống động)
+        function launchWelcomeConfetti() {
+            for (let i = 0; i < 65; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.textContent = ['🚀', '⭐', '🔥', '💎', '⚡'][Math.floor(Math.random() * 5)];
+                    emoji.style.position = 'fixed';
+                    emoji.style.left = Math.random() * 100 + 'vw';
+                    emoji.style.top = '-40px';
+                    emoji.style.fontSize = '2.2rem';
+                    emoji.style.zIndex = '99999';
+                    emoji.style.opacity = '0.95';
+                    document.body.appendChild(emoji);
+                    
+                    emoji.animate([
+                        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                        { transform: `translateY(${window.innerHeight + 120}px) rotate(${Math.random() * 1200}deg)`, opacity: 0 }
+                    ], {
+                        duration: Math.random() * 2800 + 2200,
+                        easing: 'cubic-bezier(0.23, 1, 0.32, 1)'
+                    });
+                    
+                    setTimeout(() => emoji.remove(), 5200);
+                }, i * 6);
+            }
+        }
+
         // CHECK-IN
         function handleCheckin(card) {
             const popup = document.getElementById('successPopup');
             popup.style.display = 'flex';
-            
-            for (let i = 0; i < 80; i++) {
-                setTimeout(() => {
-                    const emoji = document.createElement('div');
-                    emoji.textContent = ['🚀', '🔥', '⭐', '💎'][Math.floor(Math.random() * 4)];
-                    emoji.style.position = 'fixed';
-                    emoji.style.left = Math.random() * 100 + 'vw';
-                    emoji.style.top = '-50px';
-                    emoji.style.fontSize = '2rem';
-                    emoji.style.zIndex = '99999';
-                    emoji.style.opacity = '0.9';
-                    document.body.appendChild(emoji);
-                    
-                    const duration = Math.random() * 3000 + 2000;
-                    emoji.animate([
-                        { transform: 'translateY(0)', opacity: 1 },
-                        { transform: `translateY(${window.innerHeight + 100}px) rotate(${Math.random() * 800}deg)`, opacity: 0 }
-                    ], {
-                        duration: duration,
-                        easing: 'cubic-bezier(0.23, 1, 0.32, 1)'
-                    });
-                    setTimeout(() => emoji.remove(), duration);
-                }, i * 3);
-            }
-            
+            launchWelcomeConfetti(); // reuse confetti for fun
             setTimeout(() => {
                 popup.style.display = 'none';
                 if (card) {
@@ -794,14 +756,11 @@
         function postMessage() {
             const input = document.getElementById('msgInput');
             if (!input.value.trim()) return;
-            
             const now = new Date();
             const time = `${now.getHours()}:${now.getMinutes() < 10 ? '0' : ''}${now.getMinutes()}`;
-            
             messages.unshift({ author: "Hải", time: time, content: input.value });
             renderMessages();
             input.value = '';
-            
             const grid = document.getElementById('messagesGrid');
             grid.style.transition = 'opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1)';
             grid.style.opacity = '0.6';
@@ -813,75 +772,74 @@
             const modal = document.getElementById('loginModal');
             modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
         }
-
         function closeLoginModal() {
             document.getElementById('loginModal').style.display = 'none';
         }
-
         function fakeLogin() {
             const name = document.getElementById('loginName').value || "Hải";
             closeLoginModal();
             document.getElementById('userStatus').innerHTML = `Chào mừng trở lại, <span style="color:#00f2fe">${name}</span>! 🔥 Bạn đang dẫn đầu bảng xếp hạng thiên tài hôm nay!`;
-            
-            const toast = document.createElement('div');
-            toast.style.position = 'fixed';
-            toast.style.bottom = '30px';
-            toast.style.left = '50%';
-            toast.style.transform = 'translateX(-50%)';
-            toast.style.background = 'var(--success-glow)';
-            toast.style.color = 'white';
-            toast.style.padding = '1rem 2.5rem';
-            toast.style.borderRadius = '50px';
-            toast.style.boxShadow = '0 0 40px #10b981';
-            toast.style.zIndex = '10002';
-            toast.style.whiteSpace = 'nowrap';
-            toast.textContent = '✅ Đăng nhập thành công - Chào mừng về nhà, ULTRA GENIUS!';
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(-50%) translateY(30px)';
-                setTimeout(() => toast.remove(), 600);
-            }, 2800);
         }
 
-        // MUSIC VISUALIZER
+        // MUSIC VISUALIZER + NHẠC NỀN
         let visualizerInterval = null;
         function toggleVisualizer() {
             const viz = document.getElementById('musicVisualizer');
+            const audio = document.getElementById('bgMusic');
+            
             if (viz.style.display === 'flex') {
                 viz.style.display = 'none';
                 if (visualizerInterval) clearInterval(visualizerInterval);
+                audio.pause();
                 return;
             }
             
             viz.style.display = 'flex';
             viz.innerHTML = '';
-            for (let i = 0; i < 28; i++) {
+            for (let i = 0; i < 32; i++) {
                 const bar = document.createElement('div');
                 bar.className = 'visualizer-bar';
-                bar.style.height = Math.random() * 40 + 10 + 'px';
-                bar.style.animationDelay = Math.random() * 1.2 + 's';
+                bar.style.height = Math.random() * 35 + 15 + 'px';
+                bar.style.animationDelay = Math.random() * 1.4 + 's';
                 viz.appendChild(bar);
             }
             
             visualizerInterval = setInterval(() => {
                 const bars = viz.querySelectorAll('.visualizer-bar');
                 bars.forEach(bar => {
-                    const randomHeight = Math.random() * 68 + 12;
-                    bar.style.height = randomHeight + 'px';
+                    bar.style.height = Math.random() * 68 + 12 + 'px';
                 });
-            }, 110);
+            }, 95);
+            
+            // Phát nhạc nền
+            audio.volume = 0.32;
+            audio.play().catch(() => {});
         }
 
-        // KHỞI ĐỘNG
+        // KHỞI ĐỘNG TOÀN BỘ TRANG - HIỆU ỨNG CHÀO MỪNG SIÊU SỐNG ĐỘNG
         window.onload = function() {
             renderMessages();
             updateProgressBar();
-            
-            console.log('%c🚀 10A4 ULTRA GENIUS - Hover đã được tối ưu siêu mượt!', 'color:#00f2fe; font-size:18px; font-weight:900; font-family:Orbitron');
-            console.log('%cMọi hiệu ứng hover giờ mượt như nhung, chỉ muốn nhìn mãi mãi 🔥', 'color:#ec4899; font-size:14px');
+
+            // 1. Chờ 600ms rồi hiện subtitle + từng chữ bay lên
+            setTimeout(() => {
+                const subtitle = document.getElementById('welcomeSubtitle');
+                animateLetters(subtitle);
+            }, 600);
+
+            // 2. Phóng confetti chào mừng ngay khi vào
+            setTimeout(() => {
+                launchWelcomeConfetti();
+            }, 1200);
+
+            // 3. Tự động bật visualizer + nhạc nền sau 2 giây (nhạc hiệu ứng sống động)
+            setTimeout(() => {
+                toggleVisualizer();
+                console.log('%c🎵 Nhạc tương lai + hiệu ứng chào mừng đã bật!', 'color:#00f2fe; font-size:18px; font-weight:900; font-family:Orbitron');
+            }, 2200);
+
+            console.log('%c🚀 10A4 ULTRA GENIUS - Phần chào mừng đã được nâng cấp thành tuyệt tác sống động!', 'color:#00f2fe; font-size:18px; font-weight:900; font-family:Orbitron');
+            console.log('%cTừng chữ bay lên, confetti, nhạc nền, visualizer... chỉ muốn nhìn mãi 🔥', 'color:#ec4899; font-size:14px');
         };
     </script>
 </body>
