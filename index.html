@@ -6,7 +6,6 @@
     <title>10A4 • THPT Gia Viễn • Nơi chúng ta tỏa sáng!</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet">
-    <script src="https://www.youtube.com/iframe_api"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Inter:wght@400;500&amp;display=swap');
         :root { --tw-color-primary: #003087; --tw-color-accent: #FF7F00; --tw-color-neon: #A020F0; }
@@ -15,11 +14,13 @@
         .title-font { font-family: 'Poppins', sans-serif; }
         .glass { background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); }
         .neon-text { text-shadow: 0 0 10px #A020F0, 0 0 20px #A020F0; }
+        .page { display: none; }
+        .page.active { display: block; }
     </style>
 </head>
 <body class="bg-[#003087] text-white min-h-screen overflow-x-hidden">
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN SCREEN (đã update) -->
 <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center hero-bg">
     <canvas id="particle-canvas" class="absolute inset-0 pointer-events-none"></canvas>
     
@@ -57,7 +58,7 @@
             <button onclick="startForgotPassword()" class="w-full py-4 bg-[#A020F0] hover:bg-[#C040FF] text-white font-bold text-xl rounded-2xl">GỬI MÃ OTP</button>
         </div>
 
-        <!-- FORM ĐẶT MẬT KHẨU MỚI (mới thêm) -->
+        <!-- ĐẶT MẬT KHẨU MỚI -->
         <div id="form-new-password" class="hidden">
             <h3 class="text-xl font-bold mb-4 text-center">Đặt mật khẩu mới</h3>
             <input id="new-password" type="password" placeholder="Mật khẩu mới" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-4">
@@ -80,25 +81,165 @@
     </div>
 </div>
 
-<!-- MAIN APP (giữ nguyên) -->
-<div id="main-app" class="hidden">
-    <!-- Navbar, pages, playlist... (bạn copy phần này từ bản trước) -->
-    <!-- Nếu bạn muốn tôi gửi lại full code thì cứ nói -->
+<!-- MAIN APP -->
+<div id="main-app" class="hidden flex h-screen bg-[#001f5a]">
+    <!-- Sidebar -->
+    <div class="w-72 bg-black/40 backdrop-blur-lg border-r border-white/10 p-6 flex flex-col">
+        <div class="flex items-center gap-3 mb-10">
+            <div class="w-12 h-12 bg-[#FF7F00] rounded-2xl flex items-center justify-center text-4xl">🏫</div>
+            <div>
+                <h1 class="title-font text-3xl font-bold neon-text">10A4</h1>
+                <p class="text-white/60 text-sm">CYBERSECR</p>
+            </div>
+        </div>
+        
+        <nav class="flex-1 space-y-2">
+            <button onclick="switchPage('home')" class="nav-btn w-full text-left px-6 py-4 rounded-2xl flex items-center gap-3 hover:bg-white/10 active" id="nav-home">
+                🏠 Trang chủ
+            </button>
+            <button onclick="switchPage('schedule')" class="nav-btn w-full text-left px-6 py-4 rounded-2xl flex items-center gap-3 hover:bg-white/10" id="nav-schedule">
+                📅 Lịch học
+            </button>
+            <button onclick="switchPage('playlist')" class="nav-btn w-full text-left px-6 py-4 rounded-2xl flex items-center gap-3 hover:bg-white/10" id="nav-playlist">
+                🎵 Playlist lớp
+            </button>
+            <button onclick="switchPage('chat')" class="nav-btn w-full text-left px-6 py-4 rounded-2xl flex items-center gap-3 hover:bg-white/10" id="nav-chat">
+                💬 Chat lớp
+            </button>
+            <button onclick="switchPage('album')" class="nav-btn w-full text-left px-6 py-4 rounded-2xl flex items-center gap-3 hover:bg-white/10" id="nav-album">
+                📸 Kỷ yếu
+            </button>
+            <button onclick="switchPage('members')" class="nav-btn w-full text-left px-6 py-4 rounded-2xl flex items-center gap-3 hover:bg-white/10" id="nav-members">
+                👥 Thành viên
+            </button>
+        </nav>
+
+        <div class="mt-auto pt-6 border-t border-white/20 flex items-center gap-3 cursor-pointer" onclick="logout()">
+            <div id="user-avatar-sidebar" class="w-10 h-10 bg-[#FF7F00] rounded-2xl flex items-center justify-center text-3xl"></div>
+            <div>
+                <p id="user-name-sidebar" class="font-semibold"></p>
+                <p class="text-xs text-white/50">Đăng xuất</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="flex-1 overflow-auto">
+        <!-- HOME -->
+        <div id="page-home" class="page active p-8">
+            <h1 class="text-5xl font-bold mb-2">Chào mừng trở lại, <span id="welcome-name" class="neon-text"></span>! 🚀</h1>
+            <p class="text-white/70 mb-8">Hôm nay là ngày tỏa sáng của lớp 10A4!</p>
+            
+            <div class="grid grid-cols-3 gap-6">
+                <div class="glass rounded-3xl p-6">
+                    <h3 class="font-bold text-xl mb-4">📅 Lịch học tuần này</h3>
+                    <p class="text-sm text-white/80">Thứ 2: Toán • Lý • Hóa<br>Thứ 3: Văn • Anh • Sinh</p>
+                </div>
+                <div class="glass rounded-3xl p-6">
+                    <h3 class="font-bold text-xl mb-4">🎵 Bài hát đang hot</h3>
+                    <p class="text-lg">"See You Again" - Wiz Khalifa</p>
+                    <button onclick="switchPage('playlist')" class="mt-4 text-[#FF7F00] text-sm font-bold">Mở playlist →</button>
+                </div>
+                <div class="glass rounded-3xl p-6 flex flex-col justify-center text-center">
+                    <div class="text-6xl mb-2">🏆</div>
+                    <p class="font-bold">Lớp 10A4 đang dẫn đầu khối!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Các trang khác (bạn có thể mở rộng thêm) -->
+        <div id="page-schedule" class="page p-8 hidden">Lịch học chi tiết sẽ hiển thị ở đây...</div>
+        <div id="page-playlist" class="page p-8 hidden">
+            <h2 class="text-3xl font-bold mb-6">🎵 Playlist CYBERSECR 10A4</h2>
+            <div id="music-player" class="glass rounded-3xl p-8 text-center">
+                <p class="text-2xl mb-6" id="now-playing">Đang phát: See You Again</p>
+                <button onclick="toggleMusic()" class="px-8 py-4 bg-[#FF7F00] text-[#003087] font-bold rounded-2xl text-xl">▶ Play / Pause</button>
+            </div>
+        </div>
+        <div id="page-chat" class="page p-8 hidden">💬 Phòng chat lớp (demo) - sẽ thêm realtime sau</div>
+        <div id="page-album" class="page p-8 hidden">📸 Album kỷ yếu lớp 10A4</div>
+        <div id="page-members" class="page p-8 hidden">👥 Danh sách thành viên lớp</div>
+    </div>
 </div>
 
 <script>
-// ==================== DỮ LIỆU USERS ====================
+// ==================== DỮ LIỆU & BIẾN ====================
 let users = JSON.parse(localStorage.getItem('10A4_users')) || [
     { id: 1, name: "Nguyễn Văn An", email: "an10a4@gmail.com", password: "10A4", avatar: "🚀", nick: "An Pro" }
 ];
-
-let currentUser = null;
+let currentUser = JSON.parse(localStorage.getItem('10A4_currentUser')) || null;
 let currentOTP = null;
-let currentAction = null;        // 'register' hoặc 'forgot'
+let currentAction = null;
 let tempRegisterData = null;
 let tempForgotEmail = null;
 
-// ==================== OTP & AUTH LOGIC ====================
+// ==================== PARTICLE BACKGROUND ====================
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let particlesArray = [];
+
+class Particle {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 1 - 0.5;
+        this.speedY = Math.random() * 1 - 0.5;
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+    }
+    draw() {
+        ctx.fillStyle = '#A020F0';
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = '#A020F0';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+function initParticles() {
+    particlesArray = [];
+    for (let i = 0; i < 120; i++) particlesArray.push(new Particle());
+}
+function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particlesArray.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animateParticles);
+}
+
+// ==================== CONFETTI ====================
+function launchConfetti() {
+    const colors = ['#FF7F00', '#A020F0', '#00FF88'];
+    for (let i = 0; i < 150; i++) {
+        const confetti = document.createElement('div');
+        confetti.style.position = 'fixed';
+        confetti.style.zIndex = '99999';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.top = '-20px';
+        confetti.style.fontSize = '20px';
+        confetti.textContent = ['🎉', '🚀', '✨'][Math.floor(Math.random() * 3)];
+        document.body.appendChild(confetti);
+        
+        const duration = Math.random() * 3000 + 2000;
+        confetti.animate([
+            { transform: 'translateY(0) rotate(0deg)' },
+            { transform: `translateY(${window.innerHeight + 100}px) rotate(${Math.random() * 1000}deg)` }
+        ], { duration, easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)' });
+        
+        setTimeout(() => confetti.remove(), duration);
+    }
+}
+
+// ==================== AUTH LOGIC (giữ nguyên như bạn update) ====================
 function generateOTP() {
     currentOTP = Math.floor(100000 + Math.random() * 900000).toString();
     return currentOTP;
@@ -111,7 +252,7 @@ function switchAuthTab(tab) {
     document.getElementById('form-new-password').classList.add('hidden');
 }
 
-function startRegister() { /* giữ nguyên như cũ */ 
+function startRegister() {
     const name = document.getElementById('reg-name').value.trim();
     const email = document.getElementById('reg-email').value.trim();
     const password = document.getElementById('reg-password').value.trim();
@@ -159,9 +300,7 @@ function verifyOTP() {
         localStorage.setItem('10A4_users', JSON.stringify(users));
         showAuthMessage('Đăng ký thành công! Đang đăng nhập...', 'green');
         setTimeout(() => loginSuccess(newUser), 1000);
-    } 
-    else if (currentAction === 'forgot') {
-        // Chuyển sang form đặt mật khẩu mới
+    } else if (currentAction === 'forgot') {
         document.getElementById('form-forgot').classList.add('hidden');
         document.getElementById('form-new-password').classList.remove('hidden');
         showAuthMessage('OTP đúng! Hãy đặt mật khẩu mới.', 'green');
@@ -172,7 +311,6 @@ function verifyOTP() {
 function setNewPassword() {
     const newPass = document.getElementById('new-password').value.trim();
     const confirmPass = document.getElementById('confirm-password').value.trim();
-
     if (!newPass || newPass.length < 4) return showAuthMessage('Mật khẩu phải ít nhất 4 ký tự!', 'red');
     if (newPass !== confirmPass) return showAuthMessage('Hai mật khẩu không khớp!', 'red');
 
@@ -180,27 +318,28 @@ function setNewPassword() {
     if (user) {
         user.password = newPass;
         localStorage.setItem('10A4_users', JSON.stringify(users));
-        showAuthMessage('✅ Mật khẩu đã được thay đổi thành công!', 'green');
-        
+        showAuthMessage('✅ Mật khẩu đã được thay đổi!', 'green');
         setTimeout(() => {
-            switchAuthTab(0); // quay về tab đăng nhập
+            switchAuthTab(0);
             document.getElementById('form-new-password').classList.add('hidden');
         }, 1500);
     }
 }
 
 function showOTPModal() {
-    document.getElementById('otp-modal').classList.remove('hidden');
-    document.getElementById('otp-modal').classList.add('flex');
+    const modal = document.getElementById('otp-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
     document.getElementById('otp-input').focus();
 }
 
 function hideOTPModal() {
-    document.getElementById('otp-modal').classList.add('hidden');
-    document.getElementById('otp-modal').classList.remove('flex');
+    const modal = document.getElementById('otp-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
 }
 
-function handleLogin() { /* giữ nguyên */ 
+function handleLogin() {
     const input = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value.trim();
     const user = users.find(u => (u.email === input || u.name === input) && u.password === password);
@@ -213,10 +352,46 @@ function loginSuccess(user) {
     localStorage.setItem('10A4_currentUser', JSON.stringify(currentUser));
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('main-app').classList.remove('hidden');
+    
+    // Hiển thị thông tin user
+    document.getElementById('welcome-name').textContent = user.name;
+    document.getElementById('user-name-sidebar').textContent = user.name;
+    document.getElementById('user-avatar-sidebar').innerHTML = `<span>${user.avatar}</span>`;
+    
     launchConfetti();
     startMusic();
-    document.getElementById('user-name-display').textContent = currentUser.name;
-    document.getElementById('user-avatar').innerHTML = `<span>${currentUser.avatar}</span>`;
+}
+
+// ==================== MAIN APP FUNCTIONS ====================
+function switchPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+    document.getElementById('page-' + page).classList.remove('hidden');
+    
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active', 'bg-white/10'));
+    const activeBtn = document.getElementById('nav-' + page);
+    if (activeBtn) activeBtn.classList.add('active', 'bg-white/10');
+}
+
+function toggleMusic() {
+    const player = document.getElementById('now-playing');
+    if (player.textContent.includes('Đang phát')) {
+        player.innerHTML = '⏸ Đã tạm dừng';
+    } else {
+        player.innerHTML = '▶ Đang phát: <span class="font-bold">See You Again</span>';
+    }
+}
+
+function startMusic() {
+    // Demo music player
+    console.log('%c🎵 Music player started (demo)', 'color:#FF7F00');
+}
+
+function logout() {
+    currentUser = null;
+    localStorage.removeItem('10A4_currentUser');
+    document.getElementById('main-app').classList.add('hidden');
+    document.getElementById('login-screen').classList.remove('hidden');
+    switchAuthTab(0);
 }
 
 function showAuthMessage(text, color) {
@@ -226,10 +401,24 @@ function showAuthMessage(text, color) {
     setTimeout(() => msg.textContent = '', 4500);
 }
 
-// ==================== Các hàm cũ (particles, playlist, chat...) giữ nguyên ====================
-// Bạn chỉ cần thay phần <script> và login screen ở trên vào file cũ là xong.
+// ==================== KHỞI ĐỘNG ====================
+window.onload = () => {
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    initParticles();
+    animateParticles();
 
-console.log('%c✅ Phần Quên mật khẩu đã được sửa hoàn chỉnh!', 'color:#FF7F00;font-size:18px');
+    // Nếu đã login trước đó
+    if (currentUser) {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('main-app').classList.remove('hidden');
+        document.getElementById('welcome-name').textContent = currentUser.name;
+        document.getElementById('user-name-sidebar').textContent = currentUser.name;
+        document.getElementById('user-avatar-sidebar').innerHTML = `<span>${currentUser.avatar}</span>`;
+    }
+    
+    console.log('%c✅ CYBERSECR 10A4 - Full version loaded!', 'color:#FF7F00;font-size:20px;font-weight:bold');
+};
 </script>
 </body>
 </html>
