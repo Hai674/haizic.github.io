@@ -1,320 +1,240 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>10A4 • THPT Gia Viễn • Nơi chúng ta tỏa sáng!</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Inter:wght@400;500&amp;display=swap');
-        :root { --tw-color-primary: #003087; --tw-color-accent: #FF7F00; --tw-color-neon: #A020F0; }
-        * { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
-        body { font-family: 'Inter', system_ui, sans-serif; }
-        .title-font { font-family: 'Poppins', sans-serif; }
-        .glass { background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); }
-        .neon-text { text-shadow: 0 0 10px #A020F0, 0 0 20px #A020F0; }
-        .page { display: none; }
-        .page.active { display: block; }
-        #chat-messages { scrollbar-width: thin; }
-        .message-bubble { max-width: 75%; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10A4 - GOD LEVEL</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  color:white;
+  overflow-x:hidden;
+}
+
+/* NAVBAR */
+nav{
+  position:fixed;
+  width:100%;
+  padding:20px 60px;
+  display:flex;
+  justify-content:space-between;
+  backdrop-filter: blur(15px);
+  background:rgba(255,255,255,0.05);
+  z-index:999;
+}
+
+nav h1{
+  font-weight:800;
+  letter-spacing:2px;
+}
+
+nav a{
+  color:white;
+  text-decoration:none;
+  margin-left:25px;
+  transition:0.3s;
+}
+
+nav a:hover{
+  color:#00f7ff;
+}
+
+/* HERO */
+.hero{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+.hero h2{
+  font-size:60px;
+  background:linear-gradient(90deg,#00f7ff,#00ffae);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.hero p{
+  margin-top:20px;
+  opacity:0.8;
+}
+
+.btn{
+  margin-top:30px;
+  padding:15px 40px;
+  border-radius:50px;
+  border:none;
+  cursor:pointer;
+  background:linear-gradient(90deg,#00f7ff,#00ffae);
+  color:black;
+  font-weight:600;
+  transition:0.3s;
+}
+
+.btn:hover{
+  transform:scale(1.1);
+}
+
+/* GLASS CARD */
+.section{
+  padding:100px 10%;
+}
+
+.card{
+  background:rgba(255,255,255,0.05);
+  border-radius:20px;
+  padding:40px;
+  backdrop-filter: blur(20px);
+  transition:0.4s;
+}
+
+.card:hover{
+  transform:translateY(-10px);
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:30px;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:40px;
+  opacity:0.6;
+}
+
+/* PARTICLES */
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
+}
+
+/* ANIMATION */
+.fade{
+  opacity:0;
+  transform:translateY(50px);
+  transition:1s;
+}
+
+.fade.show{
+  opacity:1;
+  transform:translateY(0);
+}
+</style>
 </head>
-<body class="bg-[#003087] text-white min-h-screen overflow-x-hidden">
 
-<!-- LOGIN SCREEN -->
-<div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center hero-bg">
-    <canvas id="particle-canvas" class="absolute inset-0 pointer-events-none"></canvas>
-    <div class="max-w-lg w-full mx-4 glass rounded-3xl p-10 shadow-2xl border border-white/20">
-        <div class="flex justify-center mb-6">
-            <div class="w-20 h-20 bg-[#FF7F00] rounded-2xl flex items-center justify-center text-5xl shadow-inner neon-text">🏫</div>
-        </div>
-        <h1 class="title-font text-4xl font-bold text-center mb-2 neon-text">CYBERSECR 10A4</h1>
-        <p class="text-center text-white/70 mb-8">Lớp 10A4 THPT Gia Viễn • 2025-2026</p>
-        <div class="flex mb-8 border-b border-white/20">
-            <button onclick="switchAuthTab(0)" id="tab-login" class="flex-1 py-3 font-bold border-b-2 border-[#FF7F00] text-[#FF7F00]">Đăng nhập</button>
-            <button onclick="switchAuthTab(1)" id="tab-register" class="flex-1 py-3 font-bold">Đăng ký</button>
-        </div>
-        <div id="form-login">
-            <input id="login-email" type="text" placeholder="Email hoặc tên học sinh" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-4">
-            <input id="login-password" type="password" placeholder="Mật khẩu" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-6">
-            <button onclick="handleLogin()" class="w-full py-4 bg-[#FF7F00] hover:bg-[#FF9F33] text-[#003087] font-bold text-xl rounded-2xl">ĐĂNG NHẬP</button>
-            <p onclick="switchToForgot()" class="text-center text-[#A020F0] mt-4 cursor-pointer hover:underline">Quên mật khẩu?</p>
-        </div>
-        <div id="form-register" class="hidden">
-            <input id="reg-name" type="text" placeholder="Họ và tên" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-4">
-            <input id="reg-email" type="email" placeholder="Email" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-4">
-            <input id="reg-password" type="password" placeholder="Mật khẩu" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-6">
-            <button onclick="startRegister()" class="w-full py-4 bg-[#FF7F00] hover:bg-[#FF9F33] text-[#003087] font-bold text-xl rounded-2xl">ĐĂNG KÝ & NHẬN MÃ OTP</button>
-        </div>
-        <div id="form-forgot" class="hidden">
-            <input id="forgot-email" type="email" placeholder="Nhập email của bạn" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-6">
-            <button onclick="startForgotPassword()" class="w-full py-4 bg-[#A020F0] hover:bg-[#C040FF] text-white font-bold text-xl rounded-2xl">GỬI MÃ OTP</button>
-        </div>
-        <div id="form-new-password" class="hidden">
-            <h3 class="text-xl font-bold mb-4 text-center">Đặt mật khẩu mới</h3>
-            <input id="new-password" type="password" placeholder="Mật khẩu mới" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-4">
-            <input id="confirm-password" type="password" placeholder="Nhập lại mật khẩu mới" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-6">
-            <button onclick="setNewPassword()" class="w-full py-4 bg-[#FF7F00] hover:bg-[#FF9F33] text-[#003087] font-bold text-xl rounded-2xl">XÁC NHẬN & ĐẶT LẠI</button>
-        </div>
-        <p id="auth-message" class="text-center text-sm mt-6 min-h-[24px]"></p>
-    </div>
-</div>
+<body>
 
-<!-- OTP MODAL -->
-<div onclick="if(event.target.id==='otp-modal')hideOTPModal()" id="otp-modal" class="hidden fixed inset-0 bg-black/80 z-[99999] flex items-center justify-center">
-    <div onclick="event.stopImmediatePropagation()" class="glass rounded-3xl p-10 max-w-md w-full mx-4 text-center">
-        <h3 class="text-2xl font-bold mb-2">Nhập mã OTP</h3>
-        <p id="otp-email-display" class="text-white/70 mb-6"></p>
-        <input id="otp-input" maxlength="6" placeholder="000000" class="w-52 text-center text-4xl font-mono tracking-[8px] bg-white/10 border border-white/30 rounded-2xl py-5 focus:outline-none focus:border-[#FF7F00]">
-        <button onclick="verifyOTP()" class="w-full mt-6 py-4 bg-[#FF7F00] text-[#003087] font-bold text-xl rounded-2xl">XÁC NHẬN</button>
-        <div id="demo-otp" class="mt-6 text-xs text-white/50"></div>
-    </div>
-</div>
+<canvas id="bg"></canvas>
 
-<!-- MAIN APP -->
-<div id="main-app" class="hidden flex h-screen bg-[#001f5a]">
-    <!-- Sidebar -->
-    <div class="w-72 bg-black/40 backdrop-blur-lg border-r border-white/10 p-6 flex flex-col">
-        <div class="flex items-center gap-3 mb-10">
-            <div class="w-12 h-12 bg-[#FF7F00] rounded-2xl flex items-center justify-center text-4xl">🏫</div>
-            <div>
-                <h1 class="title-font text-3xl font-bold neon-text">10A4</h1>
-                <p class="text-white/60 text-sm">CYBERSECR</p>
-            </div>
-        </div>
-        <nav class="flex-1 space-y-2">
-            <button onclick="switchPage('home')" class="nav-btn w-full text-left px-6 py-4 rounded-2xl flex items-center gap-3 hover:bg-white/10 active" id="nav-home">🏠 Trang chủ</button>
-            <button onclick="switchPage('schedule')" class="nav-btn w-full text-left px-6 py-4 rounded-2xl flex items-center gap-3 hover:bg-white/10" id="nav-schedule">📅 Lịch học</button>
-            <button onclick="switchPage('playlist')" class="nav-btn w-full text-left px-6 py-4 rounded-2xl flex items-center gap-3 hover:bg-white/10" id="nav-playlist">🎵 Playlist lớp</button>
-            <button onclick="switchPage('chat')" class="nav-btn w-full text-left px-6 py-4 rounded-2xl flex items-center gap-3 hover:bg-white/10" id="nav-chat">💬 Chat lớp</button>
-            <button onclick="switchPage('album')" class="nav-btn w-full text-left px-6 py-4 rounded-2xl flex items-center gap-3 hover:bg-white/10" id="nav-album">📸 Kỷ yếu</button>
-            <button onclick="switchPage('members')" class="nav-btn w-full text-left px-6 py-4 rounded-2xl flex items-center gap-3 hover:bg-white/10" id="nav-members">👥 Thành viên</button>
-        </nav>
-        <div class="mt-auto pt-6 border-t border-white/20 flex items-center gap-3 cursor-pointer" onclick="logout()">
-            <div id="user-avatar-sidebar" class="w-10 h-10 bg-[#FF7F00] rounded-2xl flex items-center justify-center text-3xl"></div>
-            <div>
-                <p id="user-name-sidebar" class="font-semibold"></p>
-                <p class="text-xs text-white/50">Đăng xuất</p>
-            </div>
-        </div>
+<nav>
+  <h1>10A4</h1>
+  <div>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Team</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <h2>10A4 - ĐỈNH CAO</h2>
+  <p>Giáo viên: Đinh Trung Thiện | 38 học sinh</p>
+  <button class="btn">Khám phá ngay</button>
+</section>
+
+<section class="section">
+  <div class="grid">
+    <div class="card fade">
+      <h3>🔥 Đoàn Kết</h3>
+      <p>Lớp 10A4 luôn gắn kết như gia đình.</p>
     </div>
 
-    <!-- Content Area -->
-    <div class="flex-1 overflow-auto">
-        <!-- HOME -->
-        <div id="page-home" class="page active p-8">
-            <h1 class="text-5xl font-bold mb-2">Chào mừng, <span id="welcome-name" class="neon-text"></span>! 🚀</h1>
-            <p class="text-white/70 mb-8">Lớp 10A4 CYBERSECR • 2025-2026</p>
-        </div>
-
-        <!-- CHAT -->
-        <div id="page-chat" class="page flex flex-col h-full p-8 hidden">
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 bg-[#A020F0] rounded-2xl flex items-center justify-center text-4xl">💬</div>
-                    <div>
-                        <h2 class="title-font text-4xl font-bold neon-text">Phòng Chat Lớp 10A4</h2>
-                        <p class="text-white/60">Mới lập • Realtime demo</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-sm font-medium text-white/70">Online:</span>
-                    <div id="online-list" class="flex -space-x-3"></div>
-                </div>
-            </div>
-            <div id="chat-messages" class="flex-1 overflow-y-auto space-y-6 p-6 bg-black/30 rounded-3xl mb-6"></div>
-            <div id="typing-indicator" class="px-6 text-white/60 text-sm italic hidden">Đang gõ...</div>
-            <div class="flex gap-3 items-end">
-                <button onclick="toggleEmojiPicker()" class="px-5 py-5 bg-white/10 hover:bg-white/20 rounded-3xl text-3xl">😀</button>
-                <label class="px-5 py-5 bg-white/10 hover:bg-white/20 rounded-3xl cursor-pointer">📸
-                    <input type="file" id="image-upload" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
-                </label>
-                <input id="chat-input" type="text" placeholder="Nhập tin nhắn..." class="flex-1 px-6 py-5 bg-white/10 border border-white/30 rounded-3xl text-lg focus:outline-none focus:border-[#FF7F00]" onkeypress="if(event.key==='Enter') sendMessage()" onkeyup="handleTyping()">
-                <button onclick="sendMessage()" class="px-10 py-5 bg-[#FF7F00] hover:bg-[#FF9F33] text-[#003087] font-bold text-xl rounded-3xl">Gửi</button>
-            </div>
-            <div id="emoji-picker" class="hidden absolute bottom-24 left-80 bg-white/10 backdrop-blur-xl border border-white/30 rounded-3xl p-4 grid grid-cols-6 gap-2 text-3xl w-80 shadow-2xl"></div>
-        </div>
-
-        <!-- THỜI KHÓA BIỂU BẰNG ẢNH -->
-        <div id="page-schedule" class="page p-8 hidden">
-            <h2 class="text-3xl font-bold mb-6 neon-text">📅 Thời Khóa Biểu Lớp 10A4</h2>
-            <div class="glass rounded-3xl p-8 text-center">
-                <div id="schedule-container">
-                    <p class="text-white/60 mb-4">Chưa có ảnh thời khóa biểu.<br>Hãy upload ảnh để hiển thị!</p>
-                    <img id="schedule-image" class="max-w-full rounded-2xl shadow-2xl hidden" alt="Thời khóa biểu">
-                </div>
-                <label class="mt-6 inline-flex items-center gap-3 px-8 py-4 bg-[#FF7F00] text-[#003087] font-bold rounded-3xl cursor-pointer hover:bg-[#FF9F33]">
-                    📤 Upload ảnh thời khóa biểu mới
-                    <input type="file" id="schedule-upload" accept="image/*" class="hidden" onchange="uploadScheduleImage(event)">
-                </label>
-            </div>
-        </div>
-
-        <div id="page-playlist" class="page p-8 hidden">🎵 Playlist lớp (demo)</div>
-        <div id="page-album" class="page p-8 hidden">📸 Kỷ yếu</div>
-        <div id="page-members" class="page p-8 hidden">👥 Thành viên</div>
+    <div class="card fade">
+      <h3>🚀 Năng Động</h3>
+      <p>Hoạt động mạnh mẽ, không ngừng phát triển.</p>
     </div>
-</div>
+
+    <div class="card fade">
+      <h3>💎 Sáng Tạo</h3>
+      <p>Ý tưởng độc đáo, không giới hạn.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 - 10A4 GOD LEVEL
+</footer>
 
 <script>
-// ==================== BIẾN CHUNG ====================
-let users = JSON.parse(localStorage.getItem('10A4_users')) || [];
-let currentUser = JSON.parse(localStorage.getItem('10A4_currentUser')) || null;
-let messages = JSON.parse(localStorage.getItem('10A4_chatMessages')) || [];
-let onlineUsers = JSON.parse(localStorage.getItem('10A4_onlineUsers')) || [];
-let currentOTP = null; let currentAction = null; let tempRegisterData = null; let tempForgotEmail = null;
-
-const chatChannel = new BroadcastChannel('10a4-chat');
-let typingTimeout = null;
-
-// ==================== PARTICLE & CONFETTI (giữ nguyên) ====================
-// ... (copy nguyên phần particle, confetti, auth logic từ code cũ của bạn) ...
-
-// ==================== THÔNG BÁO PUSH ====================
-function requestNotificationPermission() {
-    if (Notification.permission === "default") {
-        Notification.requestPermission().then(permission => {
-            if (permission === "granted") {
-                console.log('%c🛎️ Thông báo Push đã được bật!', 'color:#FF7F00');
-            }
-        });
+// SCROLL ANIMATION
+const fades = document.querySelectorAll('.fade');
+window.addEventListener('scroll', () => {
+  fades.forEach(el => {
+    const top = el.getBoundingClientRect().top;
+    if(top < window.innerHeight - 100){
+      el.classList.add('show');
     }
+  });
+});
+
+// PARTICLES BACKGROUND
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for(let i=0;i<100;i++){
+  particles.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    r: Math.random()*2,
+    d: Math.random()*1
+  });
 }
 
-function showPushNotification(msg) {
-    if (Notification.permission !== "granted" || document.hasFocus()) return;
-    
-    const title = `💬 Tin nhắn mới từ ${msg.name}`;
-    const body = msg.imageBase64 ? "Đã gửi một ảnh" : msg.text;
-    
-    new Notification(title, {
-        body: body,
-        icon: "🏫",
-        tag: "10a4-chat",
-        vibrate: [200, 100, 200]
-    });
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="white";
+  particles.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+  });
+  update();
 }
 
-// ==================== CHAT FUNCTIONS (có push) ====================
-function loadChat() {
-    const container = document.getElementById('chat-messages');
-    container.innerHTML = messages.length === 0 
-        ? `<div class="text-center py-20 text-white/50">Chưa có tin nhắn nào.<br>Hãy là người đầu tiên nói gì đó! 🚀</div>` 
-        : '';
-    messages.forEach(msg => appendMessage(msg, container));
-    updateOnlineList();
-}
-
-function appendMessage(msg, container) {
-    const isOwn = currentUser && msg.name === currentUser.name;
-    const time = new Date(msg.timestamp).toLocaleTimeString('vi-VN', {hour:'2-digit', minute:'2-digit'});
-    let contentHTML = msg.imageBase64 
-        ? `<img src="${msg.imageBase64}" class="max-w-[260px] rounded-2xl mt-2 cursor-pointer" onclick="this.src=this.src">`
-        : `<div class="px-5 py-4 rounded-3xl ${isOwn ? 'bg-[#FF7F00] text-[#003087] rounded-br-none' : 'bg-white/10 text-white rounded-bl-none'}">${msg.text}</div>`;
-    
-    const html = `<div class="flex ${isOwn ? 'justify-end' : 'justify-start'}"><div class="message-bubble"><div class="flex items-center gap-2 ${isOwn ? 'flex-row-reverse' : ''} mb-1"><div class="w-8 h-8 bg-[#FF7F00] rounded-2xl flex items-center justify-center text-xl">${msg.avatar || '👤'}</div><span class="text-xs text-white/70">${msg.name}</span><span class="text-xs text-white/40">${time}</span></div>${contentHTML}</div></div>`;
-    container.innerHTML += html;
-    container.scrollTop = container.scrollHeight;
-}
-
-function sendMessage() {
-    const input = document.getElementById('chat-input');
-    const text = input.value.trim();
-    if (!text || !currentUser) return;
-    const newMsg = { name: currentUser.name, avatar: currentUser.avatar || '👤', text, timestamp: Date.now() };
-    messages.push(newMsg);
-    localStorage.setItem('10A4_chatMessages', JSON.stringify(messages));
-    appendMessage(newMsg, document.getElementById('chat-messages'));
-    chatChannel.postMessage({type: 'newMessage', msg: newMsg});
-    input.value = '';
-    stopTyping();
-}
-
-async function handleImageUpload(e) {
-    const file = e.target.files[0];
-    if (!file || !currentUser) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-        const newMsg = { name: currentUser.name, avatar: currentUser.avatar || '👤', imageBase64: ev.target.result, timestamp: Date.now() };
-        messages.push(newMsg);
-        localStorage.setItem('10A4_chatMessages', JSON.stringify(messages));
-        appendMessage(newMsg, document.getElementById('chat-messages'));
-        chatChannel.postMessage({type: 'newMessage', msg: newMsg});
-    };
-    reader.readAsDataURL(file);
-}
-
-function handleTyping() {
-    if (!currentUser) return;
-    chatChannel.postMessage({type: 'typing', user: currentUser.name});
-    clearTimeout(typingTimeout);
-    typingTimeout = setTimeout(stopTyping, 2000);
-}
-function stopTyping() { chatChannel.postMessage({type: 'stopTyping'}); }
-
-function toggleEmojiPicker() { /* giữ nguyên như trước */ }
-
-function updateOnlineList() { /* giữ nguyên như trước */ }
-
-// BroadcastChannel (realtime + push)
-chatChannel.onmessage = ev => {
-    const data = ev.data;
-    if (data.type === 'newMessage') {
-        if (!messages.find(m => m.timestamp === data.msg.timestamp)) {
-            messages.push(data.msg);
-            localStorage.setItem('10A4_chatMessages', JSON.stringify(messages));
-            appendMessage(data.msg, document.getElementById('chat-messages'));
-            showPushNotification(data.msg);   // ← THÔNG BÁO PUSH
-        }
-    } else if (data.type === 'typing' && data.user !== currentUser?.name) {
-        document.getElementById('typing-indicator').textContent = `${data.user} đang gõ...`;
-        document.getElementById('typing-indicator').classList.remove('hidden');
-    } else if (data.type === 'stopTyping') {
-        document.getElementById('typing-indicator').classList.add('hidden');
+function update(){
+  particles.forEach(p=>{
+    p.y += p.d;
+    if(p.y > canvas.height){
+      p.y = 0;
+      p.x = Math.random()*canvas.width;
     }
-};
-
-// ==================== AUTH & LOGIN (thêm push) ====================
-function loginSuccess(user) {
-    currentUser = user;
-    localStorage.setItem('10A4_currentUser', JSON.stringify(currentUser));
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('main-app').classList.remove('hidden');
-    document.getElementById('welcome-name').textContent = user.name;
-    document.getElementById('user-name-sidebar').textContent = user.name;
-    document.getElementById('user-avatar-sidebar').innerHTML = `<span>${user.avatar}</span>`;
-    
-    onlineUsers.push({id: user.id, name: user.name, avatar: user.avatar, timestamp: Date.now()});
-    localStorage.setItem('10A4_onlineUsers', JSON.stringify(onlineUsers));
-    
-    requestNotificationPermission();   // ← YÊU CẦU QUYỀN PUSH
-    launchConfetti();
+  });
 }
 
-// ==================== SWITCH PAGE & KHỞI ĐỘNG ====================
-function switchPage(page) {
-    document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-    document.getElementById('page-' + page).classList.remove('hidden');
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active', 'bg-white/10'));
-    const activeBtn = document.getElementById('nav-' + page);
-    if (activeBtn) activeBtn.classList.add('active', 'bg-white/10');
-    if (page === 'chat') loadChat();
-    if (page === 'schedule') renderScheduleImage();
-}
-
-window.onload = () => {
-    resizeCanvas(); window.addEventListener('resize', resizeCanvas); initParticles(); animateParticles();
-    if (currentUser) {
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('main-app').classList.remove('hidden');
-        document.getElementById('welcome-name').textContent = currentUser.name;
-        document.getElementById('user-name-sidebar').textContent = currentUser.name;
-        document.getElementById('user-avatar-sidebar').innerHTML = `<span>${currentUser.avatar}</span>`;
-        requestNotificationPermission();
-    }
-    console.log('%c✅ CYBERSECR 10A4 + Thông báo Push READY!', 'color:#FF7F00;font-size:20px;font-weight:bold');
-};
+setInterval(draw,33);
 </script>
+
 </body>
 </html>
