@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>10A4 SUPREME SYSTEM</title>
+<title>10A4 GOD SYSTEM FINAL</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 
@@ -13,16 +13,16 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
 
 <style>
-body{margin:0;font-family:Poppins;background:#0f2027;color:white;display:flex;height:100vh;}
-.sidebar{width:220px;background:#ffffff10;padding:15px}
+body{margin:0;font-family:Poppins;background:#0f2027;color:white;display:flex;height:100vh}
+.sidebar{width:230px;background:#ffffff10;padding:15px}
 .main{flex:1;display:flex;flex-direction:column}
 .chat{flex:1;overflow:auto;padding:10px}
-.msg{margin:5px;padding:10px;border-radius:10px}
+.msg{padding:10px;margin:5px;border-radius:10px;max-width:70%}
 .me{background:#00ffae;color:black;margin-left:auto}
 .other{background:#ffffff20}
 .input{display:flex;padding:10px}
-input{flex:1;padding:10px}
-button{padding:10px;margin-left:5px}
+input{flex:1;padding:10px;border:none;border-radius:10px}
+button{padding:10px;margin-left:5px;border:none;border-radius:10px;cursor:pointer}
 .gallery img{width:80px;margin:5px;border-radius:10px}
 </style>
 </head>
@@ -30,13 +30,16 @@ button{padding:10px;margin-left:5px}
 <body>
 
 <div id="auth">
-  <input id="email" placeholder="email"><br>
-  <input id="pass" type="password"><br>
+  <h3>Login / Register</h3>
+  <input id="email" placeholder="Email"><br>
+  <input id="pass" type="password" placeholder="Password"><br>
+  <button onclick="register()">Register</button>
   <button onclick="login()">Login</button>
 </div>
 
 <div class="sidebar" id="app" style="display:none;">
   <h3>🔥 10A4</h3>
+  <p id="userInfo"></p>
   <button onclick="showTab('chat')">Chat</button>
   <button onclick="showTab('ai')">AI</button>
   <button onclick="showTab('gallery')">Gallery</button>
@@ -48,9 +51,10 @@ button{padding:10px;margin-left:5px}
   <div id="chatTab" class="chat"></div>
 
   <div id="aiTab" style="display:none;padding:10px;">
-    <h3>🤖 AI Chat</h3>
+    <h3>🤖 AI</h3>
     <div id="aiChat"></div>
-    <input id="aiInput"><button onclick="askAI()">Hỏi</button>
+    <input id="aiInput">
+    <button onclick="askAI()">Hỏi</button>
   </div>
 
   <div id="galleryTab" style="display:none;">
@@ -64,34 +68,56 @@ button{padding:10px;margin-left:5px}
   </div>
 
   <div class="input">
-    <input id="msg"><button onclick="send()">Gửi</button>
+    <input id="msg" placeholder="Nhắn gì đó...">
+    <button onclick="send()">Gửi</button>
   </div>
 </div>
 
-<audio id="music" loop autoplay>
-  <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3">
-</audio>
-
 <script>
-// CONFIG
-const firebaseConfig = {apiKey:"DÁN",authDomain:"DÁN",projectId:"DÁN",storageBucket:"DÁN"};
-firebase.initializeApp(firebaseConfig);
+const firebaseConfig = {
+  apiKey:"DÁN",
+  authDomain:"DÁN",
+  projectId:"DÁN",
+  storageBucket:"DÁN"
+};
 
+firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 const storage = firebase.storage();
 
+let currentUserData = {};
+
+// REGISTER
+function register(){
+  auth.createUserWithEmailAndPassword(email.value, pass.value)
+  .then(res=>{
+    return db.collection("users").doc(res.user.uid).set({
+      name: email.value,
+      avatar:"https://i.pravatar.cc/100",
+      coin:0,
+      exp:0
+    });
+  });
+}
+
 // LOGIN
 function login(){
-  auth.signInWithEmailAndPassword(email.value,pass.value);
+  auth.signInWithEmailAndPassword(email.value, pass.value);
 }
 
 // AUTH
-auth.onAuthStateChanged(user=>{
+auth.onAuthStateChanged(async user=>{
   if(user){
-    authDiv.style.display="none";
+    auth.style.display="none";
     app.style.display="block";
     main.style.display="flex";
+
+    let doc = await db.collection("users").doc(user.uid).get();
+    currentUserData = doc.data();
+
+    userInfo.innerHTML = `${currentUserData.name}<br>💰 ${currentUserData.coin} | ⭐ ${currentUserData.exp}`;
+
     loadChat(user);
     loadGallery();
     loadRank();
@@ -100,16 +126,21 @@ auth.onAuthStateChanged(user=>{
 
 // CHAT
 function send(){
+  if(!msg.value) return;
+
   db.collection("chat").add({
     text:msg.value,
     uid:auth.currentUser.uid,
+    name:currentUserData.name,
+    avatar:currentUserData.avatar,
     time:Date.now()
   });
 
-  // + rank
-  db.collection("rank").doc(auth.currentUser.uid).set({
-    score:firebase.firestore.FieldValue.increment(1)
-  },{merge:true});
+  // tăng coin + exp
+  db.collection("users").doc(auth.currentUser.uid).update({
+    coin: firebase.firestore.FieldValue.increment(5),
+    exp: firebase.firestore.FieldValue.increment(10)
+  });
 
   msg.value="";
 }
@@ -120,30 +151,35 @@ function loadChat(user){
   .onSnapshot(s=>{
     chatTab.innerHTML="";
     s.forEach(doc=>{
-      let d=doc.data();
-      let cls=d.uid===user.uid?"msg me":"msg other";
-      chatTab.innerHTML+=`<div class="${cls}">${d.text}</div>`;
+      let d = doc.data();
+      let cls = d.uid===user.uid?"msg me":"msg other";
+      chatTab.innerHTML += `
+        <div class="${cls}">
+          <b>${d.name}</b><br>
+          ${d.text}
+        </div>`;
     });
+    chatTab.scrollTop = chatTab.scrollHeight;
   });
 }
 
-// AI (fake thông minh)
-function askAI(){
-  let q = aiInput.value.toLowerCase();
-  let res = "Không hiểu 😅";
+// AI (fallback + có thể nâng API)
+async function askAI(){
+  let q = aiInput.value;
+  let res = "AI chưa cấu hình 😅";
 
-  if(q.includes("chào")) res="Hello bạn 😎";
-  if(q.includes("10a4")) res="10A4 là lớp bá nhất 🔥";
-  if(q.includes("ai đẹp")) res="Bạn đẹp nhất 😏";
+  if(q.toLowerCase().includes("10a4")) res="10A4 là số 1 🔥";
+  if(q.toLowerCase().includes("ai đẹp")) res="Bạn đẹp nhất 😎";
 
-  aiChat.innerHTML += `<div>${q} → ${res}</div>`;
+  aiChat.innerHTML += `<div><b>Bạn:</b> ${q}<br><b>AI:</b> ${res}</div>`;
   aiInput.value="";
 }
 
 // UPLOAD
 function upload(e){
   let file = e.target.files[0];
-  let ref = storage.ref("img/"+file.name);
+  let ref = storage.ref("img/"+Date.now()+file.name);
+
   ref.put(file).then(()=>{
     ref.getDownloadURL().then(url=>{
       db.collection("gallery").add({url});
@@ -163,11 +199,12 @@ function loadGallery(){
 
 // RANK
 function loadRank(){
-  db.collection("rank").orderBy("score","desc")
+  db.collection("users").orderBy("exp","desc")
   .onSnapshot(s=>{
     rank.innerHTML="";
     s.forEach(doc=>{
-      rank.innerHTML+=`<div>${doc.id} : ${doc.data().score}</div>`;
+      let d = doc.data();
+      rank.innerHTML+=`<div>${d.name} - ⭐ ${d.exp}</div>`;
     });
   });
 }
