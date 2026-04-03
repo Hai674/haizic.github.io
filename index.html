@@ -3,827 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>10A4</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>10A4 - Nơi chúng ta tỏa sáng! ✨</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Poppins & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Alpine.js CDN -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
     <style>
-        :root {
-            --bg-dark: #0a0a23;
-            --bg-light: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-            --glass-dark: rgba(255,255,255,0.08);
-            --glass-light: rgba(255,255,255,0.15);
-            --primary-glow: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
-            --accent-glow: #00f2fe;
-            --success-glow: linear-gradient(45deg, #10b981, #34d399);
-            --warning-glow: linear-gradient(45deg, #f59e0b, #fbbf24);
-            --danger-glow: linear-gradient(45deg, #ef4444, #f87171);
-            --card-glow: rgba(59,130,246,0.3);
+        body { 
+            font-family: 'Inter', sans-serif; 
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg-dark);
-            color: white;
-            overflow-x: hidden;
-            position: relative;
+        .font-poppins { 
+            font-family: 'Poppins', sans-serif; 
         }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-image: 
-                radial-gradient(2px 2px at 20px 30px, #3b82f6, transparent),
-                radial-gradient(2px 2px at 40px 70px, #8b5cf6, transparent),
-                radial-gradient(1px 1px at 90px 40px, #ec4899, transparent),
-                radial-gradient(1px 1px at 130px 80px, #00f2fe, transparent);
-            background-repeat: repeat;
-            background-size: 200px 100px;
-            animation: stars 22s linear infinite;
-            z-index: -1;
-            opacity: 0.5;
+        .glass { 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        @keyframes stars { from { transform: translateY(0px); } to { transform: translateY(-300px); } }
-
-        body.light { background: var(--bg-light); }
-
-        /* PROGRESS BAR */
-        .progress-bar {
-            position: fixed; top: 0; left: 0; height: 5px;
-            background: var(--primary-glow);
-            z-index: 9999;
-            transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 15px var(--primary-glow);
+        .neon-glow { 
+            box-shadow: 0 0 20px rgba(160, 32, 240, 0.5), 0 0 40px rgba(160, 32, 240, 0.3);
         }
-
-        /* NAV */
-        nav {
-            position: fixed; top: 0; width: 100%; padding: 1.2rem 5%;
-            display: flex; justify-content: space-between; align-items: center;
-            backdrop-filter: blur(30px); background: var(--glass-dark);
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            z-index: 1000; box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+        .gradient-bg {
+            background: linear-gradient(135deg, #003087 0%, #FF7F00 50%, #A020F0 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
         }
-
-        .logo {
-            font-family: 'Orbitron', monospace; font-size: 2.8rem; font-weight: 900;
-            background: var(--primary-glow); -webkit-background-clip: text;
-            background-clip: text; -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(59,130,246,0.7); line-height: 1;
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
-
-        .nav-btns { display: flex; gap: 1rem; align-items: center; }
-
-        .nav-btns button {
-            padding: 0.9rem 1.8rem; border: none;
-            background: rgba(255,255,255,0.12); color: white;
-            border-radius: 50px; cursor: pointer;
-            backdrop-filter: blur(15px);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            font-size: 1.05rem; font-weight: 600;
-            position: relative; overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.15);
-            will-change: transform, box-shadow;
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
         }
-
-        .nav-btns button:hover {
-            transform: translateY(-4px) scale(1.08);
-            box-shadow: 0 20px 40px var(--card-glow);
-            background: rgba(255,255,255,0.25);
+        .masonry {
+            column-count: 1;
+            column-gap: 1.5rem;
         }
-
-        /* HERO */
-        .hero {
-            height: 100vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-            padding: 0 2rem; position: relative; overflow: hidden;
+        @media (min-width: 640px) { .masonry { column-count: 2; } }
+        @media (min-width: 1024px) { .masonry { column-count: 3; } }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
         }
-
-        #particleCanvas {
-            position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%; z-index: 1;
-            pointer-events: none;
-        }
-
-        .hero::after {
-            content: ''; position: absolute; bottom: 10%; left: 50%;
-            transform: translateX(-50%);
-            width: 420px; height: 420px;
-            background: radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 70%);
-            filter: blur(90px); z-index: 2;
-            animation: pulse-ring 5s ease-in-out infinite;
-        }
-
-        @keyframes pulse-ring {
-            0%, 100% { opacity: 0.3; transform: translateX(-50%) scale(0.85); }
-            50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
-        }
-
-        .hero h1 {
-            font-family: 'Orbitron', monospace;
-            font-size: clamp(6rem, 16vw, 11rem); font-weight: 900;
-            background: var(--primary-glow);
-            -webkit-background-clip: text; background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem; position: relative; z-index: 3;
-            line-height: 0.85; letter-spacing: -8px;
-            animation: hero-glow 3s ease-in-out infinite alternate;
-            filter: drop-shadow(0 0 60px rgba(59,130,246,0.8));
-        }
-
-        @keyframes hero-glow {
-            from { filter: drop-shadow(0 0 30px rgba(59,130,246,0.6)); }
-            to { filter: drop-shadow(0 0 80px rgba(139,92,246,1)); }
-        }
-
-        #welcomeSubtitle {
-            font-family: 'Orbitron', monospace;
-            font-size: clamp(2.4rem, 6.5vw, 3.8rem); font-weight: 800;
-            background: var(--primary-glow); -webkit-background-clip: text;
-            background-clip: text; -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 50px rgba(0,242,254,0.9);
-            margin-bottom: 2.2rem; letter-spacing: 6px;
-            line-height: 1.1; position: relative; z-index: 3;
-            opacity: 0;
-        }
-
-        .letter {
-            display: inline-block; opacity: 0;
-            transform: translateY(40px) scale(0.6);
-            filter: blur(6px);
-            animation: letterPop 1.1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-        }
-
-        @keyframes letterPop {
-            0% { opacity: 0; transform: translateY(40px) scale(0.6); filter: blur(6px); }
-            50% { transform: translateY(-12px) scale(1.15); filter: blur(0); }
-            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-        }
-
-        #userStatus {
-            font-size: 1.85rem; margin-bottom: 3.5rem;
-            opacity: 0.95; min-height: 3rem; font-weight: 600;
-            text-shadow: 0 0 20px rgba(0,242,254,0.6);
-            position: relative; z-index: 3;
-        }
-
-        .btn {
-            padding: 1.6rem 4.5rem; border: none;
-            background: var(--primary-glow); color: white;
-            border-radius: 60px; cursor: pointer;
-            font-size: 1.35rem; font-weight: 700;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            box-shadow: 0 15px 40px var(--card-glow);
-            position: relative; overflow: hidden;
-            text-transform: uppercase; letter-spacing: 2px;
-            z-index: 3; will-change: transform, box-shadow;
-        }
-
-        .btn:hover {
-            transform: translateY(-10px) scale(1.08);
-            box-shadow: 0 30px 70px rgba(139,92,246,0.8);
-        }
-
-        /* SECTIONS */
-        section {
-            padding: 140px 5%; max-width: 1480px; margin: 0 auto;
-            display: none;
-            opacity: 0;
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        section.active {
-            display: block;
-            opacity: 1;
-        }
-
-        h2 {
-            font-family: 'Orbitron', monospace; font-size: 4.2rem; text-align: center;
-            margin-bottom: 4.5rem; background: var(--primary-glow);
-            -webkit-background-clip: text; background-clip: text;
-            -webkit-text-fill-color: transparent; position: relative; font-weight: 800;
-        }
-
-        h2::after {
-            content: ''; position: absolute; bottom: -18px; left: 50%;
-            transform: translateX(-50%); width: 140px; height: 6px;
-            background: var(--primary-glow); border-radius: 3px;
-            box-shadow: 0 0 30px var(--primary-glow);
-        }
-
-        .grid, .grid-2 {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 3rem;
-        }
-        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); }
-
-        .card {
-            background: var(--glass-dark); backdrop-filter: blur(35px);
-            border: 1px solid rgba(255,255,255,0.18); padding: 3.2rem 2.8rem;
-            border-radius: 32px; transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            position: relative; overflow: hidden; cursor: pointer;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.35);
-            will-change: transform, box-shadow, border-color;
-        }
-
-        .card:hover {
-            transform: translateY(-22px) scale(1.04);
-            box-shadow: 0 45px 90px rgba(59,130,246,0.4);
-            border-color: rgba(255,255,255,0.5);
-        }
-
-        .card-icon {
-            font-size: 4.8rem; margin-bottom: 2rem; display: block; text-align: center;
-            filter: drop-shadow(0 0 30px currentColor);
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .card:hover .card-icon {
-            transform: scale(1.2) rotate(12deg);
-            filter: drop-shadow(0 0 50px currentColor);
-        }
-
-        .checkin-card { background: linear-gradient(135deg, rgba(16,185,129,0.18), rgba(34,197,94,0.1)); border-color: rgba(16,185,129,0.5); }
-        .checkin-card .card-icon { color: #10b981; }
-        .activity-card { background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(251,191,36,0.1)); border-color: rgba(245,158,11,0.5); }
-        .activity-card .card-icon { color: #f59e0b; }
-        .achievement-card { background: linear-gradient(135deg, rgba(239,68,68,0.18), rgba(248,113,113,0.1)); border-color: rgba(239,68,68,0.5); }
-        .achievement-card .card-icon { color: #ef4444; }
-
-        .msg-input { max-width: 860px; margin: 0 auto 4rem; display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
-        #msgInput { flex: 1; padding: 1.6rem 2.8rem; border: none; border-radius: 30px; background: rgba(255,255,255,0.13); color: white; font-size: 1.25rem; backdrop-filter: blur(25px); min-width: 420px; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); border: 1px solid rgba(255,255,255,0.15); }
-        #msgInput:focus { box-shadow: 0 0 45px var(--card-glow); transform: scale(1.03); border-color: var(--accent-glow); }
-
-        .btn-post { padding: 1.6rem 3.5rem; background: var(--primary-glow); border: none; border-radius: 30px; color: white; font-weight: 700; cursor: pointer; transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); font-size: 1.25rem; position: relative; overflow: hidden; box-shadow: 0 15px 40px var(--card-glow); }
-        .btn-post:hover:not(:disabled) { transform: scale(1.1); box-shadow: 0 25px 60px rgba(59,130,246,0.7); }
-
-        .messages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(410px, 1fr)); gap: 2.8rem; }
-        .msg-card {
-            animation: msgSlideIn 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-            background: var(--glass-dark); border-radius: 28px; padding: 2.8rem;
-            border: 1px solid rgba(255,255,255,0.15); transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            box-shadow: 0 15px 45px rgba(0,0,0,0.3);
-        }
-        .msg-card:hover { transform: translateY(-12px); box-shadow: 0 30px 70px rgba(139,92,246,0.3); }
-
-        @keyframes msgSlideIn { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
-
-        .checkin-btn {
-            background: var(--success-glow); border: none; padding: 1.3rem 3.2rem;
-            border-radius: 50px; color: white; font-weight: 700; font-size: 1.25rem;
-            cursor: pointer; transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            box-shadow: 0 12px 35px rgba(16,185,129,0.5); width: 100%; margin-top: 2rem;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-
-        .checkin-btn:hover { transform: scale(1.05); box-shadow: 0 20px 50px rgba(16,185,129,0.7); }
-
-        /* MUSIC VISUALIZER */
-        #musicVisualizer {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 80px;
-            background: rgba(10,10,35,0.92); display: none; z-index: 999;
-            backdrop-filter: blur(25px); align-items: flex-end; padding: 0 5%; gap: 6px;
-            box-shadow: 0 -10px 30px rgba(0,242,254,0.4);
-        }
-
-        .visualizer-bar {
-            width: 6px; background: linear-gradient(to top, var(--accent-glow), #3b82f6, #ec4899);
-            border-radius: 9999px 9999px 0 0; box-shadow: 0 0 12px var(--accent-glow);
-            animation: soundwave 1.2s ease-in-out infinite;
-            transition: height 0.08s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        @keyframes soundwave { 0%, 100% { height: 12px; } 50% { height: 68px; } }
-
-        /* SUCCESS POPUP */
-        .success-popup {
-            position: fixed; top: 30%; left: 50%; transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #10b981, #34d399); color: white;
-            padding: 2rem 4rem; border-radius: 30px; font-size: 2rem; font-weight: 800;
-            box-shadow: 0 0 80px #10b981; z-index: 10001;
-            animation: successPop 2.5s ease forwards; display: none; align-items: center; gap: 1rem;
-        }
-
-        @keyframes successPop {
-            0% { transform: translate(-50%, -80%) scale(0.5); opacity: 0; }
-            20% { transform: translate(-50%, -50%) scale(1.15); }
-            80% { transform: translate(-50%, -50%) scale(1); }
-            100% { transform: translate(-50%, -20%) scale(0.8); opacity: 0; }
-        }
-
-        /* LOGIN / REGISTER MODAL */
-        #loginModal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92); backdrop-filter: blur(25px);
-            display: flex; justify-content: center; align-items: center; z-index: 10000;
-        }
-
-        .login-box {
-            background: var(--glass-dark); backdrop-filter: blur(45px);
-            padding: 4rem 3.5rem; border-radius: 40px; text-align: center;
-            border: 1px solid rgba(255,255,255,0.3);
-            box-shadow: 0 60px 120px rgba(0,0,0,0.9); min-width: 520px;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .tab-buttons {
-            display: flex; gap: 10px; margin-bottom: 2rem; justify-content: center;
-        }
-
-        .tab-buttons button {
-            padding: 0.8rem 2rem; border: none; background: rgba(255,255,255,0.1);
-            color: white; border-radius: 50px; cursor: pointer; font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .tab-buttons button.active {
-            background: var(--primary-glow);
-            box-shadow: 0 0 25px rgba(59,130,246,0.6);
-        }
-
-        .form-container > div { display: none; }
-        .form-container > div.active { display: block; animation: formFade 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
-
-        @keyframes formFade {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .login-box input {
-            width: 100%; padding: 1.4rem; border-radius: 20px;
-            background: rgba(255,255,255,0.15); border: none; color: white;
-            font-size: 1.2rem; margin-bottom: 1.5rem; text-align: center;
-        }
-
-        .login-box button {
-            width: 100%; padding: 1.4rem; background: var(--primary-glow);
-            border: none; border-radius: 30px; color: white; font-size: 1.3rem;
-            font-weight: 700; margin-bottom: 1rem; cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        .dark .glass { 
+            background: rgba(0, 0, 0, 0.3); 
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
-<body>
-    <!-- PROGRESS BAR -->
-    <div class="progress-bar" id="progressBar"></div>
+<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white min-h-screen overflow-x-hidden" x-data="appData()">
+    <!-- Particle Background Canvas -->
+    <canvas id="particles" class="fixed inset-0 z-0 opacity-30"></canvas>
 
-    <!-- NAV -->
-    <nav>
-        <div class="logo">10A4</div>
-        <div class="nav-btns">
-            <button onclick="showSection('checkin')"><i class="fas fa-calendar-check"></i> Check-in</button>
-            <button onclick="showSection('activity')"><i class="fas fa-bolt"></i> Hoạt động</button>
-            <button onclick="showSection('achievement')"><i class="fas fa-trophy"></i> Thành tựu</button>
-            <button onclick="showSection('messages')"><i class="fas fa-comments"></i> Tin nhắn</button>
-            <button onclick="logout()" style="background: rgba(239,68,68,0.2); border-color: #ef4444;"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
-        </div>
-    </nav>
-
-    <!-- HERO -->
-    <section class="hero" id="hero">
-        <canvas id="particleCanvas"></canvas>
-
-        <h1>10A4</h1>
-        
-        <div id="welcomeSubtitle">CHÀO MỪNG ĐẾN VỚI LỚP 10A4</div>
-        
-        <div id="userStatus">Hải ơi, bạn đã sẵn sàng trở thành <span style="color:#00f2fe">THIÊN TÀI</span> của lớp chưa? 🔥</div>
-        
-        <button class="btn" onclick="startJourney()">KHỞI ĐỘNG SỨ MỆNH THIÊN TÀI NGAY BÂY GIỜ</button>
-        
-        <div onclick="toggleVisualizer()" style="position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); z-index: 3; display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.12); padding: 14px 32px; border-radius: 50px; backdrop-filter: blur(20px); cursor: pointer; box-shadow: 0 0 30px rgba(0,242,254,0.4);">
-            <i class="fas fa-music" style="color: #00f2fe; font-size: 1.4rem;"></i>
-            <span style="font-weight: 700; font-size: 1.15rem; letter-spacing: 1px;">BẬT NHẠC TƯƠNG LAI • HIỆU ỨNG SỐNG ĐỘNG</span>
-        </div>
-    </section>
-
-    <!-- CHECK-IN -->
-    <section id="checkin">
-        <h2>CHECK-IN HÀNG NGÀY</h2>
-        <div class="grid">
-            <div class="card checkin-card" onclick="handleCheckin(this)">
-                <i class="fas fa-rocket card-icon"></i>
-                <h3>CHECK-IN NGAY</h3>
-                <p>Đánh dấu sự hiện diện của bạn trong hành trình trở thành thiên tài của lớp 10A4. +100 EXP mỗi ngày!</p>
-                <button class="checkin-btn" onclick="event.stopImmediatePropagation(); handleCheckin(this.parentElement)">CHECK-IN THIÊN TÀI</button>
-            </div>
-            <div class="card checkin-card">
-                <i class="fas fa-gem card-icon"></i>
-                <h3>ĐIỂM THIÊN TÀI</h3>
-                <p>Hải đang dẫn đầu với <strong>2.840 EXP</strong>. Bạn sẽ phá kỷ lục tuần này không?</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- HOẠT ĐỘNG -->
-    <section id="activity">
-        <h2>HOẠT ĐỘNG SIÊU CẤP</h2>
-        <div class="grid-2">
-            <div class="card activity-card">
-                <i class="fas fa-brain card-icon"></i>
-                <h3>THỬ THÁCH TOÁN HỌC</h3>
-                <p>Giải 10 bài siêu khó trong 24h. Top 3 nhận badge “Math God” +500 EXP</p>
-            </div>
-            <div class="card activity-card">
-                <i class="fas fa-users card-icon"></i>
-                <h3>TEAM PROJECT “TƯƠNG LAI 2030”</h3>
-                <p>Làm nhóm trình bày ý tưởng thay đổi thế giới. Giải nhất toàn lớp: 1.000 EXP</p>
-            </div>
-            <div class="card activity-card">
-                <i class="fas fa-gamepad card-icon"></i>
-                <h3>ULTRA QUIZ NIGHT</h3>
-                <p>Đêm nay 20:00 - Câu hỏi từ vũ trụ đến lịch sử lớp. Ai nhanh tay nhất?</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- THÀNH TỰU -->
-    <section id="achievement">
-        <h2>THÀNH TỰU VĨ ĐẠI</h2>
-        <div class="grid">
-            <div class="card achievement-card">
-                <i class="fas fa-trophy card-icon"></i>
-                <h3>GENIUS OF THE WEEK</h3>
-                <p>Hải đã đạt danh hiệu tuần này! Bạn đang giữ vị trí #1 của 10A4.</p>
-            </div>
-            <div class="card achievement-card">
-                <i class="fas fa-medal card-icon"></i>
-                <h3>PERFECT ATTENDANCE</h3>
-                <p>100% check-in tháng 3. Bạn là hình mẫu của lớp!</p>
-            </div>
-            <div class="card achievement-card">
-                <i class="fas fa-star card-icon"></i>
-                <h3>ULTRA LEGEND</h3>
-                <p>Đạt 10.000 EXP tổng thể. Chỉ 3 người trong lớp có huy hiệu này.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- TIN NHẮN -->
-    <section id="messages">
-        <h2>HỆ THỐNG TIN NHẮN CỘNG ĐỒNG</h2>
-        <div class="msg-input">
-            <input type="text" id="msgInput" placeholder="Chia sẻ ý tưởng thiên tài của bạn với cả lớp 10A4...">
-            <button class="btn-post" onclick="postMessage()">ĐĂNG TIN NHẮN</button>
-        </div>
-        <div class="messages-grid" id="messagesGrid"></div>
-    </section>
-
-    <!-- LOGIN / REGISTER MODAL -->
-    <div id="loginModal">
-        <div class="login-box">
-            <h2 class="login-title" style="font-size: 2.6rem; margin-bottom: 1rem;">10A4</h2>
-            
-            <div class="tab-buttons">
-                <button id="tab-login" class="active" onclick="switchTab(0)">ĐĂNG NHẬP</button>
-                <button id="tab-register" onclick="switchTab(1)">ĐĂNG KÝ</button>
-            </div>
-
-            <div class="form-container">
-                <div id="login-form" class="active">
-                    <input id="loginName" type="text" value="Hải" placeholder="Tên học sinh">
-                    <button onclick="fakeLogin()">XÁC NHẬN &amp; VÀO LỚP</button>
-                </div>
-
-                <div id="register-form">
-                    <input id="registerName" type="text" placeholder="Tên học sinh">
-                    <input id="registerPass" type="password" placeholder="Mật khẩu (bất kỳ)">
-                    <button onclick="fakeRegister()">ĐĂNG KÝ TÀI KHOẢN</button>
-                </div>
-            </div>
-            
-            <p style="margin-top: 1.5rem; opacity: 0.7; font-size: 0.95rem;">Chỉ học sinh lớp 10A4 mới được vào</p>
+    <!-- Loading Screen -->
+    <div id="loading" class="fixed inset-0 bg-gradient-to-r from-blue-900 via-purple-900 to-orange-500 z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div class="w-24 h-24 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-6"></div>
+            <h1 class="font-poppins text-3xl font-bold neon-glow mb-2">10A4</h1>
+            <p class="text-white/80">Đang tải... Nơi chúng ta tỏa sáng! ✨</p>
         </div>
     </div>
 
-    <!-- MUSIC VISUALIZER -->
-    <div id="musicVisualizer"></div>
-
-    <!-- BÀI HÁT YOUTUBE TỰ ĐỘNG -->
-    <iframe id="youtubeMusic" 
-            width="1" height="1" 
-            src="https://www.youtube.com/embed/PLkgOriIw28?autoplay=1&amp;loop=1&amp;playlist=PLkgOriIw28&amp;modestbranding=1&amp;controls=0&amp;fs=0&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;enablejsapi=1" 
-            frameborder="0" 
-            allow="autoplay; encrypted-media" 
-            allowfullscreen 
-            style="position: absolute; left: -9999px; top: -9999px; opacity: 0; pointer-events: none; z-index: -1;">
-    </iframe>
-
-    <!-- SUCCESS POPUP -->
-    <div id="successPopup" class="success-popup">
-        <i class="fas fa-rocket" style="font-size: 2.5rem;"></i>
-        CHECK-IN THÀNH CÔNG! +100 EXP
+    <!-- Login Overlay -->
+    <div x-show="!isLoggedIn" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" 
+         class="fixed inset-0 bg-black/80 backdrop-blur-md z-40 flex items-center justify-center p-4">
+        <div class="glass rounded-3xl p-12 max-w-md w-full max-h-[90vh] overflow-y-auto neon-glow">
+            <div class="text-center mb-8">
+                <h1 class="font-poppins text-4xl font-bold bg-gradient-to-r from-blue-400 via-orange-400 to-purple-500 bg-clip-text text-transparent mb-2">
+                    10A4 CyberSecr 🚀
+                </h1>
+                <p class="text-white/80">Hệ thống bảo mật lớp 10A4</p>
+            </div>
+            
+            <form @submit.prevent="login" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Tên học sinh</label>
+                    <input x-model="loginData.username" type="text" required 
+                           class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-500/50 transition-all duration-300 text-white placeholder-white/60">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Mật khẩu lớp</label>
+                    <input x-model="loginData.password" type="password" required 
+                           class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-500/50 transition-all duration-300 text-white placeholder-white/60">
+                </div>
+                <button type="submit" 
+                        class="w-full font-poppins font-bold py-4 px-6 bg-gradient-to-r from-blue-600 to-orange-500 hover:from-blue-700 hover:to-orange-600 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-purple-500/25 neon-glow">
+                    🚀 ĐĂNG NHẬP 10A4
+                </button>
+            </form>
+            
+            <div class="mt-8 pt-6 border-t border-white/20 text-center">
+                <p class="text-xs text-white/60">👥 Tài khoản mẫu: <strong>10a4</strong> / <strong>vietnam</strong></p>
+            </div>
+        </div>
     </div>
 
-    <script>
-        // PROGRESS BAR
-        function updateProgressBar() {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.getElementById("progressBar").style.width = scrolled + "%";
-        }
-        window.onscroll = updateProgressBar;
+    <!-- Main App (Chỉ hiện sau khi login) -->
+    <div x-show="isLoggedIn" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-10" x-transition:enter-end="opacity-100 translate-y-0">
+        <!-- Header & Navigation -->
+        <header class="fixed top-0 left-0 right-0 z-30 glass backdrop-blur-xl border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <!-- Logo -->
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-orange-500 rounded-2xl flex items-center justify-center neon-glow">
+                            <span class="font-poppins font-bold text-xl">10</span>
+                        </div>
+                        <div>
+                            <h1 class="font-poppins text-2xl font-bold bg-gradient-to-r from-blue-400 via-orange-400 to-purple-500 bg-clip-text text-transparent">
+                                10A4
+                            </h1>
+                            <p class="text-xs text-white/60">Nơi chúng ta tỏa sáng!</p>
+                        </div>
+                    </div>
 
-        // LIGHT MODE
-        function toggleLightMode() {
-            document.body.classList.toggle('light');
-        }
+                    <!-- Navigation -->
+                    <nav class="hidden md:flex items-center space-x-1">
+                        <template x-for="item in navItems" :key="item.id">
+                            <a :href="item.href" 
+                               @click.prevent="currentPage = item.id"
+                               :class="['px-4 py-2 font-medium rounded-xl transition-all duration-300 font-poppins relative group', 
+                               currentPage === item.id ? 'bg-white/20 neon-glow scale-105' : 'hover:bg-white/10 hover:scale-105']">
+                                <span x-text="item.name"></span>
+                                <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+                            </a>
+                        </template>
+                        <!-- Dark Mode Toggle -->
+                        <button @click="toggleDarkMode" class="p-2 rounded-xl hover:bg-white/20 transition-all duration-300">
+                            <span x-show="!isDarkMode" class="text-2xl">☀️</span>
+                            <span x-show="isDarkMode" class="text-2xl">🌙</span>
+                        </button>
+                        <!-- Logout -->
+                        <button @click="logout" class="ml-4 px-4 py-2 font-poppins font-semibold bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 rounded-xl transform hover:scale-105 transition-all duration-300">
+                            🚪 Thoát
+                        </button>
+                    </nav>
 
-        // ANIMATE LETTERS
-        function animateLetters(element) {
-            const text = element.innerText;
-            element.innerHTML = '';
-            text.split('').forEach((char, i) => {
-                const span = document.createElement('span');
-                span.className = 'letter';
-                span.style.animationDelay = `${i * 35}ms`;
-                span.textContent = char === ' ' ? '\u00A0' : char;
-                element.appendChild(span);
-            });
-            element.style.opacity = '1';
-        }
+                    <!-- Mobile Menu Button -->
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-xl hover:bg-white/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
 
-        // PARTICLE SYSTEM
-        let particles = [];
-        let mouse = { x: 0, y: 0, radius: 180 };
-        let canvas, ctx, w, h;
+        <!-- Mobile Menu Overlay -->
+        <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-x-full" x-transition:enter-end="opacity-100 translate-x-0" 
+             class="fixed top-20 left-0 h-full w-64 glass backdrop-blur-xl z-20 md:hidden">
+            <div class="p-6 space-y-4">
+                <template x-for="item in navItems" :key="item.id">
+                    <a :href="item.href" @click.prevent="currentPage = item.id; mobileMenuOpen = false" 
+                       class="block px-4 py-3 font-poppins font-semibold rounded-xl hover:bg-white/20 transition-all duration-300"
+                       :class="currentPage === item.id ? 'bg-white/30 neon-glow' : ''">
+                        <span x-text="item.name"></span>
+                    </a>
+                </template>
+                <button @click="toggleDarkMode" class="w-full text-left px-4 py-3 font-poppins font-semibold rounded-xl hover:bg-white/20 transition-all duration-300">
+                    <span x-show="!isDarkMode">☀️ Chế độ sáng</span>
+                    <span x-show="isDarkMode">🌙 Chế độ tối</span>
+                </button>
+                <button @click="logout" class="w-full font-poppins font-bold py-3 px-4 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 rounded-xl transition-all duration-300">
+                    🚪 Thoát
+                </button>
+            </div>
+        </div>
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * w;
-                this.y = Math.random() * h;
-                this.vx = (Math.random() - 0.5) * 1.6;
-                this.vy = (Math.random() - 0.5) * 1.6;
-                this.size = Math.random() * 4 + 1.2;
-                this.color = ['#3b82f6', '#8b5cf6', '#ec4899', '#00f2fe'][Math.floor(Math.random() * 4)];
-                this.life = 110 + Math.random() * 70;
-                this.alpha = 1;
-            }
-            update() {
-                const dx = mouse.x - this.x;
-                const dy = mouse.y - this.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance < mouse.radius && distance > 0) {
-                    const force = (mouse.radius - distance) / mouse.radius;
-                    this.vx += dx / distance * force * 2;
-                    this.vy += dy / distance * force * 2;
-                }
-                this.vx = Math.max(Math.min(this.vx, 3.8), -3.8);
-                this.vy = Math.max(Math.min(this.vy, 3.8), -3.8);
-                this.x += this.vx;
-                this.y += this.vy;
-                this.life--;
-                this.alpha = this.life / 130;
-                if (this.x < 0 || this.x > w) this.vx *= -0.92;
-                if (this.y < 0 || this.y > h) this.vy *= -0.92;
-                if (this.life <= 0) {
-                    this.x = Math.random() * w;
-                    this.y = Math.random() * h;
-                    this.vx = (Math.random() - 0.5) * 1.6;
-                    this.vy = (Math.random() - 0.5) * 1.6;
-                    this.life = 110 + Math.random() * 70;
-                }
-            }
-            draw() {
-                ctx.save();
-                ctx.shadowBlur = 16;
-                ctx.shadowColor = this.color;
-                ctx.globalAlpha = this.alpha * 0.9;
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-        }
+        <!-- Main Content -->
+        <main class="pt-24 pb-20 max-w-7xl mx-auto px-6">
+            <!-- Welcome Banner -->
+            <div x-show="currentPage === 'home' && showWelcome" x-init="setTimeout(() => showWelcome = false, 5000)" 
+                 class="fixed top-28 right-6 z-20 glass p-6 rounded-2xl neon-glow animate-bounce">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-500 rounded-xl flex items-center justify-center">
+                        <span class="font-bold text-xl">🎉</span>
+                    </div>
+                    <div>
+                        <h3 class="font-poppins font-bold text-lg" x-text="`Chào ${userData.name}!`"></h3>
+                        <p class="text-sm text-white/80">Chào mừng đến với 10A4! ✨</p>
+                    </div>
+                </div>
+            </div>
 
-        function initParticles() {
-            canvas = document.getElementById('particleCanvas');
-            ctx = canvas.getContext('2d');
-            const hero = document.querySelector('.hero');
-            w = canvas.width = hero.offsetWidth;
-            h = canvas.height = hero.offsetHeight;
-            particles = [];
-            for (let i = 0; i < 138; i++) particles.push(new Particle());
-            hero.addEventListener('mousemove', (e) => {
-                const rect = hero.getBoundingClientRect();
-                mouse.x = e.clientX - rect.left;
-                mouse.y = e.clientY - rect.top;
-            });
-            hero.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
-            window.addEventListener('resize', () => {
-                w = canvas.width = hero.offsetWidth;
-                h = canvas.height = hero.offsetHeight;
-            });
-        }
+            <!-- Page: Trang chủ -->
+            <div x-show="currentPage === 'home'">
+                <!-- Hero Section -->
+                <section class="relative h-screen flex items-center justify-center text-center parallax" 
+                         style="background: linear-gradient(135deg, #003087, #FF7F00, #A020F0);">
+                    <div class="absolute inset-0 bg-black/30"></div>
+                    <div class="relative z-10 max-w-4xl mx-auto px-6">
+                        <h1 class="font-poppins text-5xl md:text-7xl font-black bg-gradient-to-r from-white via-blue-200 to-white bg-clip-text text-transparent mb-6 animate-pulse">
+                            CHÀO MỪNG ĐẾN VỚI
+                        </h1>
+                        <h2 class="font-poppins text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-orange-400 via-yellow-400 to-pink-400 bg-clip-text text-transparent mb-8 leading-tight">
+                            10A4
+                        </h2>
+                        <p class="font-poppins text-xl md:text-2xl text-white/90 mb-12 max-w-2xl mx-auto leading-relaxed">
+                            Nơi chúng ta <span class="text-orange-400 font-bold">tỏa sáng</span>, <span class="text-purple-400 font-bold">kết nối</span> và <span class="text-blue-400 font-bold">thành công</span> cùng nhau! ✨
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                            <button @click="currentPage = 'gallery'" 
+                                    class="font-poppins font-bold px-12 py-6 bg-white text-blue-900 rounded-3xl text-lg hover:scale-110 transition-all duration-500 shadow-2xl hover:shadow-white/50">
+                                📸 Xem ảnh lớp
+                            </button>
+                            <button @click="currentPage = 'chat'" 
+                                    class="font-poppins font-bold px-12 py-6 border-2 border-white rounded-3xl text-lg hover:bg-white hover:text-blue-900 transition-all duration-500 hover:scale-110">
+                                💬 Chat ngay
+                            </button>
+                        </div>
+                    </div>
+                </section>
 
-        function animateParticles() {
-            ctx.fillStyle = 'rgba(10, 10, 35, 0.12)';
-            ctx.fillRect(0, 0, w, h);
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < 130) {
-                        ctx.save();
-                        ctx.globalAlpha = (1 - distance / 130) * 0.4;
-                        ctx.strokeStyle = '#00f2fe';
-                        ctx.lineWidth = 0.8;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                        ctx.restore();
-                    }
-                }
-            }
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-            }
-            requestAnimationFrame(animateParticles);
-        }
+                <!-- Stats Cards -->
+                <section class="grid md:grid-cols-3 gap-8 my-24">
+                    <div class="glass p-8 rounded-3xl text-center group hover:scale-105 transition-all duration-500 hover:neon-glow">
+                        <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition-transform duration-500">
+                            <span class="font-bold text-2xl">👥</span>
+                        </div>
+                        <h3 class="font-poppins text-2xl font-bold mb-4" x-text="stats.totalStudents"></h3>
+                        <p class="text-white/70 font-medium">Học sinh 10A4</p>
+                    </div>
+                    <div class="glass p-8 rounded-3xl text-center group hover:scale-105 transition-all duration-500 hover:neon-glow">
+                        <div class="w-20 h-20 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition-transform duration-500">
+                            <span class="font-bold text-2xl" x-text="stats.todayVisits"></span>
+                        </div>
+                        <h3 class="font-poppins text-2xl font-bold mb-4" x-text="formatNumber(stats.todayVisits)"></h3>
+                        <p class="text-white/70 font-medium">Lượt truy cập hôm nay</p>
+                    </div>
+                    <div class="glass p-8 rounded-3xl text-center group hover:scale-105 transition-all duration-500 hover:neon-glow">
+                        <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition-transform duration-500">
+                            <span class="font-bold text-2xl">📊</span>
+                        </div>
+                        <h3 class="font-poppins text-2xl font-bold mb-4" x-text="formatNumber(stats.totalVisits)"></h3>
+                        <p class="text-white/70 font-medium">Tổng lượt truy cập</p>
+                    </div>
+                </section>
 
-        // CONFETTI
-        function launchWelcomeConfetti() {
-            for (let i = 0; i < 65; i++) {
-                setTimeout(() => {
-                    const emoji = document.createElement('div');
-                    emoji.textContent = ['🚀', '⭐', '🔥', '💎', '⚡'][Math.floor(Math.random() * 5)];
-                    emoji.style.position = 'fixed';
-                    emoji.style.left = Math.random() * 100 + 'vw';
-                    emoji.style.top = '-40px';
-                    emoji.style.fontSize = '2.2rem';
-                    emoji.style.zIndex = '99999';
-                    emoji.style.opacity = '0.95';
-                    document.body.appendChild(emoji);
-                    emoji.animate([
-                        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
-                        { transform: `translateY(${window.innerHeight + 120}px) rotate(${Math.random() * 1200}deg)`, opacity: 0 }
-                    ], { duration: Math.random() * 2800 + 2200, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' });
-                    setTimeout(() => emoji.remove(), 5200);
-                }, i * 6);
-            }
-        }
-
-        // CHECK-IN
-        function handleCheckin(card) {
-            const popup = document.getElementById('successPopup');
-            popup.style.display = 'flex';
-            launchWelcomeConfetti();
-            setTimeout(() => { 
-                popup.style.display = 'none'; 
-                if (card) { 
-                    card.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)'; 
-                    card.style.transform = 'scale(1.1)'; 
-                    setTimeout(() => card.style.transform = '', 600); 
-                }
-            }, 2500);
-        }
-
-        // START JOURNEY
-        function startJourney() {
-            const hero = document.querySelector('.hero');
-            hero.style.transition = 'all 1.2s cubic-bezier(0.23, 1, 0.32, 1)';
-            hero.style.opacity = '0';
-            setTimeout(() => {
-                showSection('checkin');
-                hero.style.opacity = '1';
-            }, 800);
-        }
-
-        // SHOW SECTION
-        function showSection(id) {
-            document.querySelectorAll('section').forEach(s => {
-                if (s.id !== 'hero') s.classList.remove('active');
-            });
-            const section = document.getElementById(id);
-            if (section) {
-                section.classList.add('active');
-                section.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // CLOSE WHEN CLICK OUTSIDE
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('nav') && !e.target.closest('section')) {
-                document.querySelectorAll('section').forEach(s => {
-                    if (s.id !== 'hero') s.classList.remove('active');
-                });
-            }
-        });
-
-        // MESSAGE SYSTEM (không lưu, không có tin nhắn sẵn)
-        let messages = [];
-
-        function renderMessages() {
-            const container = document.getElementById('messagesGrid');
-            container.innerHTML = '';
-            messages.forEach(msg => {
-                const cardHTML = `<div class="msg-card"><div class="msg-header"><div class="msg-author">${msg.author}</div><div class="msg-time">${msg.time}</div></div><div class="msg-content">${msg.content}</div></div>`;
-                container.innerHTML += cardHTML;
-            });
-        }
-
-        function postMessage() {
-            const input = document.getElementById('msgInput');
-            if (!input.value.trim()) return;
-            const now = new Date();
-            const time = `${now.getHours()}:${now.getMinutes() < 10 ? '0' : ''}${now.getMinutes()}`;
-            messages.unshift({ author: "Hải", time: time, content: input.value });
-            renderMessages();
-            input.value = '';
-        }
-
-        // LOGIN / REGISTER
-        let isLoggedIn = false;
-
-        function switchTab(tab) {
-            document.getElementById('tab-login').classList.toggle('active', tab === 0);
-            document.getElementById('tab-register').classList.toggle('active', tab === 1);
-            document.getElementById('login-form').classList.toggle('active', tab === 0);
-            document.getElementById('register-form').classList.toggle('active', tab === 1);
-        }
-
-        function fakeLogin() {
-            const name = document.getElementById('loginName').value || "Hải";
-            completeLogin(name);
-        }
-
-        function fakeRegister() {
-            const name = document.getElementById('registerName').value || "Hải";
-            if (!name) return alert("Vui lòng nhập tên");
-            completeLogin(name);
-        }
-
-        function completeLogin(name) {
-            isLoggedIn = true;
-            document.getElementById('loginModal').style.transition = 'opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
-            document.getElementById('loginModal').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('loginModal').style.display = 'none';
-                document.getElementById('userStatus').innerHTML = `Chào mừng trở lại, <span style="color:#00f2fe">${name}</span>! 🔥`;
-                showSection('checkin');
-            }, 600);
-        }
-
-        function logout() {
-            isLoggedIn = false;
-            document.getElementById('loginModal').style.display = 'flex';
-            document.getElementById('loginModal').style.opacity = '1';
-            document.querySelectorAll('section').forEach(s => {
-                if (s.id !== 'hero') s.classList.remove('active');
-            });
-        }
-
-        // MUSIC VISUALIZER
-        let visualizerInterval = null;
-        function toggleVisualizer() {
-            const viz = document.getElementById('musicVisualizer');
-            if (viz.style.display === 'flex') {
-                viz.style.display = 'none';
-                if (visualizerInterval) clearInterval(visualizerInterval);
-                return;
-            }
-            viz.style.display = 'flex';
-            viz.innerHTML = '';
-            for (let i = 0; i < 32; i++) {
-                const bar = document.createElement('div');
-                bar.className = 'visualizer-bar';
-                bar.style.height = Math.random() * 35 + 15 + 'px';
-                bar.style.animationDelay = Math.random() * 1.4 + 's';
-                viz.appendChild(bar);
-            }
-            visualizerInterval = setInterval(() => {
-                const bars = viz.querySelectorAll('.visualizer-bar');
-                bars.forEach(bar => bar.style.height = Math.random() * 68 + 12 + 'px');
-            }, 95);
-        }
-
-        // KHỞI ĐỘNG
-        window.onload = function() {
-            document.getElementById('loginModal').style.display = 'flex';
-            renderMessages();
-            updateProgressBar();
-            initParticles();
-            animateParticles();
-
-            setTimeout(() => {
-                const subtitle = document.getElementById('welcomeSubtitle');
-                animateLetters(subtitle);
-            }, 800);
-
-            setTimeout(() => launchWelcomeConfetti(), 1400);
-            setTimeout(() => toggleVisualizer(), 2400);
-
-            console.log('%c🚀 10A4 - Đã chỉnh sửa xong!', 'color:#00f2fe; font-size:18px; font-weight:900; font-family:Orbitron');
-        };
-    </script>
-</body>
-</html>
+                <!-- Quick Links -->
+                <section class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
+                    <div class="glass p-8 rounded-3xl group hover:scale-110 transition-all duration-500 hover:neon-glow cursor-pointer" @click="currentPage = 'gallery'">
+                        <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-180 transition-transform duration-500">
+                            <span class="text-2xl">📸</span>
+                        </div>
+                        <h3 class="font-poppins font-bold text-xl mb-2 text-center">Nơi lưu ảnh</h3>
+                        <p class="text-white/70 text-center">Xem và up ảnh lớp siêu đẹp</p>
+                    </div>
+                    <div class="glass p-8 rounded-3xl group hover:scale-110 transition-all duration-500 hover:neon-glow cursor-pointer" @click="currentPage = 'achievements'">
+                        <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-180 transition-transform duration-
