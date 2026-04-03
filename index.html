@@ -1,177 +1,199 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lưu Giữ Kỷ Niệm Cấp 3 - Lớp A4</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10A4 ULTRA FINAL</title>
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
 
-        header {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px 20px;
-            border-radius: 20px;
-            margin-bottom: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
+body{
+  background:#0f172a;
+  color:white;
+  transition:0.3s;
+}
 
-        h1 {
-            font-size: 3.5em;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
+body.light{
+  background:#f1f5f9;
+  color:#000;
+}
 
-        .subtitle {
-            font-size: 1.4em;
-            color: #666;
-            margin-bottom: 20px;
-        }
+/* NAV */
+nav{
+  position:fixed;
+  width:100%;
+  padding:15px 30px;
+  display:flex;
+  justify-content:space-between;
+  backdrop-filter: blur(10px);
+  background:rgba(255,255,255,0.05);
+  z-index:999;
+}
 
-        .nav-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
+nav button{
+  margin-left:10px;
+}
 
-        .tab-button {
-            padding: 15px 30px;
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+/* HERO */
+.hero{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
 
-        .tab-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
+.hero h1{
+  font-size:60px;
+  background:linear-gradient(45deg,#60a5fa,#a78bfa);
+  -webkit-background-clip:text;
+  color:transparent;
+}
 
-        .tab-button.active {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            color: white;
-            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
-        }
+.btn{
+  padding:10px 20px;
+  border:none;
+  background:#6366f1;
+  color:white;
+  border-radius:10px;
+  cursor:pointer;
+}
 
-        .class-content {
-            display: none;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            animation: fadeIn 0.5s ease-in;
-        }
+/* SECTION */
+section{padding:80px 20px}
 
-        .class-content.active {
-            display: block;
-        }
+/* CARD */
+.card{
+  background:rgba(255,255,255,0.05);
+  padding:20px;
+  border-radius:15px;
+  margin:10px;
+}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+}
 
-        .class-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+/* LOGIN BOX */
+#loginBox{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:#111;
+  padding:20px;
+  border-radius:10px;
+  display:none;
+}
 
-        .class-title {
-            font-size: 2.5em;
-            color: #4ecdc4;
-            margin-bottom: 10px;
-        }
+</style>
+</head>
 
-        .year {
-            font-size: 1.3em;
-            color: #666;
-            font-style: italic;
-        }
+<body>
 
-        .memories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
-        }
+<nav>
+  <b>10A4</b>
+  <div>
+    <button onclick="toggleMode()">🌗</button>
+    <button onclick="loginGoogle()">🔐</button>
+    <button onclick="toggleMusic()">🎵</button>
+  </div>
+</nav>
 
-        .memory-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+<div class="hero">
+  <h1>10A4</h1>
+  <p id="user">Chưa đăng nhập</p>
+  <button class="btn" onclick="scrollToSection()">Vào hệ thống</button>
+</div>
 
-        .memory-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
+<section>
+  <h2>Dashboard</h2>
+  <div class="grid">
+    <div class="card">👥 38 học sinh</div>
+    <div class="card">👨‍🏫 Đinh Trung Thiện</div>
+    <div class="card">📚 Lớp 10A4</div>
+  </div>
+</section>
 
-        .memory-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
-        }
+<section>
+  <h2>Thông báo</h2>
+  <input id="msg" placeholder="Nhập thông báo">
+  <button onclick="addMsg()">Đăng</button>
+  <div id="list"></div>
+</section>
 
-        .memory-icon {
-            font-size: 2.5em;
-            margin-bottom: 15px;
-        }
+<audio id="music" loop>
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
 
-        .memory-title {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
-        }
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
-        .memory-desc {
-            color: #666;
-            line-height: 1.6;
-        }
+<script>
+const firebaseConfig = {
+  apiKey: "DÁN_VÀO_ĐÂY",
+  authDomain: "DÁN_VÀO_ĐÂY",
+  projectId: "DÁN_VÀO_ĐÂY"
+};
 
-        .photo-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
+firebase.initializeApp(firebaseConfig);
 
-        .photo-placeholder {
-            height: 200px;
-            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
-            border-radius: 10px;
-            display: flex
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+/* LOGIN GOOGLE */
+function loginGoogle(){
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider)
+  .then(result=>{
+    document.getElementById("user").innerText =
+      "Xin chào: " + result.user.displayName;
+  });
+}
+
+/* ADD MESSAGE */
+function addMsg(){
+  const msg = document.getElementById("msg").value;
+  db.collection("messages").add({
+    text: msg,
+    time: Date.now()
+  });
+}
+
+/* REALTIME */
+db.collection("messages").orderBy("time","desc")
+.onSnapshot(snapshot=>{
+  let html="";
+  snapshot.forEach(doc=>{
+    html += "<div class='card'>"+doc.data().text+"</div>";
+  });
+  document.getElementById("list").innerHTML = html;
+});
+
+/* DARK MODE */
+function toggleMode(){
+  document.body.classList.toggle("light");
+}
+
+/* MUSIC */
+let playing=false;
+function toggleMusic(){
+  let m=document.getElementById("music");
+  if(!playing){m.play();playing=true;}
+  else{m.pause();playing=false;}
+}
+
+/* SCROLL */
+function scrollToSection(){
+  window.scrollTo({top:600,behavior:"smooth"});
+}
+</script>
+
+</body>
+</html>
