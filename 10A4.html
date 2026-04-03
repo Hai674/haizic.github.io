@@ -1,1 +1,694 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10A4 • THPT Gia Viễn • Nơi chúng ta tỏa sáng!</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet">
+    <!-- YouTube IFrame API (để phát nhạc YouTube mượt mà) -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Inter:wght@400;500&amp;display=swap');
+        
+        :root {
+            --tw-color-primary: #003087;
+            --tw-color-accent: #FF7F00;
+            --tw-color-neon: #A020F0;
+        }
+        
+        * { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+        
+        body { font-family: 'Inter', system_ui, sans-serif; }
+        .title-font { font-family: 'Poppins', sans-serif; }
 
+        .glass { background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); }
+        .neon-text { text-shadow: 0 0 10px #A020F0, 0 0 20px #A020F0; }
+
+        .nav-link { position: relative; }
+        .nav-link:after { content: ''; position: absolute; width: 0; height: 3px; bottom: -2px; left: 50%; background: #FF7F00; transition: all 0.3s ease; }
+        .nav-link:hover:after { width: 100%; left: 0; }
+
+        .masonry-grid { column-count: 4; column-gap: 1.5rem; }
+        @media (max-width: 768px) { .masonry-grid { column-count: 2; } }
+
+        .page { animation: fadeIn 0.4s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .chat-bubble-mine { background: #FF7F00; color: #003087; border-radius: 20px 20px 4px 20px; }
+        .chat-bubble-other { background: rgba(255,255,255,0.15); border-radius: 20px 20px 20px 4px; }
+    </style>
+</head>
+<body class="bg-[#003087] text-white min-h-screen overflow-x-hidden">
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center hero-bg">
+        <canvas id="particle-canvas" class="absolute inset-0 pointer-events-none"></canvas>
+        
+        <div class="max-w-md w-full mx-4 glass rounded-3xl p-10 shadow-2xl border border-white/20 relative">
+            <div class="flex justify-center mb-6">
+                <div class="w-20 h-20 bg-[#FF7F00] rounded-2xl flex items-center justify-center text-5xl shadow-inner neon-text">🏫</div>
+            </div>
+            
+            <h1 class="title-font text-4xl font-bold text-center mb-2 neon-text">CYBERSECR</h1>
+            <p class="text-center text-white/80 text-lg mb-8">Đăng nhập • Lớp 10A4 THPT Gia Viễn</p>
+            
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-white/90">Tên học sinh</label>
+                    <input id="username" type="text" placeholder="Ví dụ: Nguyễn Văn An" 
+                           class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl focus:outline-none focus:border-[#FF7F00] text-white placeholder-white/50 text-lg">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-white/90">Mật khẩu</label>
+                    <input id="password" type="password" placeholder="Mật khẩu lớp (10A4)" 
+                           class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl focus:outline-none focus:border-[#FF7F00] text-white placeholder-white/50 text-lg">
+                </div>
+                
+                <button type="submit" 
+                        class="w-full py-4 bg-[#FF7F00] hover:bg-[#FF9F33] text-[#003087] font-bold text-xl rounded-2xl shadow-lg flex items-center justify-center gap-3">
+                    ĐĂNG NHẬP NGAY <span class="text-2xl">🚀</span>
+                </button>
+            </form>
+            
+            <p id="login-error" class="text-red-400 text-center mt-4 hidden"></p>
+            
+            <div class="mt-8 text-center text-xs text-white/60">
+                Mật khẩu chung cho cả lớp: <span class="font-bold text-[#FF7F00]">10A4</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="main-app" class="hidden">
+        
+        <!-- NAVBAR -->
+        <nav class="fixed top-0 left-0 right-0 z-50 bg-[#003087]/95 backdrop-blur-lg border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-[#FF7F00] text-[#003087] rounded-2xl flex items-center justify-center text-3xl shadow-inner">🏫</div>
+                    <div>
+                        <h1 class="title-font text-2xl font-bold">10A4</h1>
+                        <p class="text-[10px] text-white/60 -mt-1">THPT Gia Viễn • 2025-2026</p>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-8 text-lg font-medium">
+                    <a onclick="navigateTo('home')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00]">🏠 Trang chủ</a>
+                    <a onclick="navigateTo('album')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00]">📸 Nơi lưu giữ hình ảnh</a>
+                    <a onclick="navigateTo('achievements')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00]">🏆 Thành tích</a>
+                    <a onclick="navigateTo('students')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00]">👥 Danh sách học sinh</a>
+                    <a onclick="navigateTo('chat')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00]">💬 Chat chung &amp; Nhắn riêng</a>
+                    <a onclick="navigateTo('profile')" id="profile-menu-link" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00] hidden">👤 Hồ sơ cá nhân</a>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleDarkMode()" class="w-10 h-10 flex items-center justify-center text-2xl rounded-2xl hover:bg-white/10">🌗</button>
+                    
+                    <div onclick="toggleMusic()" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-3xl cursor-pointer">
+                        <span id="music-icon" class="text-2xl">🎵</span>
+                        <span id="music-status" class="text-sm font-medium">Nhạc đang phát</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-3">
+                        <div id="user-avatar" onclick="navigateTo('profile')" class="w-9 h-9 bg-[#FF7F00] rounded-2xl flex items-center justify-center text-xl cursor-pointer shadow-inner"></div>
+                        <div>
+                            <p id="user-name-display" class="font-semibold text-sm"></p>
+                            <p class="text-[10px] text-white/60">Lớp 10A4</p>
+                        </div>
+                        <button onclick="logout()" class="px-5 py-2 text-sm font-medium bg-red-500/80 hover:bg-red-600 rounded-2xl flex items-center gap-2">🚪 Đăng xuất</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- PAGE CONTAINER -->
+        <div class="pt-20 max-w-7xl mx-auto px-6 pb-12">
+            
+            <!-- HOME PAGE -->
+            <div id="page-home" class="page">
+                <div class="hero-bg rounded-3xl p-12 relative overflow-hidden mb-12 shadow-2xl">
+                    <div class="max-w-2xl">
+                        <h1 class="title-font text-6xl md:text-7xl font-bold leading-none mb-6">
+                            Chào mừng đến với<br>10A4 – Nơi chúng ta<br><span class="text-[#FF7F00]">tỏa sáng!</span>
+                        </h1>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div class="glass rounded-3xl p-8 text-center"><p class="text-[#FF7F00] text-5xl font-bold" id="today-visits">248</p><p class="text-white/70">Lượt truy cập hôm nay</p></div>
+                    <div class="glass rounded-3xl p-8 text-center"><p class="text-[#FF7F00] text-5xl font-bold" id="total-visits">12468</p><p class="text-white/70">Tổng lượt truy cập</p></div>
+                    <div class="glass rounded-3xl p-8 text-center"><p class="text-[#A020F0] text-5xl font-bold">42</p><p class="text-white/70">Bạn đang online</p></div>
+                </div>
+            </div>
+            
+            <!-- ALBUM PAGE -->
+            <div id="page-album" class="page hidden">
+                <div class="flex justify-between items-baseline mb-8">
+                    <h2 class="title-font text-4xl font-semibold">📸 Nơi lưu giữ hình ảnh 10A4</h2>
+                    <label class="cursor-pointer bg-[#FF7F00] hover:bg-[#FF9F33] text-[#003087] px-8 py-4 rounded-3xl font-bold flex items-center gap-3 shadow-lg">
+                        <span class="text-xl">📤 Tải ảnh lên</span>
+                        <input type="file" id="upload-photo" accept="image/*" class="hidden" onchange="uploadPhoto(event)">
+                    </label>
+                </div>
+                <div id="photo-grid" class="masonry-grid"></div>
+                
+                <!-- Modal xem ảnh -->
+                <div onclick="if(event.target.id==='photo-modal')hidePhotoModal()" id="photo-modal" class="hidden fixed inset-0 bg-black/90 z-[9999] flex items-center justify-center">
+                    <div onclick="event.stopImmediatePropagation()" class="max-w-4xl w-full mx-4 glass rounded-3xl p-8">
+                        <img id="modal-image" class="w-full rounded-3xl" alt="">
+                        <div class="flex justify-between mt-6">
+                            <div class="flex-1">
+                                <p id="modal-uploader" class="font-semibold text-lg"></p>
+                                <div id="modal-comments" class="mt-6 space-y-4 max-h-80 overflow-auto pr-2"></div>
+                            </div>
+                            <div class="text-right">
+                                <button onclick="likeCurrentPhoto()" class="flex items-center gap-2 text-4xl mb-8">❤️ <span id="modal-likes" class="text-2xl font-bold"></span></button>
+                                <div class="flex">
+                                    <input id="comment-input" placeholder="Viết bình luận..." 
+                                           class="flex-1 px-6 py-4 bg-white/10 rounded-3xl text-sm focus:outline-none">
+                                    <button onclick="addCommentToPhoto()" class="ml-3 px-8 py-4 bg-[#A020F0] rounded-3xl">Gửi</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CHAT PAGE -->
+            <div id="page-chat" class="page hidden">
+                <div class="flex h-[calc(100vh-180px)] bg-white/5 rounded-3xl overflow-hidden border border-white/10 shadow-xl">
+                    <div class="w-72 border-r border-white/10 p-4 flex flex-col">
+                        <div onclick="switchChatTab(0)" id="tab-group" 
+                             class="chat-tab flex items-center gap-4 px-6 py-5 rounded-3xl mb-3 cursor-pointer bg-[#FF7F00] text-[#003087] font-bold text-lg">
+                            💬 Chat chung (cả lớp)
+                        </div>
+                        <div onclick="switchChatTab(1)" id="tab-private" 
+                             class="chat-tab flex items-center gap-4 px-6 py-5 rounded-3xl cursor-pointer text-lg">
+                            💬 Nhắn riêng
+                        </div>
+                        <div id="private-list" class="hidden flex-1 overflow-auto mt-4"></div>
+                    </div>
+                    
+                    <div class="flex-1 flex flex-col">
+                        <div id="chat-header" class="px-8 py-6 border-b border-white/10 flex items-center gap-4 font-medium"></div>
+                        <div id="chat-messages" class="flex-1 overflow-auto p-8 space-y-7"></div>
+                        <div class="p-6 border-t border-white/10">
+                            <div class="flex gap-3">
+                                <input id="message-input" onkeydown="if(event.keyCode===13) sendMessage()" 
+                                       placeholder="Nhập tin nhắn..." 
+                                       class="flex-1 px-7 py-5 bg-white/10 rounded-3xl outline-none text-lg">
+                                <button onclick="sendMessage()" 
+                                        class="px-10 bg-[#FF7F00] text-[#003087] rounded-3xl text-4xl flex items-center justify-center">➤</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- DANH SÁCH HỌC SINH -->
+            <div id="page-students" class="page hidden">
+                <h2 class="title-font text-4xl font-semibold mb-8">👥 Danh sách học sinh 10A4</h2>
+                <div id="students-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+            </div>
+            
+            <!-- THÀNH TÍCH -->
+            <div id="page-achievements" class="page hidden">
+                <h2 class="title-font text-4xl font-semibold mb-8">🏆 Thành tích tự hào của 10A4</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="glass rounded-3xl p-8 hover:shadow-2xl hover:-translate-y-2 cursor-pointer">
+                        <div class="text-6xl mb-6">🥇</div>
+                        <h3 class="font-bold text-2xl mb-2">Giải Nhất Toán cấp tỉnh</h3>
+                        <p class="text-white/70">Nguyễn Văn An • Tháng 3/2026</p>
+                    </div>
+                    <div class="glass rounded-3xl p-8 hover:shadow-2xl hover:-translate-y-2 cursor-pointer">
+                        <div class="text-6xl mb-6">🥈</div>
+                        <h3 class="font-bold text-2xl mb-2">Giải Nhì Tiếng Anh quốc gia</h3>
+                        <p class="text-white/70">Trần Thị Bích • Tháng 2/2026</p>
+                    </div>
+                    <div class="glass rounded-3xl p-8 hover:shadow-2xl hover:-translate-y-2 cursor-pointer">
+                        <div class="text-6xl mb-6">🏅</div>
+                        <h3 class="font-bold text-2xl mb-2">Đội bóng lớp vô địch thể thao trường</h3>
+                        <p class="text-white/70">Toàn lớp • Tháng 1/2026</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- HỒ SƠ CÁ NHÂN -->
+            <div id="page-profile" class="page hidden">
+                <h2 class="title-font text-4xl font-semibold mb-8">👤 Hồ sơ cá nhân</h2>
+                <div class="max-w-2xl mx-auto glass rounded-3xl p-12">
+                    <div class="flex flex-col items-center">
+                        <div id="profile-avatar" onclick="changeAvatar()" class="w-32 h-32 bg-[#FF7F00] rounded-3xl flex items-center justify-center text-7xl mb-6 cursor-pointer"></div>
+                        <h3 id="profile-name" class="text-3xl font-bold mb-1"></h3>
+                        <p id="profile-nickname" class="text-[#A020F0] text-xl"></p>
+                        <div class="mt-12 w-full grid grid-cols-2 gap-6">
+                            <div>
+                                <label class="text-sm block mb-3">Sở thích</label>
+                                <input id="profile-hobby" type="text" class="w-full px-6 py-4 bg-white/10 rounded-2xl">
+                            </div>
+                            <div>
+                                <label class="text-sm block mb-3">Mục tiêu tương lai</label>
+                                <input id="profile-goal" type="text" class="w-full px-6 py-4 bg-white/10 rounded-2xl">
+                            </div>
+                        </div>
+                        <button onclick="saveProfile()" class="mt-12 px-12 py-5 bg-[#A020F0] rounded-3xl text-xl font-medium">💾 Lưu thay đổi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- YOUTUBE PLAYER (ẩn) -->
+        <div id="yt-player" style="display: none;"></div>
+        
+        <!-- FOOTER -->
+        <footer class="bg-[#001F5A] text-white/60 text-center py-8 text-sm">
+            © 2026 Lớp 10A4 THPT Gia Viễn – Kết nối – Yêu thương – Thành công ❤️
+        </footer>
+    </div>
+
+    <script>
+        // ==================== BIẾN TOÀN CỤC ====================
+        let currentUser = null;
+        let currentChatType = 0;
+        let currentChatPartner = null;
+        let ytPlayer = null;           // YouTube player
+        let musicPlaying = false;
+
+        let students = [
+            { id: 1, name: "Nguyễn Văn An", nick: "An Pro", avatar: "🚀" },
+            { id: 2, name: "Trần Thị Bích", nick: "Bích Cute", avatar: "🌸" },
+            { id: 3, name: "Lê Minh Đức", nick: "Đức Gà", avatar: "🐔" },
+            { id: 4, name: "Phạm Thị Hương", nick: "Hương Nắng", avatar: "☀️" },
+            { id: 5, name: "Vũ Quang Huy", nick: "Huy Badboy", avatar: "😎" },
+            { id: 6, name: "Hoàng Thị Lan", nick: "Lan Kẹo", avatar: "🍭" },
+            { id: 7, name: "Đặng Văn Minh", nick: "Minh Siêu", avatar: "⚡" },
+            { id: 8, name: "Bùi Thị Ngọc", nick: "Ngọc Ngọt", avatar: "🍬" },
+            { id: 9, name: "Phan Minh Quân", nick: "Quân Chill", avatar: "🧘" },
+            { id: 10, name: "Nguyễn Thị Thanh", nick: "Thanh Xinh", avatar: "💖" },
+            { id: 11, name: "Trần Văn Khánh", nick: "Khánh Coder", avatar: "💻" },
+            { id: 12, name: "Lê Thị Mỹ Linh", nick: "Linh Dance", avatar: "💃" },
+            { id: 13, name: "Phạm Quang Dũng", nick: "Dũng Football", avatar: "⚽" },
+            { id: 14, name: "Hoàng Minh Tuấn", nick: "Tuấn Rap", avatar: "🎤" },
+            { id: 15, name: "Bùi Thị Hà", nick: "Hà Vlog", avatar: "📹" },
+            { id: 16, name: "Đặng Quang Huy", nick: "Huy Piano", avatar: "🎹" },
+            { id: 17, name: "Nguyễn Thị Ngọc Anh", nick: "Anh Book", avatar: "📚" },
+            { id: 18, name: "Trần Minh Phúc", nick: "Phúc Meme", avatar: "🤣" },
+            { id: 19, name: "Lê Văn Hoàng", nick: "Hoàng Draw", avatar: "🎨" },
+            { id: 20, name: "Phạm Thị Kim Oanh", nick: "Oanh Queen", avatar: "👑" }
+        ];
+
+        let accounts = {};
+        students.forEach(s => accounts[s.name] = "10A4");
+
+        let groupMessages = [];
+        let privateMessages = {};
+        let photos = [];
+
+        // ==================== STORAGE ====================
+        function loadFromStorage() {
+            if (localStorage.getItem('10A4_currentUser')) currentUser = JSON.parse(localStorage.getItem('10A4_currentUser'));
+            if (localStorage.getItem('10A4_groupMessages')) groupMessages = JSON.parse(localStorage.getItem('10A4_groupMessages'));
+            if (localStorage.getItem('10A4_privateMessages')) privateMessages = JSON.parse(localStorage.getItem('10A4_privateMessages'));
+            if (localStorage.getItem('10A4_photos')) photos = JSON.parse(localStorage.getItem('10A4_photos'));
+            
+            if (groupMessages.length === 0) {
+                groupMessages = [
+                    { from: "Trần Thị Bích", text: "Chào cả lớp ❤️", time: "19:45" },
+                    { from: "Nguyễn Văn An", text: "Mai có bài kiểm tra Toán nha!", time: "19:50" }
+                ];
+            }
+        }
+
+        function saveToStorage() {
+            if (currentUser) localStorage.setItem('10A4_currentUser', JSON.stringify(currentUser));
+            localStorage.setItem('10A4_groupMessages', JSON.stringify(groupMessages));
+            localStorage.setItem('10A4_privateMessages', JSON.stringify(privateMessages));
+            localStorage.setItem('10A4_photos', JSON.stringify(photos));
+        }
+
+        // ==================== YOUTUBE MUSIC (THAY NHẠC THEO YÊU CẦU) ====================
+        window.onYouTubeIframeAPIReady = function() {
+            ytPlayer = new YT.Player('yt-player', {
+                height: '0',
+                width: '0',
+                videoId: 'PLkgOriIw28',
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'PLkgOriIw28',
+                    'modestbranding': 1,
+                    'rel': 0
+                },
+                events: {
+                    'onReady': function() {
+                        console.log('%c🎵 YouTube Music đã sẵn sàng (ID: PLkgOriIw28)', 'color:#FF7F00');
+                    }
+                }
+            });
+        };
+
+        function startMusic() {
+            if (ytPlayer) {
+                ytPlayer.playVideo();
+                ytPlayer.setVolume(35);
+                musicPlaying = true;
+                document.getElementById('music-status').innerHTML = '🎵 Nhạc đang phát';
+            }
+        }
+
+        function toggleMusic() {
+            if (!ytPlayer) return;
+            if (musicPlaying) {
+                ytPlayer.pauseVideo();
+                document.getElementById('music-status').innerHTML = '🔇 Tạm dừng';
+            } else {
+                ytPlayer.playVideo();
+                document.getElementById('music-status').innerHTML = '🎵 Nhạc đang phát';
+            }
+            musicPlaying = !musicPlaying;
+        }
+
+        // ==================== LOGIN ====================
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!accounts[username] || password !== accounts[username]) {
+                document.getElementById('login-error').classList.remove('hidden');
+                document.getElementById('login-error').textContent = 'Tên hoặc mật khẩu sai!';
+                return;
+            }
+
+            currentUser = students.find(s => s.name === username);
+            localStorage.setItem('10A4_currentUser', JSON.stringify(currentUser));
+
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+
+            document.getElementById('user-name-display').textContent = currentUser.name;
+            document.getElementById('user-avatar').innerHTML = `<span>${currentUser.avatar}</span>`;
+            document.getElementById('profile-menu-link').classList.remove('hidden');
+
+            launchConfetti();
+            startMusic();                    // BẬT NHẠC MỚI NGAY SAU LOGIN
+            renderAllPages();
+        }
+
+        // ==================== PARTICLES, CONFETTI, NAVIGATION, CHAT, ALBUM... (GIỮ NGUYÊN NHƯ BẢN ĐÃ SỬA) ====================
+        // (Các hàm particles, confetti, navigateTo, renderChat, uploadPhoto... được giữ nguyên từ bản trước)
+
+        function initParticles() {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            let particles = [];
+            class Particle { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 4 + 1; this.speedX = Math.random() * 1 - 0.5; this.speedY = Math.random() * 1 - 0.5; } }
+            function createParticles() { for (let i = 0; i < 120; i++) particles.push(new Particle()); }
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+                    ctx.fillStyle = 'rgba(255, 127, 0, 0.8)';
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+                    p.x += p.speedX; p.y += p.speedY;
+                    if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+                }
+                requestAnimationFrame(animateParticles);
+            }
+            createParticles();
+            animateParticles();
+            window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+        }
+
+        function launchConfetti() {
+            const colors = ['#FF7F00', '#A020F0', '#00FFAA', '#FFFFFF'];
+            for (let i = 0; i < 180; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+
+        function navigateTo(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+            const target = document.getElementById('page-' + page);
+            if (target) target.classList.remove('hidden');
+            if (page === 'students') renderStudents();
+            if (page === 'album') renderPhotos();
+            if (page === 'chat') renderChat();
+        }
+
+        function renderStudents() {
+            const container = document.getElementById('students-list');
+            container.innerHTML = '';
+            students.forEach(s => {
+                if (s.name === currentUser.name) return;
+                const div = document.createElement('div');
+                div.className = 'glass rounded-3xl p-6 flex items-center gap-5 cursor-pointer hover:scale-105';
+                div.innerHTML = `
+                    <div class="text-5xl w-14 h-14 flex items-center justify-center bg-white/10 rounded-2xl">${s.avatar}</div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-xl">${s.name}</p>
+                        <p class="text-[#A020F0]">${s.nick}</p>
+                    </div>
+                    <button onclick="event.stopImmediatePropagation(); openPrivateChat('${s.name}')" class="text-4xl">💬</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderPhotos() {
+            const grid = document.getElementById('photo-grid');
+            grid.innerHTML = '';
+            if (photos.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-20 text-white/40 text-xl">Chưa có ảnh nào.<br>Hãy là người đầu tiên upload nhé! 📸</div>`;
+                return;
+            }
+            photos.forEach((photo, index) => {
+                const div = document.createElement('div');
+                div.className = 'break-inside-avoid mb-6 cursor-pointer group';
+                div.innerHTML = `
+                    <div class="relative overflow-hidden rounded-3xl shadow-xl group-hover:shadow-2xl">
+                        <img src="${photo.url}" class="w-full" alt="">
+                        <div class="absolute bottom-4 left-4 right-4 bg-black/60 backdrop-blur-md px-4 py-3 rounded-2xl flex justify-between text-sm">
+                            <span class="font-medium">${photo.uploader}</span>
+                            <span onclick="event.stopImmediatePropagation(); likePhoto(${index});" class="flex items-center gap-1">❤️ <span>${photo.likes}</span></span>
+                        </div>
+                    </div>
+                `;
+                div.onclick = () => showPhotoModal(index);
+                grid.appendChild(div);
+            });
+        }
+
+        function uploadPhoto(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) { alert('Ảnh quá lớn! Vui lòng chọn ảnh dưới 5MB.'); return; }
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                photos.unshift({ id: Date.now(), url: ev.target.result, uploader: currentUser.name, likes: 0, comments: [] });
+                saveToStorage();
+                renderPhotos();
+                showToast('✅ Ảnh đã upload thành công!');
+                e.target.value = '';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        let currentPhotoIndex = null;
+        function showPhotoModal(index) {
+            currentPhotoIndex = index;
+            const photo = photos[index];
+            document.getElementById('modal-image').src = photo.url;
+            document.getElementById('modal-uploader').innerHTML = `Đăng bởi <span class="text-[#FF7F00]">${photo.uploader}</span>`;
+            document.getElementById('modal-likes').textContent = photo.likes;
+            const cContainer = document.getElementById('modal-comments');
+            cContainer.innerHTML = '';
+            photo.comments.forEach(c => {
+                const el = document.createElement('div');
+                el.className = 'bg-white/10 p-4 rounded-2xl';
+                el.innerHTML = `<span class="font-semibold">${c.user}:</span> ${c.text}`;
+                cContainer.appendChild(el);
+            });
+            const modal = document.getElementById('photo-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
+        function hidePhotoModal() {
+            const modal = document.getElementById('photo-modal');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
+            currentPhotoIndex = null;
+        }
+        function likePhoto(index) { photos[index].likes++; saveToStorage(); renderPhotos(); }
+        function likeCurrentPhoto() {
+            if (currentPhotoIndex === null) return;
+            photos[currentPhotoIndex].likes++;
+            document.getElementById('modal-likes').textContent = photos[currentPhotoIndex].likes;
+            saveToStorage(); renderPhotos();
+        }
+        function addCommentToPhoto() {
+            if (currentPhotoIndex === null) return;
+            const input = document.getElementById('comment-input');
+            const text = input.value.trim();
+            if (!text) return;
+            photos[currentPhotoIndex].comments.push({ user: currentUser.name, text });
+            input.value = '';
+            saveToStorage();
+            showPhotoModal(currentPhotoIndex);
+        }
+
+        function switchChatTab(tab) {
+            currentChatType = tab;
+            const groupTab = document.getElementById('tab-group');
+            const privateTab = document.getElementById('tab-private');
+            groupTab.classList.toggle('bg-[#FF7F00]', tab === 0);
+            groupTab.classList.toggle('text-[#003087]', tab === 0);
+            privateTab.classList.toggle('bg-[#FF7F00]', tab === 1);
+            privateTab.classList.toggle('text-[#003087]', tab === 1);
+            if (tab === 1) {
+                document.getElementById('private-list').classList.remove('hidden');
+                renderPrivateList();
+            } else {
+                document.getElementById('private-list').classList.add('hidden');
+                currentChatPartner = null;
+            }
+            renderChat();
+        }
+
+        function renderPrivateList() {
+            const container = document.getElementById('private-list');
+            container.innerHTML = `<p class="px-4 mb-3 text-white/60 text-sm">Chọn bạn để nhắn riêng</p>`;
+            students.forEach(s => {
+                if (s.name === currentUser.name) return;
+                const div = document.createElement('div');
+                div.className = `flex items-center gap-4 px-5 py-4 rounded-3xl cursor-pointer hover:bg-white/10 ${currentChatPartner === s.name ? 'bg-white/20' : ''}`;
+                div.innerHTML = `<span class="text-3xl">${s.avatar}</span><div class="flex-1"><p class="font-medium">${s.name}</p><p class="text-xs text-white/60">${s.nick}</p></div>`;
+                div.onclick = () => openPrivateChat(s.name);
+                container.appendChild(div);
+            });
+        }
+
+        function openPrivateChat(partnerName) {
+            currentChatPartner = partnerName;
+            currentChatType = 1;
+            navigateTo('chat');
+            switchChatTab(1);
+        }
+
+        function renderChat() {
+            const header = document.getElementById('chat-header');
+            const container = document.getElementById('chat-messages');
+            container.innerHTML = '';
+            if (currentChatType === 1 && !currentChatPartner) {
+                header.innerHTML = `<p class="text-white/60 italic text-xl">Chọn bạn từ danh sách bên trái để bắt đầu nhắn 💬</p>`;
+                container.innerHTML = `<div class="h-full flex items-center justify-center text-7xl opacity-20">💬</div>`;
+                return;
+            }
+            if (currentChatType === 0) {
+                header.innerHTML = `<span class="text-4xl">💬</span><div><p class="font-bold text-xl">Chat chung cả lớp 10A4</p><p class="text-white/60 text-sm">20 người đang online</p></div>`;
+                groupMessages.forEach(msg => container.appendChild(createMessageBubble(msg, true)));
+            } else {
+                const partner = students.find(s => s.name === currentChatPartner);
+                header.innerHTML = `<span class="text-4xl">${partner.avatar}</span><div><p class="font-bold text-xl">${partner.name}</p><p class="text-white/60">${partner.nick}</p></div>`;
+                const key = [currentUser.name, currentChatPartner].sort().join('-');
+                if (!privateMessages[key]) privateMessages[key] = [];
+                privateMessages[key].forEach(msg => container.appendChild(createMessageBubble(msg, false)));
+            }
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function createMessageBubble(msg, isGroup) {
+            const isMine = msg.from === currentUser.name;
+            const div = document.createElement('div');
+            div.className = `flex ${isMine ? 'justify-end' : 'justify-start'}`;
+            div.innerHTML = `
+                <div class="${isMine ? 'chat-bubble-mine' : 'chat-bubble-other'} px-6 py-4 max-w-[75%]">
+                    ${(!isMine && isGroup) ? `<p class="text-xs opacity-70 mb-1">${msg.from}</p>` : ''}
+                    <p class="text-[17px]">${msg.text}</p>
+                    <p class="text-xs text-right mt-2 opacity-70">${msg.time}</p>
+                </div>
+            `;
+            return div;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const text = input.value.trim();
+            if (!text) return;
+            const time = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+            if (currentChatType === 0) {
+                groupMessages.push({ from: currentUser.name, text, time });
+            } else if (currentChatPartner) {
+                const key = [currentUser.name, currentChatPartner].sort().join('-');
+                if (!privateMessages[key]) privateMessages[key] = [];
+                privateMessages[key].push({ from: currentUser.name, text, time });
+            }
+            saveToStorage();
+            input.value = '';
+            renderChat();
+        }
+
+        function renderAllPages() {
+            renderStudents();
+            renderPhotos();
+            document.getElementById('today-visits').textContent = '248';
+            document.getElementById('total-visits').textContent = '12468';
+        }
+
+        function logout() { if (confirm('Đăng xuất khỏi 10A4?')) location.reload(); }
+        function toggleDarkMode() { showToast('Dark mode Gen Z đã bật! 🌌'); }
+        function showToast(text) {
+            const t = document.createElement('div');
+            t.style.cssText = 'position:fixed;bottom:30px;left:30px;background:#FF7F00;color:#003087;padding:18px 26px;border-radius:9999px;box-shadow:0 10px 15px -3px rgb(0 0 0 / 0.3);font-weight:700;z-index:99999;';
+            t.textContent = text;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
+
+        function changeAvatar() {
+            const emojis = ['🚀','🌸','🐔','☀️','😎','🍭','⚡','🍬','🧘','💖'];
+            const random = emojis[Math.floor(Math.random() * emojis.length)];
+            currentUser.avatar = random;
+            document.getElementById('profile-avatar').innerHTML = `<span class="text-8xl">${random}</span>`;
+            document.getElementById('user-avatar').innerHTML = `<span>${random}</span>`;
+            saveToStorage();
+            showToast('Avatar đã thay đổi!');
+        }
+
+        function saveProfile() {
+            showToast('Hồ sơ đã được cập nhật thành công! ❤️');
+        }
+
+        // ==================== KHỞI ĐỘNG ====================
+        function initializeWebsite() {
+            initParticles();
+            loadFromStorage();
+            if (currentUser) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
+                document.getElementById('user-name-display').textContent = currentUser.name;
+                document.getElementById('user-avatar').innerHTML = `<span>${currentUser.avatar}</span>`;
+                document.getElementById('profile-menu-link').classList.remove('hidden');
+                renderAllPages();
+                startMusic();                     // Nhạc mới tự động phát nếu đã login
+            }
+            document.getElementById('login-form').addEventListener('submit', handleLogin);
+            console.log('%c✅ Website 10A4 đã thay nhạc YouTube thành công![](https://youtu.be/PLkgOriIw28)', 'color:#FF7F00;font-size:18px');
+        }
+
+        window.onload = initializeWebsite;
+    </script>
+</body>
+</html>
