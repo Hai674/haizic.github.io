@@ -1,37 +1,24 @@
+Tôi sẽ sửa code cho bạn. Đây là phiên bản đã được sửa lỗi và hoàn thiện:
+
 ```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>10A4 ULTRA GENIUS | Lớp 10A4 - Thầy Đinh Trung Thiện</title>
+<title>10A4 ULTRA GENIUS | Lớp 10A4</title>
 
-<!-- PWA & SEO -->
-<link rel="manifest" href="data:application/manifest+json,{
-  'name': '10A4 ULTRA GENIUS',
-  'short_name': '10A4',
-  'icons': [{'src': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9ImxpbmVhci1ncmFkaWVudCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIGdyYWRpZW50VHJhbnNmb3JtPSJyb3RhdGUoNDUpIiB4bGluaypocmVmPSIjZ3JhZGllbnQiLz4KPGxpbmVhckdyYWRpZW50IGlkPSJncmFkaWVudCIgeDE9IjAiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIwJSI+CjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzYwYTVmYSIvPgo8c3RvcCBvZmZzZXQ9IjAuNSIgc3RvcC1jb2xvcj0iI2E3OGJmYSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNlYzQ4OTkiLz4KPC9saW5lYXJHcmFkaWVudD4KPHRleHQgeD0iOTYiIHk9IjExMCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjQ4IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9IjkwMCI+MTBBNDwvdGV4dD4KPC9zdmc+', 'sizes': '192x192', 'type': 'image/svg+xml'}],
-  'theme_color': '#6366f1',
-  'background_color': '#0f172a',
-  'display': 'standalone'
-}">
-<meta name="theme-color" content="#6366f1">
-<meta name="description" content="Hệ thống quản lý lớp 10A4 ULTRA GENIUS - Thầy Đinh Trung Thiện">
-
-<!-- Fonts & Icons -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 :root {
-  --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  --glass: rgba(255, 255, 255, 0.05);
-  --glass-light: rgba(255, 255, 255, 0.1);
-  --shadow: 0 25px 45px rgba(0,0,0,0.1);
-  --glow: 0 0 30px rgba(99, 102, 241, 0.5);
+  --bg-dark: #0a0a23;
+  --bg-light: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --glass-dark: rgba(255,255,255,0.05);
+  --glass-light: rgba(255,255,255,0.1);
+  --primary-glow: linear-gradient(45deg, #60a5fa, #a78bfa, #ec4899);
+  --accent-glow: #00f2fe;
 }
 
 * {
@@ -40,18 +27,14 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-}
+html { scroll-behavior: smooth; }
 
 body {
   font-family: 'Poppins', sans-serif;
-  background: #0a0a0a;
-  color: #fff;
-  min-height: 100vh;
-  position: relative;
+  background: var(--bg-dark);
+  color: white;
   overflow-x: hidden;
+  position: relative;
 }
 
 body::before {
@@ -61,58 +44,36 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #60a5fa, transparent),
+    radial-gradient(2px 2px at 40px 70px, #a78bfa, transparent),
+    radial-gradient(1px 1px at 90px 40px, #ec4899, transparent),
+    radial-gradient(1px 1px at 130px 80px, #00f2fe, transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  animation: stars 20s linear infinite;
   z-index: -1;
-  animation: float 20s ease-in-out infinite;
+  opacity: 0.3;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-20px) rotate(120deg); }
-  66% { transform: translateY(20px) rotate(240deg); }
+@keyframes stars {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-200px); }
 }
 
 body.light {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  color: #fff;
+  background: var(--bg-light);
 }
 
-body.light::before {
-  opacity: 0.5;
-}
-
-/* PARTICLES */
-.particles {
+/* PROGRESS BAR */
+.progress-bar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: var(--accent);
-  border-radius: 50%;
-  animation: particleFloat 25s linear infinite;
-}
-
-@keyframes particleFloat {
-  0% {
-    transform: translateY(100vh) scale(0) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100vh) scale(1) rotate(360deg);
-    opacity: 0;
-  }
+  height: 3px;
+  background: var(--primary-glow);
+  z-index: 9999;
+  transition: width 0.1s ease;
 }
 
 /* NAV */
@@ -125,61 +86,41 @@ nav {
   justify-content: space-between;
   align-items: center;
   backdrop-filter: blur(25px);
-  background: rgba(10, 10, 10, 0.9);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--glass-dark);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
   z-index: 1000;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-nav.scrolled {
-  background: rgba(10, 10, 10, 0.95);
-  box-shadow: var(--shadow);
-  padding: 0.5rem 5%;
+body.light nav {
+  background: var(--glass-light);
 }
 
-nav .logo {
+.logo {
   font-family: 'Orbitron', monospace;
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-size: 2rem;
   font-weight: 900;
-  background: var(--primary);
+  background: var(--primary-glow);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  letter-spacing: 2px;
 }
 
-nav .nav-controls button {
+.nav-btns button {
   margin-left: 1rem;
   padding: 0.8rem 1.5rem;
   border: none;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border-radius: 50px;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border-radius: 25px;
   cursor: pointer;
   backdrop-filter: blur(10px);
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  position: relative;
-  overflow: hidden;
+  transition: all 0.3s ease;
+  font-size: 1rem;
 }
 
-nav .nav-controls button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  transition: left 0.5s;
-}
-
-nav .nav-controls button:hover::before {
-  left: 100%;
-}
-
-nav .nav-controls button:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: var(--glow);
+.nav-btns button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(96,165,250,0.4);
 }
 
 /* HERO */
@@ -190,280 +131,300 @@ nav .nav-controls button:hover {
   justify-content: center;
   align-items: center;
   text-align: center;
-  position: relative;
+  padding: 0 2rem;
 }
 
 .hero h1 {
   font-family: 'Orbitron', monospace;
-  font-size: clamp(4rem, 12vw, 10rem);
+  font-size: clamp(4rem, 10vw, 8rem);
   font-weight: 900;
-  background: var(--accent);
+  background: var(--primary-glow);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 1rem;
-  animation: titleGlow 2s ease-in-out infinite alternate;
-  text-shadow: 0 0 40px rgba(0, 242, 254, 0.5);
+  animation: glow 2s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 20px rgba(96,165,250,0.5));
 }
 
-@keyframes titleGlow {
-  from { filter: drop-shadow(0 0 20px #00f2fe); }
-  to { filter: drop-shadow(0 0 40px #00f2fe); }
+@keyframes glow {
+  from { filter: drop-shadow(0 0 20px rgba(96,165,250,0.5)); }
+  to { filter: drop-shadow(0 0 30px rgba(96,165,250,0.8)); }
 }
 
-.hero .subtitle {
-  font-size: clamp(1.2rem, 3vw, 2rem);
-  opacity: 0.9;
-  margin-bottom: 3rem;
-  font-weight: 300;
-  letter-spacing: 1px;
-}
-
-.hero .user-status {
-  font-size: 1.3rem;
+#userStatus {
+  font-size: 1.5rem;
   margin-bottom: 2rem;
-  opacity: 0.8;
+  opacity: 0.9;
   min-height: 2rem;
 }
 
-.btn-primary {
-  position: relative;
+.btn {
   padding: 1.2rem 3rem;
   border: none;
-  background: var(--primary);
+  background: var(--primary-glow);
   color: white;
   border-radius: 50px;
   cursor: pointer;
   font-size: 1.2rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  overflow: hidden;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  box-shadow: var(--shadow);
+  box-shadow: 0 10px 30px rgba(96,165,250,0.4);
 }
 
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-  transition: left 0.6s;
-}
-
-.btn-primary:hover::before {
-  left: 100%;
-}
-
-.btn-primary:hover {
-  transform: translateY(-8px) scale(1.05);
-  box-shadow: 0 20px 50px rgba(102, 126, 234, 0.4);
+.btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(96,165,250,0.6);
 }
 
 /* SECTIONS */
 section {
-  padding: 120px 5%;
-  max-width: 1400px;
+  padding: 100px 5%;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
-section h2 {
+h2 {
   font-family: 'Orbitron', monospace;
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: 3rem;
   text-align: center;
-  margin-bottom: 4rem;
-  background: var(--secondary);
+  margin-bottom: 3rem;
+  background: var(--primary-glow);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  position: relative;
 }
 
-section h2::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 4px;
-  background: var(--primary);
-  border-radius: 2px;
-}
-
-/* GRID */
+/* GRID & CARDS */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
 }
 
-/* CARDS */
 .card {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-dark);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 2.5rem;
-  border-radius: 24px;
-  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 2rem;
+  border-radius: 20px;
+  transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
+}
+
+body.light .card {
+  background: var(--glass-light);
 }
 
 .card::before {
   content: '';
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transition: transform 0.5s ease;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: 0.6s;
 }
 
 .card:hover::before {
-  transform: scaleX(1);
+  left: 100%;
 }
 
 .card:hover {
-  transform: translateY(-15px) rotateX(5deg);
-  background: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 35px 60px rgba(0,0,0,0.3);
-}
-
-.card-icon {
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
-  display: block;
-  filter: drop-shadow(0 10px 20px rgba(0,242,254,0.3));
-}
-
-.card h3 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  font-weight: 700;
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.3);
 }
 
 /* MESSAGE SYSTEM */
-.message-input {
-  max-width: 700px;
-  margin: 0 auto 3rem;
+.msg-input {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-#msg {
-  width: 100%;
-  padding: 1.5rem 2rem;
+#msgInput {
+  flex: 1;
+  padding: 1rem 1.5rem;
   border: none;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-  font-size: 1.1rem;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 1rem;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-  margin-bottom: 1rem;
+  min-width: 300px;
 }
 
-#msg:focus {
+#msgInput::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+#msgInput:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.12);
-  box-shadow: var(--glow);
-  transform: scale(1.02);
+  box-shadow: 0 0 20px rgba(96,165,250,0.5);
 }
 
-#msg::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+#msgInput:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.btn-message {
-  width: 100%;
-  padding: 1.2rem;
-  background: var(--accent);
+.btn-post {
+  padding: 1rem 2rem;
+  background: var(--primary-glow);
   border: none;
-  border-radius: 16px;
-  color: #fff;
-  font-size: 1.1rem;
+  border-radius: 15px;
+  color: white;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.btn-message:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--glow);
+.btn-post:hover {
+  transform: scale(1.05);
+}
+
+.btn-post:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* LOGIN MODAL */
-#loginBox {
+#loginModal {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.8);
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(30px);
-  padding: 3rem;
-  border-radius: 24px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
   display: none;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 50px 100px rgba(0,0,0,0.5);
-  z-index: 2000;
-  max-width: 450px;
-  width: 90%;
-  animation: modalAppear 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
 }
 
-@keyframes modalAppear {
+.login-box {
+  background: var(--glass-dark);
+  backdrop-filter: blur(30px);
+  padding: 3rem;
+  border-radius: 25px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  min-width: 400px;
+}
+
+.login-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  background: var(--primary-glow);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-google {
+  width: 100%;
+  padding: 1rem;
+  background: #fff;
+  color: #333;
+  border: none;
+  border-radius: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.btn-google:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.btn-close {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+/* MESSAGE CARD */
+.msg-card {
+  animation: msgSlideIn 0.5s ease-out;
+}
+
+@keyframes msgSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
   to {
-    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-#loginBox h3 {
-  font-family: 'Orbitron', monospace;
-  font-size: 1.8rem;
+.msg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.msg-author {
+  font-weight: 600;
+  color: #60a5fa;
+}
+
+.msg-time {
+  font-size: 0.8rem;
+}
+
+.msg-content {
+  line-height: 1.6;
   margin-bottom: 1rem;
-  text-align: center;
-  background: var(--primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  nav { padding: 1rem 3%; }
-  .grid { grid-template-columns: 1fr; gap: 1.5rem; }
-  section { padding: 80px 3%; }
+  .msg-input { flex-direction: column; }
+  #msgInput { min-width: auto; }
+  .login-box { min-width: 90%; padding: 2rem; }
 }
 
-/* LOADING */
-.loading {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255,255,255,0.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* SCROLL INDICATOR */
-.progress-bar {
+/* MUSIC VISUALIZER */
+#musicVisualizer {
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 0;
-  width: 0%;
-  height: 4px;
-  background: var(--accent);
-  z-index: 1001;
-  transition: width 0.1s ease;
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  display: none;
+  z-index: 100;
+}
+
+.visualizer-bar {
+  position: absolute;
+  bottom: 0;
+  width: 4px;
+  background: var(--accent-glow);
+  transition: height 0.1s ease;
 }
 </style>
 </head>
@@ -472,14 +433,147 @@ section h2::after {
 <!-- PROGRESS BAR -->
 <div class="progress-bar" id="progressBar"></div>
 
-<!-- PARTICLE SYSTEM -->
-<div class="particles" id="particles"></div>
+<!-- MUSIC VISUALIZER -->
+<div id="musicVisualizer"></div>
 
 <!-- NAV -->
-<nav id="nav">
-  <div class="logo">
-    <i class="fas fa-rocket"></i> 10A4 ULTRA GENIUS
+<nav>
+  <div class="logo">10A4 ULTRA</div>
+  <div class="nav-btns">
+    <button onclick="toggleDarkMode()" id="darkModeBtn">
+      <i class="fas fa-moon"></i>
+    </button>
+    <button onclick="toggleAuth()" id="authBtn">
+      <i class="fas fa-user"></i> <span id="authText">Đăng nhập</span>
+    </button>
+    <button onclick="toggleMusic()" id="musicBtn">
+      <i class="fas fa-music"></i>
+    </button>
   </div>
-  <div class="nav-controls">
-    <button onclick="toggleMode()" title="Chế độ Genius"><i class="fas fa-brain"></i></button>
-    <button id="authBtn" onclick="toggleAuth()" title="Xác thực AI"><i class="fas fa-key"></i></button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>10A4</h1>
+  <div id="userStatus">Chào mừng đến với hệ thống lớp 10A4</div>
+  <button class="btn" onclick="scrollToContent()">Vào Hệ Thống</button>
+</div>
+
+<!-- DASHBOARD -->
+<section id="dashboard">
+  <h2>Dashboard</h2>
+  <div class="grid">
+    <div class="card">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">👥</div>
+      <h3>38 Học Sinh</h3>
+      <p>Tổng số học sinh lớp 10A4</p>
+    </div>
+    <div class="card">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">👨‍🏫</div>
+      <h3>Đinh Trung Thiện</h3>
+      <p>Giáo viên chủ nhiệm</p>
+    </div>
+    <div class="card">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">📚</div>
+      <h3>Lớp 10A4</h3>
+      <p>Năm học 2024-2025</p>
+    </div>
+  </div>
+</section>
+
+<!-- MESSAGES -->
+<section id="messages">
+  <h2>Thông Báo Real-time</h2>
+  <div class="msg-input">
+    <input type="text" id="msgInput" placeholder="Nhập thông báo mới... (Chỉ đăng nhập mới gửi được)" maxlength="500">
+    <button class="btn-post" id="postBtn" onclick="sendMessage()">
+      <i class="fas fa-paper-plane"></i> Gửi
+    </button>
+  </div>
+  <div id="messagesList"></div>
+</section>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal">
+  <div class="login-box">
+    <div class="login-title">🔐 Xác Thực Genius</div>
+    <p style="margin-bottom: 2rem; opacity: 0.9;">Đăng nhập Google để gửi thông báo real-time</p>
+    <button class="btn-google" onclick="signInWithGoogle()">
+      <i class="fab fa-google" style="font-size: 1.3rem;"></i>
+      Đăng nhập với Google
+    </button>
+    <button class="btn-close" onclick="closeLogin()">Đóng</button>
+  </div>
+</div>
+
+<!-- MUSIC -->
+<audio id="backgroundMusic" loop preload="metadata">
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+</audio>
+
+<!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  // 🔥 THAY ĐỔI THÔNG TIN NÀY BẰNG PROJECT FIREBASE CỦA BẠN
+  apiKey: "AIzaSyA1234567890abcdefghijklmnopqrstuvwxyz", // ← DÁN API KEY
+  authDomain: "your-project.firebaseapp.com",              // ← DÁN DOMAIN
+  projectId: "your-project-id",                           // ← DÁN PROJECT ID
+  storageBucket: "your-project.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdefghijklmnopqrstuvwxyz"
+};
+
+// Khởi tạo Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// STATE
+let currentUser = null;
+let isDarkMode = true;
+let isMusicPlaying = false;
+let music = document.getElementById('backgroundMusic');
+let audioContext, analyser, dataArray;
+let unsubscribeMessages = null;
+
+// INIT
+document.addEventListener('DOMContentLoaded', function() {
+  initApp();
+});
+
+function initApp() {
+  auth.onAuthStateChanged(user => {
+    currentUser = user;
+    updateAuthUI();
+    if (user) {
+      listenToMessages();
+    } else if (unsubscribeMessages) {
+      unsubscribeMessages();
+      unsubscribeMessages = null;
+    }
+  });
+  
+  updateProgressBar();
+  window.addEventListener('scroll', updateProgressBar);
+}
+
+// UPDATE PROGRESS BAR
+function updateProgressBar() {
+  const progressBar = document.getElementById('progressBar');
+  const scrollTop = window.pageYOffset;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const scrollPercent = (scrollTop / docHeight) * 100;
+  progressBar.style.width = scrollPercent + '%';
+}
+
+// UPDATE AUTH UI
+function updateAuthUI() {
+  const authBtn = document.getElementById('authBtn');
+  const userStatus = document.getElementById('userStatus');
+  const authText = document.getElementById('authText');
+  const msgInput = document.get
