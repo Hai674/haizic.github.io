@@ -3,237 +3,187 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>10A4 - GOD LEVEL</title>
+<title>10A4 SUPREME SYSTEM</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Poppins',sans-serif;
-}
-
-body{
-  background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-  color:white;
-  overflow-x:hidden;
-}
-
-/* NAVBAR */
-nav{
-  position:fixed;
-  width:100%;
-  padding:20px 60px;
-  display:flex;
-  justify-content:space-between;
-  backdrop-filter: blur(15px);
-  background:rgba(255,255,255,0.05);
-  z-index:999;
-}
-
-nav h1{
-  font-weight:800;
-  letter-spacing:2px;
-}
-
-nav a{
-  color:white;
-  text-decoration:none;
-  margin-left:25px;
-  transition:0.3s;
-}
-
-nav a:hover{
-  color:#00f7ff;
-}
-
-/* HERO */
-.hero{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-}
-
-.hero h2{
-  font-size:60px;
-  background:linear-gradient(90deg,#00f7ff,#00ffae);
-  -webkit-background-clip:text;
-  color:transparent;
-}
-
-.hero p{
-  margin-top:20px;
-  opacity:0.8;
-}
-
-.btn{
-  margin-top:30px;
-  padding:15px 40px;
-  border-radius:50px;
-  border:none;
-  cursor:pointer;
-  background:linear-gradient(90deg,#00f7ff,#00ffae);
-  color:black;
-  font-weight:600;
-  transition:0.3s;
-}
-
-.btn:hover{
-  transform:scale(1.1);
-}
-
-/* GLASS CARD */
-.section{
-  padding:100px 10%;
-}
-
-.card{
-  background:rgba(255,255,255,0.05);
-  border-radius:20px;
-  padding:40px;
-  backdrop-filter: blur(20px);
-  transition:0.4s;
-}
-
-.card:hover{
-  transform:translateY(-10px);
-}
-
-/* GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:30px;
-}
-
-/* FOOTER */
-footer{
-  text-align:center;
-  padding:40px;
-  opacity:0.6;
-}
-
-/* PARTICLES */
-canvas{
-  position:fixed;
-  top:0;
-  left:0;
-  z-index:-1;
-}
-
-/* ANIMATION */
-.fade{
-  opacity:0;
-  transform:translateY(50px);
-  transition:1s;
-}
-
-.fade.show{
-  opacity:1;
-  transform:translateY(0);
-}
+body{margin:0;font-family:Poppins;background:#0f2027;color:white;display:flex;height:100vh;}
+.sidebar{width:220px;background:#ffffff10;padding:15px}
+.main{flex:1;display:flex;flex-direction:column}
+.chat{flex:1;overflow:auto;padding:10px}
+.msg{margin:5px;padding:10px;border-radius:10px}
+.me{background:#00ffae;color:black;margin-left:auto}
+.other{background:#ffffff20}
+.input{display:flex;padding:10px}
+input{flex:1;padding:10px}
+button{padding:10px;margin-left:5px}
+.gallery img{width:80px;margin:5px;border-radius:10px}
 </style>
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
+<div id="auth">
+  <input id="email" placeholder="email"><br>
+  <input id="pass" type="password"><br>
+  <button onclick="login()">Login</button>
+</div>
 
-<nav>
-  <h1>10A4</h1>
-  <div>
-    <a href="#">Home</a>
-    <a href="#">About</a>
-    <a href="#">Team</a>
+<div class="sidebar" id="app" style="display:none;">
+  <h3>🔥 10A4</h3>
+  <button onclick="showTab('chat')">Chat</button>
+  <button onclick="showTab('ai')">AI</button>
+  <button onclick="showTab('gallery')">Gallery</button>
+  <button onclick="showTab('rank')">Rank</button>
+</div>
+
+<div class="main" id="main" style="display:none;">
+
+  <div id="chatTab" class="chat"></div>
+
+  <div id="aiTab" style="display:none;padding:10px;">
+    <h3>🤖 AI Chat</h3>
+    <div id="aiChat"></div>
+    <input id="aiInput"><button onclick="askAI()">Hỏi</button>
   </div>
-</nav>
 
-<section class="hero">
-  <h2>10A4 - ĐỈNH CAO</h2>
-  <p>Giáo viên: Đinh Trung Thiện | 38 học sinh</p>
-  <button class="btn">Khám phá ngay</button>
-</section>
-
-<section class="section">
-  <div class="grid">
-    <div class="card fade">
-      <h3>🔥 Đoàn Kết</h3>
-      <p>Lớp 10A4 luôn gắn kết như gia đình.</p>
-    </div>
-
-    <div class="card fade">
-      <h3>🚀 Năng Động</h3>
-      <p>Hoạt động mạnh mẽ, không ngừng phát triển.</p>
-    </div>
-
-    <div class="card fade">
-      <h3>💎 Sáng Tạo</h3>
-      <p>Ý tưởng độc đáo, không giới hạn.</p>
-    </div>
+  <div id="galleryTab" style="display:none;">
+    <input type="file" onchange="upload(event)">
+    <div class="gallery" id="gallery"></div>
   </div>
-</section>
 
-<footer>
-  © 2026 - 10A4 GOD LEVEL
-</footer>
+  <div id="rankTab" style="display:none;">
+    <h3>🏆 Rank</h3>
+    <div id="rank"></div>
+  </div>
+
+  <div class="input">
+    <input id="msg"><button onclick="send()">Gửi</button>
+  </div>
+</div>
+
+<audio id="music" loop autoplay>
+  <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3">
+</audio>
 
 <script>
-// SCROLL ANIMATION
-const fades = document.querySelectorAll('.fade');
-window.addEventListener('scroll', () => {
-  fades.forEach(el => {
-    const top = el.getBoundingClientRect().top;
-    if(top < window.innerHeight - 100){
-      el.classList.add('show');
-    }
-  });
+// CONFIG
+const firebaseConfig = {apiKey:"DÁN",authDomain:"DÁN",projectId:"DÁN",storageBucket:"DÁN"};
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+// LOGIN
+function login(){
+  auth.signInWithEmailAndPassword(email.value,pass.value);
+}
+
+// AUTH
+auth.onAuthStateChanged(user=>{
+  if(user){
+    authDiv.style.display="none";
+    app.style.display="block";
+    main.style.display="flex";
+    loadChat(user);
+    loadGallery();
+    loadRank();
+  }
 });
 
-// PARTICLES BACKGROUND
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
+// CHAT
+function send(){
+  db.collection("chat").add({
+    text:msg.value,
+    uid:auth.currentUser.uid,
+    time:Date.now()
+  });
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+  // + rank
+  db.collection("rank").doc(auth.currentUser.uid).set({
+    score:firebase.firestore.FieldValue.increment(1)
+  },{merge:true});
 
-let particles = [];
+  msg.value="";
+}
 
-for(let i=0;i<100;i++){
-  particles.push({
-    x: Math.random()*canvas.width,
-    y: Math.random()*canvas.height,
-    r: Math.random()*2,
-    d: Math.random()*1
+// LOAD CHAT
+function loadChat(user){
+  db.collection("chat").orderBy("time")
+  .onSnapshot(s=>{
+    chatTab.innerHTML="";
+    s.forEach(doc=>{
+      let d=doc.data();
+      let cls=d.uid===user.uid?"msg me":"msg other";
+      chatTab.innerHTML+=`<div class="${cls}">${d.text}</div>`;
+    });
   });
 }
 
-function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="white";
-  particles.forEach(p=>{
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fill();
-  });
-  update();
+// AI (fake thông minh)
+function askAI(){
+  let q = aiInput.value.toLowerCase();
+  let res = "Không hiểu 😅";
+
+  if(q.includes("chào")) res="Hello bạn 😎";
+  if(q.includes("10a4")) res="10A4 là lớp bá nhất 🔥";
+  if(q.includes("ai đẹp")) res="Bạn đẹp nhất 😏";
+
+  aiChat.innerHTML += `<div>${q} → ${res}</div>`;
+  aiInput.value="";
 }
 
-function update(){
-  particles.forEach(p=>{
-    p.y += p.d;
-    if(p.y > canvas.height){
-      p.y = 0;
-      p.x = Math.random()*canvas.width;
-    }
+// UPLOAD
+function upload(e){
+  let file = e.target.files[0];
+  let ref = storage.ref("img/"+file.name);
+  ref.put(file).then(()=>{
+    ref.getDownloadURL().then(url=>{
+      db.collection("gallery").add({url});
+    });
   });
 }
 
-setInterval(draw,33);
+// LOAD GALLERY
+function loadGallery(){
+  db.collection("gallery").onSnapshot(s=>{
+    gallery.innerHTML="";
+    s.forEach(doc=>{
+      gallery.innerHTML+=`<img src="${doc.data().url}">`;
+    });
+  });
+}
+
+// RANK
+function loadRank(){
+  db.collection("rank").orderBy("score","desc")
+  .onSnapshot(s=>{
+    rank.innerHTML="";
+    s.forEach(doc=>{
+      rank.innerHTML+=`<div>${doc.id} : ${doc.data().score}</div>`;
+    });
+  });
+}
+
+// TAB
+function showTab(t){
+  chatTab.style.display="none";
+  aiTab.style.display="none";
+  galleryTab.style.display="none";
+  rankTab.style.display="none";
+
+  if(t==="chat") chatTab.style.display="block";
+  if(t==="ai") aiTab.style.display="block";
+  if(t==="gallery") galleryTab.style.display="block";
+  if(t==="rank") rankTab.style.display="block";
+}
 </script>
 
 </body>
