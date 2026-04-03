@@ -64,7 +64,7 @@
             background: var(--bg-light);
         }
 
-        /* PROGRESS BAR - Siêu mượt */
+        /* PROGRESS BAR */
         .progress-bar {
             position: fixed;
             top: 0;
@@ -76,7 +76,7 @@
             box-shadow: 0 0 15px var(--primary-glow);
         }
 
-        /* NAV - Glass + Neon */
+        /* NAV */
         nav {
             position: fixed;
             top: 0;
@@ -90,10 +90,6 @@
             border-bottom: 1px solid rgba(255,255,255,0.2);
             z-index: 1000;
             box-shadow: 0 4px 30px rgba(0,0,0,0.4);
-        }
-
-        body.light nav {
-            background: var(--glass-light);
         }
 
         .logo {
@@ -116,7 +112,6 @@
         }
 
         .nav-btns button {
-            margin-left: 0.5rem;
             padding: 0.9rem 1.8rem;
             border: none;
             background: rgba(255,255,255,0.12);
@@ -124,12 +119,13 @@
             border-radius: 50px;
             cursor: pointer;
             backdrop-filter: blur(15px);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             font-size: 1.05rem;
             font-weight: 600;
             position: relative;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.15);
+            will-change: transform, box-shadow;
         }
 
         .nav-btns button::before {
@@ -140,7 +136,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
-            transition: 0.7s;
+            transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .nav-btns button:hover::before {
@@ -153,7 +149,7 @@
             background: rgba(255,255,255,0.25);
         }
 
-        /* HERO - Đỉnh cao visual */
+        /* HERO */
         .hero {
             height: 100vh;
             display: flex;
@@ -227,13 +223,14 @@
             cursor: pointer;
             font-size: 1.35rem;
             font-weight: 700;
-            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             box-shadow: 0 15px 40px var(--card-glow);
             position: relative;
             overflow: hidden;
             text-transform: uppercase;
             letter-spacing: 2px;
             z-index: 2;
+            will-change: transform, box-shadow;
         }
 
         .btn::before {
@@ -244,7 +241,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
-            transition: 0.7s;
+            transition: 0.7s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .btn:hover::before {
@@ -289,7 +286,7 @@
             box-shadow: 0 0 30px var(--primary-glow);
         }
 
-        /* GRID */
+        /* GRID & CARDS - HOVER SIÊU MỊN */
         .grid, .grid-2 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
@@ -306,16 +303,12 @@
             border: 1px solid rgba(255,255,255,0.18);
             padding: 3.2rem 2.8rem;
             border-radius: 32px;
-            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             position: relative;
             overflow: hidden;
             cursor: pointer;
             box-shadow: 0 15px 50px rgba(0,0,0,0.35);
-        }
-
-        body.light .card {
-            background: var(--glass-light);
-            border-color: rgba(255,255,255,0.3);
+            will-change: transform, box-shadow, border-color;
         }
 
         .card::before {
@@ -326,7 +319,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-            transition: 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: 0.7s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .card:hover::before {
@@ -345,7 +338,7 @@
             display: block;
             text-align: center;
             filter: drop-shadow(0 0 30px currentColor);
-            transition: all 0.5s ease;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .card:hover .card-icon {
@@ -353,21 +346,10 @@
             filter: drop-shadow(0 0 50px currentColor);
         }
 
-        .card h3 {
-            font-size: 2.1rem;
-            margin-bottom: 1.6rem;
-            font-weight: 800;
-            text-align: center;
+        .card h3, .card p {
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .card p {
-            font-size: 1.15rem;
-            line-height: 1.75;
-            opacity: 0.92;
-            text-align: center;
-        }
-
-        /* SPECIAL CARDS */
         .checkin-card { background: linear-gradient(135deg, rgba(16,185,129,0.18), rgba(34,197,94,0.1)); border-color: rgba(16,185,129,0.5); }
         .checkin-card .card-icon { color: #10b981; }
         .activity-card { background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(251,191,36,0.1)); border-color: rgba(245,158,11,0.5); }
@@ -395,12 +377,9 @@
             font-size: 1.25rem;
             backdrop-filter: blur(25px);
             min-width: 420px;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             border: 1px solid rgba(255,255,255,0.15);
-        }
-
-        #msgInput::placeholder {
-            color: rgba(255,255,255,0.65);
+            will-change: box-shadow, transform;
         }
 
         #msgInput:focus {
@@ -418,11 +397,12 @@
             color: white;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             font-size: 1.25rem;
             position: relative;
             overflow: hidden;
             box-shadow: 0 15px 40px var(--card-glow);
+            will-change: transform, box-shadow;
         }
 
         .btn-post::before {
@@ -433,7 +413,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
-            transition: 0.7s;
+            transition: 0.7s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .btn-post:hover:not(:disabled)::before {
@@ -453,13 +433,14 @@
         }
 
         .msg-card {
-            animation: msgSlideIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            animation: msgSlideIn 0.8s cubic-bezier(0.23, 1, 0.32, 1);
             background: var(--glass-dark);
             border-radius: 28px;
             padding: 2.8rem;
             border: 1px solid rgba(255,255,255,0.15);
-            transition: all 0.5s ease;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             box-shadow: 0 15px 45px rgba(0,0,0,0.3);
+            will-change: transform, box-shadow;
         }
 
         .msg-card:hover {
@@ -472,32 +453,55 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .msg-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.6rem;
+        /* CHECKIN BUTTON */
+        .checkin-btn {
+            background: var(--success-glow);
+            border: none;
+            padding: 1.3rem 3.2rem;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 12px 35px rgba(16,185,129,0.5);
+            width: 100%;
+            margin-top: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            will-change: transform, box-shadow;
         }
 
-        .msg-author {
+        .checkin-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 50px rgba(16,185,129,0.7);
+        }
+
+        /* SUCCESS POPUP */
+        .success-popup {
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #10b981, #34d399);
+            color: white;
+            padding: 2rem 4rem;
+            border-radius: 30px;
+            font-size: 2rem;
             font-weight: 800;
-            background: var(--primary-glow);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 1.35rem;
+            box-shadow: 0 0 80px #10b981;
+            z-index: 10001;
+            animation: successPop 2.5s ease forwards;
+            display: none;
+            align-items: center;
+            gap: 1rem;
         }
 
-        .msg-time {
-            font-size: 1rem;
-            color: #a78bfa;
-            font-weight: 500;
-        }
-
-        .msg-content {
-            line-height: 1.85;
-            font-size: 1.22rem;
-            opacity: 0.95;
+        @keyframes successPop {
+            0% { transform: translate(-50%, -80%) scale(0.5); opacity: 0; }
+            20% { transform: translate(-50%, -50%) scale(1.15); }
+            80% { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(-50%, -20%) scale(0.8); opacity: 0; }
         }
 
         /* LOGIN MODAL */
@@ -524,7 +528,7 @@
             border: 1px solid rgba(255,255,255,0.3);
             box-shadow: 0 60px 120px rgba(0,0,0,0.8);
             min-width: 520px;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .login-box:hover {
@@ -541,7 +545,7 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* MUSIC VISUALIZER - Siêu đẹp */
+        /* MUSIC VISUALIZER */
         #musicVisualizer {
             position: fixed;
             bottom: 0;
@@ -564,61 +568,12 @@
             border-radius: 9999px 9999px 0 0;
             box-shadow: 0 0 12px var(--accent-glow);
             animation: soundwave 1.2s ease-in-out infinite;
+            transition: height 0.08s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         @keyframes soundwave {
             0%, 100% { height: 12px; }
             50% { height: 68px; }
-        }
-
-        /* CHECKIN BUTTON */
-        .checkin-btn {
-            background: var(--success-glow);
-            border: none;
-            padding: 1.3rem 3.2rem;
-            border-radius: 50px;
-            color: white;
-            font-weight: 700;
-            font-size: 1.25rem;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            box-shadow: 0 12px 35px rgba(16,185,129,0.5);
-            width: 100%;
-            margin-top: 2rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .checkin-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 20px 50px rgba(16,185,129,0.7);
-        }
-
-        /* SUCCESS ANIMATION */
-        .success-popup {
-            position: fixed;
-            top: 30%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #10b981, #34d399);
-            color: white;
-            padding: 2rem 4rem;
-            border-radius: 30px;
-            font-size: 2rem;
-            font-weight: 800;
-            box-shadow: 0 0 80px #10b981;
-            z-index: 10001;
-            animation: successPop 2.5s ease forwards;
-            display: none;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        @keyframes successPop {
-            0% { transform: translate(-50%, -80%) scale(0.5); opacity: 0; }
-            20% { transform: translate(-50%, -50%) scale(1.15); }
-            80% { transform: translate(-50%, -50%) scale(1); }
-            100% { transform: translate(-50%, -20%) scale(0.8); opacity: 0; }
         }
     </style>
 </head>
@@ -645,7 +600,6 @@
         <div id="userStatus">Chào mừng trở lại, <span style="color:#00f2fe">Hải</span>! 🔥 Hôm nay bạn đã là thiên tài chưa?</div>
         <button class="btn" onclick="startJourney()">KHỞI ĐỘNG SỨ MỆNH THIÊN TÀI</button>
         
-        <!-- Nhạc visualizer toggle -->
         <div style="position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); z-index: 3; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.1); padding: 12px 28px; border-radius: 50px; backdrop-filter: blur(15px); cursor: pointer;" onclick="toggleVisualizer()">
             <i class="fas fa-music" style="color: #00f2fe;"></i>
             <span style="font-weight: 600; font-size: 1.1rem;">Bật nhạc tương lai</span>
@@ -726,9 +680,7 @@
             <input type="text" id="msgInput" placeholder="Chia sẻ ý tưởng thiên tài của bạn với cả lớp 10A4...">
             <button class="btn-post" onclick="postMessage()">ĐĂNG TIN NHẮN</button>
         </div>
-        <div class="messages-grid" id="messagesGrid">
-            <!-- JS sẽ thêm tin nhắn động -->
-        </div>
+        <div class="messages-grid" id="messagesGrid"></div>
     </section>
 
     <!-- LOGIN MODAL -->
@@ -752,7 +704,7 @@
     </div>
 
     <script>
-        // === PROGRESS BAR SCROLL ===
+        // PROGRESS BAR
         function updateProgressBar() {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -761,17 +713,16 @@
         }
         window.onscroll = updateProgressBar;
 
-        // === LIGHT / DARK MODE ===
+        // LIGHT MODE
         function toggleLightMode() {
             document.body.classList.toggle('light');
         }
 
-        // === CHECK-IN FUNCTION ===
+        // CHECK-IN
         function handleCheckin(card) {
             const popup = document.getElementById('successPopup');
             popup.style.display = 'flex';
             
-            // Animation confetti-like (simple emoji rain)
             for (let i = 0; i < 80; i++) {
                 setTimeout(() => {
                     const emoji = document.createElement('div');
@@ -790,25 +741,23 @@
                         { transform: `translateY(${window.innerHeight + 100}px) rotate(${Math.random() * 800}deg)`, opacity: 0 }
                     ], {
                         duration: duration,
-                        easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
+                        easing: 'cubic-bezier(0.23, 1, 0.32, 1)'
                     });
-                    
                     setTimeout(() => emoji.remove(), duration);
                 }, i * 3);
             }
             
             setTimeout(() => {
                 popup.style.display = 'none';
-                // Fake update streak on card
                 if (card) {
-                    card.style.transition = 'all 0.6s';
+                    card.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
                     card.style.transform = 'scale(1.1)';
                     setTimeout(() => card.style.transform = '', 600);
                 }
             }, 2500);
         }
 
-        // === START JOURNEY (Hero button) ===
+        // START JOURNEY
         function startJourney() {
             const hero = document.querySelector('.hero');
             hero.style.transition = 'all 1.2s cubic-bezier(0.23, 1, 0.32, 1)';
@@ -819,29 +768,16 @@
             }, 800);
         }
 
-        // === MESSAGE SYSTEM ===
+        // MESSAGE SYSTEM
         let messages = [
-            {
-                author: "Ngọc Anh",
-                time: "14:22",
-                content: "Hôm nay bài tập vật lý khó quá mọi người ơi, ai giải giúp mình câu 4 với 😭"
-            },
-            {
-                author: "Minh Quân",
-                time: "14:18",
-                content: "10A4 chúng ta là ULTRA GENIUS! Ai đã check-in chưa? Mình vừa phá kỷ lục streak 🔥"
-            },
-            {
-                author: "Hải",
-                time: "14:05",
-                content: "Lớp mình sắp tổ chức quiz đêm nay không? Mình sẵn sàng tranh top 1 rồi đây!"
-            }
+            { author: "Ngọc Anh", time: "14:22", content: "Hôm nay bài tập vật lý khó quá mọi người ơi, ai giải giúp mình câu 4 với 😭" },
+            { author: "Minh Quân", time: "14:18", content: "10A4 chúng ta là ULTRA GENIUS! Ai đã check-in chưa? Mình vừa phá kỷ lục streak 🔥" },
+            { author: "Hải", time: "14:05", content: "Lớp mình sắp tổ chức quiz đêm nay không? Mình sẵn sàng tranh top 1 rồi đây!" }
         ];
 
         function renderMessages() {
             const container = document.getElementById('messagesGrid');
             container.innerHTML = '';
-            
             messages.forEach(msg => {
                 const cardHTML = `
                 <div class="msg-card">
@@ -862,22 +798,17 @@
             const now = new Date();
             const time = `${now.getHours()}:${now.getMinutes() < 10 ? '0' : ''}${now.getMinutes()}`;
             
-            messages.unshift({
-                author: "Hải",
-                time: time,
-                content: input.value
-            });
-            
+            messages.unshift({ author: "Hải", time: time, content: input.value });
             renderMessages();
             input.value = '';
             
-            // Hiệu ứng post
             const grid = document.getElementById('messagesGrid');
+            grid.style.transition = 'opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1)';
             grid.style.opacity = '0.6';
             setTimeout(() => grid.style.opacity = '1', 200);
         }
 
-        // === LOGIN MODAL ===
+        // LOGIN
         function toggleLoginModal() {
             const modal = document.getElementById('loginModal');
             modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
@@ -892,7 +823,6 @@
             closeLoginModal();
             document.getElementById('userStatus').innerHTML = `Chào mừng trở lại, <span style="color:#00f2fe">${name}</span>! 🔥 Bạn đang dẫn đầu bảng xếp hạng thiên tài hôm nay!`;
             
-            // Toast thông báo
             const toast = document.createElement('div');
             toast.style.position = 'fixed';
             toast.style.bottom = '30px';
@@ -909,18 +839,17 @@
             document.body.appendChild(toast);
             
             setTimeout(() => {
-                toast.style.transition = 'all 0.6s';
+                toast.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
                 toast.style.opacity = '0';
                 toast.style.transform = 'translateX(-50%) translateY(30px)';
                 setTimeout(() => toast.remove(), 600);
             }, 2800);
         }
 
-        // === MUSIC VISUALIZER ===
+        // MUSIC VISUALIZER
         let visualizerInterval = null;
         function toggleVisualizer() {
             const viz = document.getElementById('musicVisualizer');
-            
             if (viz.style.display === 'flex') {
                 viz.style.display = 'none';
                 if (visualizerInterval) clearInterval(visualizerInterval);
@@ -928,8 +857,6 @@
             }
             
             viz.style.display = 'flex';
-            
-            // Tạo 28 thanh visualizer
             viz.innerHTML = '';
             for (let i = 0; i < 28; i++) {
                 const bar = document.createElement('div');
@@ -939,7 +866,6 @@
                 viz.appendChild(bar);
             }
             
-            // Animation ngẫu nhiên
             visualizerInterval = setInterval(() => {
                 const bars = viz.querySelectorAll('.visualizer-bar');
                 bars.forEach(bar => {
@@ -949,21 +875,14 @@
             }, 110);
         }
 
-        // === KHỞI ĐỘNG TOÀN BỘ TRANG ===
+        // KHỞI ĐỘNG
         window.onload = function() {
-            // Render tin nhắn ban đầu
             renderMessages();
-            
-            // Progress bar
             updateProgressBar();
             
-            console.log('%c🚀 10A4 ULTRA GENIUS đã được nâng cấp thành tuyệt tác!', 'color:#00f2fe; font-size:18px; font-weight:900; font-family:Orbitron');
-            console.log('%cChỉ muốn nhìn mãi không thôi 🔥', 'color:#ec4899; font-size:14px');
-            
-            // Thêm hiệu ứng hover toàn trang
-            console.log('🌟 Trang web đã sẵn sàng cho lớp 10A4 - Siêu phẩm visual!');
+            console.log('%c🚀 10A4 ULTRA GENIUS - Hover đã được tối ưu siêu mượt!', 'color:#00f2fe; font-size:18px; font-weight:900; font-family:Orbitron');
+            console.log('%cMọi hiệu ứng hover giờ mượt như nhung, chỉ muốn nhìn mãi mãi 🔥', 'color:#ec4899; font-size:14px');
         };
     </script>
 </body>
 </html>
-```
