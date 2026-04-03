@@ -1,261 +1,360 @@
+```html
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" x-data="app()">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>10A4 - Nơi chúng ta tỏa sáng! ✨</title>
+    <title>🌟 10A4 - Nơi chúng ta tỏa sáng! 🌟</title>
     
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Poppins & Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Alpine.js CDN -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        primary: '#003087',
+                        secondary: '#FF7F00',
+                        neon: '#A020F0'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
+        :root {
+            --primary: #003087;
+            --secondary: #FF7F00;
+            --neon: #A020F0;
         }
-        .font-poppins { 
-            font-family: 'Poppins', sans-serif; 
+        
+        * {
+            font-family: 'Inter', sans-serif;
         }
-        .glass { 
-            background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(20px); 
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .neon-glow { 
-            box-shadow: 0 0 20px rgba(160, 32, 240, 0.5), 0 0 40px rgba(160, 32, 240, 0.3);
+        
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .gradient-bg {
-            background: linear-gradient(135deg, #003087 0%, #FF7F00 50%, #A020F0 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+        
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(160, 32, 240, 0.5);
         }
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #FF7F00, #A020F0, #003087);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
+        
         .parallax {
             background-attachment: fixed;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
         }
+        
         .masonry {
             column-count: 1;
             column-gap: 1.5rem;
         }
         @media (min-width: 640px) { .masonry { column-count: 2; } }
         @media (min-width: 1024px) { .masonry { column-count: 3; } }
-        .masonry-item {
-            break-inside: avoid;
-            margin-bottom: 1.5rem;
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
         }
-        .dark .glass { 
-            background: rgba(0, 0, 0, 0.3); 
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.8s ease-out;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .hover-scale {
+            transform: scale(1.05);
+        }
+        
+        .rotate-3d {
+            transform: rotateY(15deg) rotateX(10deg);
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white min-h-screen overflow-x-hidden" x-data="appData()">
-    <!-- Particle Background Canvas -->
-    <canvas id="particles" class="fixed inset-0 z-0 opacity-30"></canvas>
 
+<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-blue-900 text-white min-h-screen overflow-x-hidden">
     <!-- Loading Screen -->
-    <div id="loading" class="fixed inset-0 bg-gradient-to-r from-blue-900 via-purple-900 to-orange-500 z-50 flex items-center justify-center">
+    <div x-show="loading" x-transition class="fixed inset-0 bg-gradient-to-r from-blue-900 via-purple-900 to-orange-500 z-50 flex items-center justify-center">
         <div class="text-center">
-            <div class="w-24 h-24 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-6"></div>
-            <h1 class="font-poppins text-3xl font-bold neon-glow mb-2">10A4</h1>
-            <p class="text-white/80">Đang tải... Nơi chúng ta tỏa sáng! ✨</p>
+            <div class="w-24 h-24 border-4 border-orange-400/50 border-t-orange-400 rounded-full animate-spin mx-auto mb-6"></div>
+            <h1 class="text-3xl md:text-4xl font-bold font-poppins gradient-text animate-pulse">10A4 Đang tải...</h1>
+            <p class="mt-2 text-lg opacity-75">Nơi chúng ta tỏa sáng! ✨</p>
         </div>
     </div>
 
-    <!-- Login Overlay -->
-    <div x-show="!isLoggedIn" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" 
-         class="fixed inset-0 bg-black/80 backdrop-blur-md z-40 flex items-center justify-center p-4">
-        <div class="glass rounded-3xl p-12 max-w-md w-full max-h-[90vh] overflow-y-auto neon-glow">
+    <!-- Particles Container (Login & Background) -->
+    <div id="particles-js" class="absolute inset-0 z-0"></div>
+
+    <!-- ================ LOGIN PAGE ================ -->
+    <div x-show="!isLoggedIn" class="min-h-screen flex items-center justify-center p-4 relative z-10">
+        <div class="glass w-full max-w-md p-8 rounded-3xl neon-glow">
             <div class="text-center mb-8">
-                <h1 class="font-poppins text-4xl font-bold bg-gradient-to-r from-blue-400 via-orange-400 to-purple-500 bg-clip-text text-transparent mb-2">
-                    10A4 CyberSecr 🚀
-                </h1>
-                <p class="text-white/80">Hệ thống bảo mật lớp 10A4</p>
+                <div class="w-24 h-24 bg-gradient-to-r from-orange-400 to-purple-400 rounded-3xl mx-auto mb-4 flex items-center justify-center">
+                    <span class="text-3xl font-poppins">🌟</span>
+                </div>
+                <h1 class="text-4xl font-bold font-poppins gradient-text mb-2">Chào 10A4!</h1>
+                <p class="opacity-75">Hệ thống bảo mật CyberSecr</p>
             </div>
             
             <form @submit.prevent="login" class="space-y-6">
                 <div>
-                    <label class="block text-sm font-medium mb-2">Tên học sinh</label>
-                    <input x-model="loginData.username" type="text" required 
-                           class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-500/50 transition-all duration-300 text-white placeholder-white/60">
+                    <label class="block text-sm font-medium mb-2">Tên đăng nhập</label>
+                    <input 
+                        x-model="loginForm.username" 
+                        type="text" 
+                        class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
+                        placeholder="Nhập tên học sinh..."
+                        required
+                    >
                 </div>
+                
                 <div>
-                    <label class="block text-sm font-medium mb-2">Mật khẩu lớp</label>
-                    <input x-model="loginData.password" type="password" required 
-                           class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-500/50 transition-all duration-300 text-white placeholder-white/60">
+                    <label class="block text-sm font-medium mb-2">Mật khẩu CyberSecr</label>
+                    <input 
+                        x-model="loginForm.password" 
+                        :type="loginForm.showPassword ? 'text' : 'password'"
+                        class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
+                        placeholder="••••••••"
+                        required
+                    >
+                    <button type="button" @click="loginForm.showPassword = !loginForm.showPassword" class="absolute right-3 top-10 text-lg">
+                        <i x-show="!loginForm.showPassword" class="fas fa-eye"></i>
+                        <i x-show="loginForm.showPassword" class="fas fa-eye-slash"></i>
+                    </button>
                 </div>
-                <button type="submit" 
-                        class="w-full font-poppins font-bold py-4 px-6 bg-gradient-to-r from-blue-600 to-orange-500 hover:from-blue-700 hover:to-orange-600 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-purple-500/25 neon-glow">
-                    🚀 ĐĂNG NHẬP 10A4
+                
+                <button 
+                    type="submit" 
+                    class="w-full bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 text-white font-bold py-4 px-6 rounded-2xl transform hover:scale-105 transition-all duration-300 shadow-2xl"
+                >
+                    🚀 Truy cập 10A4
                 </button>
             </form>
             
-            <div class="mt-8 pt-6 border-t border-white/20 text-center">
-                <p class="text-xs text-white/60">👥 Tài khoản mẫu: <strong>10a4</strong> / <strong>vietnam</strong></p>
+            <div class="mt-6 text-center">
+                <p class="text-xs opacity-50">Demo: admin / 10a4vip</p>
             </div>
         </div>
     </div>
 
-    <!-- Main App (Chỉ hiện sau khi login) -->
-    <div x-show="isLoggedIn" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-10" x-transition:enter-end="opacity-100 translate-y-0">
+    <!-- ================ MAIN APP (Sau khi login) ================ -->
+    <div x-show="isLoggedIn" x-transition class="min-h-screen relative z-10">
         <!-- Header & Navigation -->
-        <header class="fixed top-0 left-0 right-0 z-30 glass backdrop-blur-xl border-b border-white/10">
-            <div class="max-w-7xl mx-auto px-6 py-4">
-                <div class="flex items-center justify-between">
+        <header class="glass sticky top-0 z-40 border-b border-white/10 backdrop-blur-xl">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
                     <!-- Logo -->
                     <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-orange-500 rounded-2xl flex items-center justify-center neon-glow">
-                            <span class="font-poppins font-bold text-xl">10</span>
+                        <div class="w-10 h-10 bg-gradient-to-r from-orange-400 to-purple-400 rounded-2xl flex items-center justify-center neon-glow">
+                            <span class="text-xl font-poppins">🌟</span>
                         </div>
                         <div>
-                            <h1 class="font-poppins text-2xl font-bold bg-gradient-to-r from-blue-400 via-orange-400 to-purple-500 bg-clip-text text-transparent">
-                                10A4
-                            </h1>
-                            <p class="text-xs text-white/60">Nơi chúng ta tỏa sáng!</p>
+                            <h1 class="text-2xl font-bold font-poppins gradient-text">10A4</h1>
+                            <p class="text-xs opacity-75">Nơi chúng ta tỏa sáng!</p>
                         </div>
                     </div>
 
                     <!-- Navigation -->
                     <nav class="hidden md:flex items-center space-x-1">
-                        <template x-for="item in navItems" :key="item.id">
-                            <a :href="item.href" 
-                               @click.prevent="currentPage = item.id"
-                               :class="['px-4 py-2 font-medium rounded-xl transition-all duration-300 font-poppins relative group', 
-                               currentPage === item.id ? 'bg-white/20 neon-glow scale-105' : 'hover:bg-white/10 hover:scale-105']">
-                                <span x-text="item.name"></span>
-                                <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
-                            </a>
-                        </template>
-                        <!-- Dark Mode Toggle -->
-                        <button @click="toggleDarkMode" class="p-2 rounded-xl hover:bg-white/20 transition-all duration-300">
-                            <span x-show="!isDarkMode" class="text-2xl">☀️</span>
-                            <span x-show="isDarkMode" class="text-2xl">🌙</span>
+                        <button 
+                            @click="currentPage = 'home'"
+                            :class="currentPage === 'home' ? 'bg-white/10' : ''"
+                            class="px-4 py-2 rounded-2xl font-medium hover:bg-white/20 transition-all flex items-center space-x-2"
+                        >
+                            <i class="fas fa-home"></i>
+                            <span>Trang chủ</span>
                         </button>
-                        <!-- Logout -->
-                        <button @click="logout" class="ml-4 px-4 py-2 font-poppins font-semibold bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 rounded-xl transform hover:scale-105 transition-all duration-300">
-                            🚪 Thoát
+                        <button 
+                            @click="currentPage = 'gallery'"
+                            :class="currentPage === 'gallery' ? 'bg-white/10' : ''"
+                            class="px-4 py-2 rounded-2xl font-medium hover:bg-white/20 transition-all flex items-center space-x-2"
+                        >
+                            <i class="fas fa-images"></i>
+                            <span>Hình ảnh</span>
+                        </button>
+                        <button 
+                            @click="currentPage = 'achievements'"
+                            :class="currentPage === 'achievements' ? 'bg-white/10' : ''"
+                            class="px-4 py-2 rounded-2xl font-medium hover:bg-white/20 transition-all flex items-center space-x-2"
+                        >
+                            <i class="fas fa-trophy"></i>
+                            <span>Thành tích</span>
+                        </button>
+                        <button 
+                            @click="currentPage = 'students'"
+                            :class="currentPage === 'students' ? 'bg-white/10' : ''"
+                            class="px-4 py-2 rounded-2xl font-medium hover:bg-white/20 transition-all flex items-center space-x-2"
+                        >
+                            <i class="fas fa-users"></i>
+                            <span>Học sinh</span>
+                        </button>
+                        <button 
+                            @click="currentPage = 'chat'"
+                            :class="currentPage === 'chat' ? 'bg-white/10' : ''"
+                            class="px-4 py-2 rounded-2xl font-medium hover:bg-white/20 transition-all flex items-center space-x-2"
+                        >
+                            <i class="fas fa-comments"></i>
+                            <span>Chat</span>
+                        </button>
+                        <button 
+                            @click="currentPage = 'profile'"
+                            :class="currentPage === 'profile' ? 'bg-white/10' : ''"
+                            class="px-4 py-2 rounded-2xl font-medium hover:bg-white/20 transition-all flex items-center space-x-2"
+                        >
+                            <i class="fas fa-user"></i>
+                            <span>Hồ sơ</span>
                         </button>
                     </nav>
 
-                    <!-- Mobile Menu Button -->
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-xl hover:bg-white/20">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                            <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
+                    <!-- Right controls -->
+                    <div class="flex items-center space-x-4">
+                        <!-- Dark mode toggle -->
+                        <button @click="toggleDarkMode()" class="p-2 rounded-2xl hover:bg-white/20 transition-all">
+                            <i x-show="!isDarkMode" class="fas fa-moon"></i>
+                            <i x-show="isDarkMode" class="fas fa-sun"></i>
+                        </button>
+                        
+                        <!-- Music control -->
+                        <button @click="toggleMusic()" class="p-2 rounded-2xl hover:bg-white/20 transition-all relative">
+                            <i x-show="!musicPlaying" class="fas fa-play"></i>
+                            <i x-show="musicPlaying" class="fas fa-pause"></i>
+                            <div x-show="musicPlaying" class="absolute -top-2 -right-2 w-4 h-4 bg-green-400 rounded-full animate-ping"></div>
+                        </button>
+                        
+                        <!-- User info -->
+                        <div class="flex items-center space-x-2">
+                            <div class="w-10 h-10 bg-gradient-to-r from-orange-400 to-purple-400 rounded-2xl flex items-center justify-center font-bold">
+                                {{ userInitial }}
+                            </div>
+                            <span class="font-medium hidden sm:block">{{ currentUser?.name || '10A4' }}</span>
+                        </div>
+                        
+                        <!-- Logout -->
+                        <button @click="logout()" class="px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-200 font-medium rounded-2xl transition-all flex items-center space-x-2">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Thoát</span>
+                        </button>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-2xl hover:bg-white/20">
+                        <i class="fas fa-bars text-xl"></i>
                     </button>
                 </div>
             </div>
         </header>
 
-        <!-- Mobile Menu Overlay -->
-        <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-x-full" x-transition:enter-end="opacity-100 translate-x-0" 
-             class="fixed top-20 left-0 h-full w-64 glass backdrop-blur-xl z-20 md:hidden">
-            <div class="p-6 space-y-4">
-                <template x-for="item in navItems" :key="item.id">
-                    <a :href="item.href" @click.prevent="currentPage = item.id; mobileMenuOpen = false" 
-                       class="block px-4 py-3 font-poppins font-semibold rounded-xl hover:bg-white/20 transition-all duration-300"
-                       :class="currentPage === item.id ? 'bg-white/30 neon-glow' : ''">
-                        <span x-text="item.name"></span>
-                    </a>
-                </template>
-                <button @click="toggleDarkMode" class="w-full text-left px-4 py-3 font-poppins font-semibold rounded-xl hover:bg-white/20 transition-all duration-300">
-                    <span x-show="!isDarkMode">☀️ Chế độ sáng</span>
-                    <span x-show="isDarkMode">🌙 Chế độ tối</span>
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" x-transition class="md:hidden glass border-t border-white/10 backdrop-blur-xl" style="display: none;">
+            <div class="px-4 py-4 space-y-2">
+                <button @click="currentPage = 'home'; mobileMenuOpen = false" class="w-full text-left p-3 rounded-2xl hover:bg-white/20 flex items-center space-x-3">
+                    <i class="fas fa-home"></i>
+                    <span>Trang chủ</span>
                 </button>
-                <button @click="logout" class="w-full font-poppins font-bold py-3 px-4 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 rounded-xl transition-all duration-300">
-                    🚪 Thoát
-                </button>
+                <!-- Thêm các menu khác tương tự -->
             </div>
         </div>
 
-        <!-- Main Content -->
-        <main class="pt-24 pb-20 max-w-7xl mx-auto px-6">
-            <!-- Welcome Banner -->
-            <div x-show="currentPage === 'home' && showWelcome" x-init="setTimeout(() => showWelcome = false, 5000)" 
-                 class="fixed top-28 right-6 z-20 glass p-6 rounded-2xl neon-glow animate-bounce">
-                <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-500 rounded-xl flex items-center justify-center">
-                        <span class="font-bold text-xl">🎉</span>
-                    </div>
-                    <div>
-                        <h3 class="font-poppins font-bold text-lg" x-text="`Chào ${userData.name}!`"></h3>
-                        <p class="text-sm text-white/80">Chào mừng đến với 10A4! ✨</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Page: Trang chủ -->
-            <div x-show="currentPage === 'home'">
-                <!-- Hero Section -->
-                <section class="relative h-screen flex items-center justify-center text-center parallax" 
-                         style="background: linear-gradient(135deg, #003087, #FF7F00, #A020F0);">
-                    <div class="absolute inset-0 bg-black/30"></div>
-                    <div class="relative z-10 max-w-4xl mx-auto px-6">
-                        <h1 class="font-poppins text-5xl md:text-7xl font-black bg-gradient-to-r from-white via-blue-200 to-white bg-clip-text text-transparent mb-6 animate-pulse">
-                            CHÀO MỪNG ĐẾN VỚI
+        <!-- ================ MAIN CONTENT ================ -->
+        <main class="pt-4 pb-20">
+            <!-- Hero Section (Trang chủ) -->
+            <div x-show="currentPage === 'home'" class="relative">
+                <!-- Parallax Hero -->
+                <div class="parallax h-screen flex items-center justify-center bg-gradient-to-br from-blue-900/80 via-purple-900/80 to-orange-500/80 relative overflow-hidden">
+                    <div class="text-center px-4 max-w-4xl mx-auto fade-in">
+                        <h1 class="text-5xl md:text-7xl font-black font-poppins mb-6 gradient-text animate-pulse">
+                            Chào mừng đến với <span class="block">10A4</span>
                         </h1>
-                        <h2 class="font-poppins text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-orange-400 via-yellow-400 to-pink-400 bg-clip-text text-transparent mb-8 leading-tight">
-                            10A4
-                        </h2>
-                        <p class="font-poppins text-xl md:text-2xl text-white/90 mb-12 max-w-2xl mx-auto leading-relaxed">
-                            Nơi chúng ta <span class="text-orange-400 font-bold">tỏa sáng</span>, <span class="text-purple-400 font-bold">kết nối</span> và <span class="text-blue-400 font-bold">thành công</span> cùng nhau! ✨
+                        <p class="text-xl md:text-2xl opacity-90 mb-8 max-w-2xl mx-auto leading-relaxed">
+                            Nơi chúng ta <span class="gradient-text font-bold">tỏa sáng</span> cùng nhau! 
+                            Kết nối - Yêu thương - Thành công 💙🧡💜
                         </p>
                         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                            <button @click="currentPage = 'gallery'" 
-                                    class="font-poppins font-bold px-12 py-6 bg-white text-blue-900 rounded-3xl text-lg hover:scale-110 transition-all duration-500 shadow-2xl hover:shadow-white/50">
-                                📸 Xem ảnh lớp
-                            </button>
-                            <button @click="currentPage = 'chat'" 
-                                    class="font-poppins font-bold px-12 py-6 border-2 border-white rounded-3xl text-lg hover:bg-white hover:text-blue-900 transition-all duration-500 hover:scale-110">
+                            <button @click="currentPage = 'chat'" class="bg-gradient-to-r from-orange-500 to-purple-500 hover:from-orange-600 hover:to-purple-600 px-8 py-4 rounded-2xl font-bold text-lg transform hover:scale-105 shadow-2xl neon-glow">
                                 💬 Chat ngay
                             </button>
+                            <button @click="currentPage = 'gallery'" class="border-2 border-white/30 hover:border-white/50 px-8 py-4 rounded-2xl font-bold text-lg backdrop-blur-sm hover:bg-white/10 transition-all">
+                                🖼️ Xem ảnh lớp
+                            </button>
                         </div>
                     </div>
-                </section>
+                </div>
 
-                <!-- Stats Cards -->
-                <section class="grid md:grid-cols-3 gap-8 my-24">
-                    <div class="glass p-8 rounded-3xl text-center group hover:scale-105 transition-all duration-500 hover:neon-glow">
-                        <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition-transform duration-500">
-                            <span class="font-bold text-2xl">👥</span>
+                <!-- Stats -->
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                    <div class="grid md:grid-cols-4 gap-6">
+                        <div class="glass p-8 rounded-3xl text-center hover:scale-105 transition-all">
+                            <div class="text-4xl mb-2">📊</div>
+                            <h3 class="text-2xl font-bold mb-1">{{ stats.today }}</h3>
+                            <p class="opacity-75">Truy cập hôm nay</p>
                         </div>
-                        <h3 class="font-poppins text-2xl font-bold mb-4" x-text="stats.totalStudents"></h3>
-                        <p class="text-white/70 font-medium">Học sinh 10A4</p>
-                    </div>
-                    <div class="glass p-8 rounded-3xl text-center group hover:scale-105 transition-all duration-500 hover:neon-glow">
-                        <div class="w-20 h-20 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition-transform duration-500">
-                            <span class="font-bold text-2xl" x-text="stats.todayVisits"></span>
+                        <div class="glass p-8 rounded-3xl text-center hover:scale-105 transition-all">
+                            <div class="text-4xl mb-2">🌐</div>
+                            <h3 class="text-2xl font-bold mb-1">{{ stats.total.toLocaleString() }}</h3>
+                            <p class="opacity-75">Tổng lượt truy cập</p>
                         </div>
-                        <h3 class="font-poppins text-2xl font-bold mb-4" x-text="formatNumber(stats.todayVisits)"></h3>
-                        <p class="text-white/70 font-medium">Lượt truy cập hôm nay</p>
-                    </div>
-                    <div class="glass p-8 rounded-3xl text-center group hover:scale-105 transition-all duration-500 hover:neon-glow">
-                        <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition-transform duration-500">
-                            <span class="font-bold text-2xl">📊</span>
+                        <div class="glass p-8 rounded-3xl text-center hover:scale-105 transition-all">
+                            <div class="text-4xl mb-2">👥</div>
+                            <h3 class="text-2xl font-bold mb-1">{{ students.length }}</h3>
+                            <p class="opacity-75">Học sinh 10A4</p>
                         </div>
-                        <h3 class="font-poppins text-2xl font-bold mb-4" x-text="formatNumber(stats.totalVisits)"></h3>
-                        <p class="text-white/70 font-medium">Tổng lượt truy cập</p>
+                        <div class="glass p-8 rounded-3xl text-center hover:scale-105 transition-all">
+                            <div class="text-4xl mb-2">📸</div>
+                            <h3 class="text-2xl font-bold mb-1">{{ gallery.length }}</h3>
+                            <p class="opacity-75">Ảnh trong album</p>
+                        </div>
                     </div>
-                </section>
+                </div>
 
-                <!-- Quick Links -->
-                <section class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
-                    <div class="glass p-8 rounded-3xl group hover:scale-110 transition-all duration-500 hover:neon-glow cursor-pointer" @click="currentPage = 'gallery'">
-                        <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-180 transition-transform duration-500">
-                            <span class="text-2xl">📸</span>
-                        </div>
-                        <h3 class="font-poppins font-bold text-xl mb-2 text-center">Nơi lưu ảnh</h3>
-                        <p class="text-white/70 text-center">Xem và up ảnh lớp siêu đẹp</p>
-                    </div>
-                    <div class="glass p-8 rounded-3xl group hover:scale-110 transition-all duration-500 hover:neon-glow cursor-pointer" @click="currentPage = 'achievements'">
-                        <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-180 transition-transform duration-
+                <!-- Lịch học & Tin tức -->
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <div class="glass p-8 rounded-3xl">
+                            <h2 class="text-3xl font-bold font-poppins mb-6 gradient-text">📚 Lịch học tuần này</h2>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
+                                    <span>Thứ 2</span>
+                                    <span class="font-bold">Toán - Lý - Hóa</span>
+                                </div
