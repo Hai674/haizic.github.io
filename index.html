@@ -19,7 +19,7 @@
 </head>
 <body class="bg-[#003087] text-white min-h-screen overflow-x-hidden">
 
-<!-- LOGIN SCREEN - ĐÃ NÂNG CẤP -->
+<!-- LOGIN SCREEN -->
 <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center hero-bg">
     <canvas id="particle-canvas" class="absolute inset-0 pointer-events-none"></canvas>
     
@@ -30,21 +30,20 @@
         <h1 class="title-font text-4xl font-bold text-center mb-2 neon-text">CYBERSECR 10A4</h1>
         <p class="text-center text-white/70 mb-8">Lớp 10A4 THPT Gia Viễn • 2025-2026</p>
 
-        <!-- Tab -->
         <div class="flex mb-8 border-b border-white/20">
             <button onclick="switchAuthTab(0)" id="tab-login" class="flex-1 py-3 font-bold border-b-2 border-[#FF7F00] text-[#FF7F00]">Đăng nhập</button>
             <button onclick="switchAuthTab(1)" id="tab-register" class="flex-1 py-3 font-bold">Đăng ký</button>
         </div>
 
-        <!-- FORM ĐĂNG NHẬP -->
+        <!-- ĐĂNG NHẬP -->
         <div id="form-login">
-            <input id="login-email" type="text" placeholder="Email hoặc tên học sinh" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-4 focus:outline-none focus:border-[#FF7F00]">
-            <input id="login-password" type="password" placeholder="Mật khẩu" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-6 focus:outline-none focus:border-[#FF7F00]">
+            <input id="login-email" type="text" placeholder="Email hoặc tên học sinh" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-4">
+            <input id="login-password" type="password" placeholder="Mật khẩu" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-6">
             <button onclick="handleLogin()" class="w-full py-4 bg-[#FF7F00] hover:bg-[#FF9F33] text-[#003087] font-bold text-xl rounded-2xl">ĐĂNG NHẬP</button>
             <p onclick="switchToForgot()" class="text-center text-[#A020F0] mt-4 cursor-pointer hover:underline">Quên mật khẩu?</p>
         </div>
 
-        <!-- FORM ĐĂNG KÝ -->
+        <!-- ĐĂNG KÝ -->
         <div id="form-register" class="hidden">
             <input id="reg-name" type="text" placeholder="Họ và tên" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-4">
             <input id="reg-email" type="email" placeholder="Email (ví dụ: tenban@gmail.com)" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-4">
@@ -52,153 +51,148 @@
             <button onclick="startRegister()" class="w-full py-4 bg-[#FF7F00] hover:bg-[#FF9F33] text-[#003087] font-bold text-xl rounded-2xl">ĐĂNG KÝ & NHẬN MÃ OTP</button>
         </div>
 
-        <!-- FORM QUÊN MẬT KHẨU -->
+        <!-- QUÊN MẬT KHẨU -->
         <div id="form-forgot" class="hidden">
             <input id="forgot-email" type="email" placeholder="Nhập email của bạn" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-6">
-            <button onclick="startForgotPassword()" class="w-full py-4 bg-[#A020F0] hover:bg-[#C040FF] text-white font-bold text-xl rounded-2xl">GỬI MÃ OTP ĐẶT LẠI MẬT KHẨU</button>
+            <button onclick="startForgotPassword()" class="w-full py-4 bg-[#A020F0] hover:bg-[#C040FF] text-white font-bold text-xl rounded-2xl">GỬI MÃ OTP</button>
+        </div>
+
+        <!-- FORM ĐẶT MẬT KHẨU MỚI (mới thêm) -->
+        <div id="form-new-password" class="hidden">
+            <h3 class="text-xl font-bold mb-4 text-center">Đặt mật khẩu mới</h3>
+            <input id="new-password" type="password" placeholder="Mật khẩu mới" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-4">
+            <input id="confirm-password" type="password" placeholder="Nhập lại mật khẩu mới" class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl mb-6">
+            <button onclick="setNewPassword()" class="w-full py-4 bg-[#FF7F00] hover:bg-[#FF9F33] text-[#003087] font-bold text-xl rounded-2xl">XÁC NHẬN & ĐẶT LẠI</button>
         </div>
 
         <p id="auth-message" class="text-center text-sm mt-6 min-h-[24px]"></p>
     </div>
 </div>
 
-<!-- OTP MODAL (chung cho đăng ký & quên mật khẩu) -->
+<!-- OTP MODAL -->
 <div onclick="if(event.target.id==='otp-modal')hideOTPModal()" id="otp-modal" class="hidden fixed inset-0 bg-black/80 z-[99999] flex items-center justify-center">
     <div onclick="event.stopImmediatePropagation()" class="glass rounded-3xl p-10 max-w-md w-full mx-4 text-center">
-        <h3 class="text-2xl font-bold mb-2">Xác thực OTP</h3>
+        <h3 class="text-2xl font-bold mb-2">Nhập mã OTP</h3>
         <p id="otp-email-display" class="text-white/70 mb-6"></p>
-        <p class="text-sm mb-4">Chúng tôi đã gửi mã 6 số đến Gmail của bạn</p>
-        
-        <div class="flex justify-center gap-3 mb-8">
-            <input id="otp-input" maxlength="6" placeholder="000000" 
-                   class="w-52 text-center text-4xl font-mono tracking-[8px] bg-white/10 border border-white/30 rounded-2xl py-5 focus:outline-none focus:border-[#FF7F00]">
-        </div>
-        
-        <button onclick="verifyOTP()" class="w-full py-4 bg-[#FF7F00] text-[#003087] font-bold text-xl rounded-2xl mb-4">XÁC NHẬN MÃ</button>
-        <button onclick="hideOTPModal()" class="text-white/60">Đóng</button>
-        
+        <input id="otp-input" maxlength="6" placeholder="000000" class="w-52 text-center text-4xl font-mono tracking-[8px] bg-white/10 border border-white/30 rounded-2xl py-5 focus:outline-none focus:border-[#FF7F00]">
+        <button onclick="verifyOTP()" class="w-full mt-6 py-4 bg-[#FF7F00] text-[#003087] font-bold text-xl rounded-2xl">XÁC NHẬN</button>
         <div id="demo-otp" class="mt-6 text-xs text-white/50"></div>
     </div>
 </div>
 
-<!-- MAIN APP (giữ nguyên như trước, chỉ thay đổi một chút) -->
-<div id="main-app" class="hidden"> ... (toàn bộ nội dung main app từ bản trước, bao gồm navbar có nút Playlist) ... </div>
+<!-- MAIN APP (giữ nguyên) -->
+<div id="main-app" class="hidden">
+    <!-- Navbar, pages, playlist... (bạn copy phần này từ bản trước) -->
+    <!-- Nếu bạn muốn tôi gửi lại full code thì cứ nói -->
+</div>
 
 <script>
-// ==================== USERS (localStorage) ====================
+// ==================== DỮ LIỆU USERS ====================
 let users = JSON.parse(localStorage.getItem('10A4_users')) || [
     { id: 1, name: "Nguyễn Văn An", email: "an10a4@gmail.com", password: "10A4", avatar: "🚀", nick: "An Pro" }
 ];
 
-// ==================== OTP LOGIC (GIẢ LẬP) ====================
+let currentUser = null;
 let currentOTP = null;
-let currentAction = null; // 'register' hoặc 'forgot'
+let currentAction = null;        // 'register' hoặc 'forgot'
 let tempRegisterData = null;
 let tempForgotEmail = null;
 
-// Sinh OTP 6 số
+// ==================== OTP & AUTH LOGIC ====================
 function generateOTP() {
     currentOTP = Math.floor(100000 + Math.random() * 900000).toString();
     return currentOTP;
 }
 
-// Chuyển tab
 function switchAuthTab(tab) {
     document.getElementById('form-login').classList.toggle('hidden', tab === 1);
     document.getElementById('form-register').classList.toggle('hidden', tab === 0);
     document.getElementById('form-forgot').classList.add('hidden');
+    document.getElementById('form-new-password').classList.add('hidden');
 }
 
-// Đăng ký
-function startRegister() {
+function startRegister() { /* giữ nguyên như cũ */ 
     const name = document.getElementById('reg-name').value.trim();
     const email = document.getElementById('reg-email').value.trim();
     const password = document.getElementById('reg-password').value.trim();
+    if (!name || !email || !password) return showAuthMessage('Vui lòng điền đầy đủ!', 'red');
+    if (users.find(u => u.email === email)) return showAuthMessage('Email đã tồn tại!', 'red');
 
-    if (!name || !email || !password) {
-        showAuthMessage('Vui lòng điền đầy đủ thông tin!', 'red');
-        return;
-    }
-    if (users.find(u => u.email === email)) {
-        showAuthMessage('Email đã tồn tại!', 'red');
-        return;
-    }
-
-    tempRegisterData = { name, email, password, avatar: "👤", nick: name.split(' ').pop() };
+    tempRegisterData = { name, email, password, avatar: "👤", nick: name.split(' ').pop() || "GenZ" };
     currentAction = 'register';
     const otp = generateOTP();
-    
-    document.getElementById('otp-email-display').innerHTML = `Đã gửi mã OTP đến:<br><span class="font-bold">${email}</span>`;
-    document.getElementById('demo-otp').innerHTML = `Mã OTP (demo): <span class="font-mono font-bold text-[#FF7F00]">${otp}</span> <button onclick="copyOTP()" class="text-xs underline">Copy</button>`;
-    
+    document.getElementById('otp-email-display').innerHTML = `Đã gửi OTP đến:<br><span class="font-bold">${email}</span>`;
+    document.getElementById('demo-otp').innerHTML = `Mã OTP (demo): <span class="font-bold text-[#FF7F00]">${otp}</span>`;
     showOTPModal();
 }
 
-// Quên mật khẩu
 function switchToForgot() {
     document.getElementById('form-login').classList.add('hidden');
     document.getElementById('form-register').classList.add('hidden');
     document.getElementById('form-forgot').classList.remove('hidden');
+    document.getElementById('form-new-password').classList.add('hidden');
 }
 
 function startForgotPassword() {
     const email = document.getElementById('forgot-email').value.trim();
     if (!email) return showAuthMessage('Vui lòng nhập email!', 'red');
-    
     const user = users.find(u => u.email === email);
-    if (!user) return showAuthMessage('Email chưa đăng ký!', 'red');
+    if (!user) return showAuthMessage('Email chưa được đăng ký!', 'red');
 
     tempForgotEmail = email;
     currentAction = 'forgot';
     const otp = generateOTP();
-    
-    document.getElementById('otp-email-display').innerHTML = `Đã gửi mã OTP đến:<br><span class="font-bold">${email}</span>`;
-    document.getElementById('demo-otp').innerHTML = `Mã OTP (demo): <span class="font-mono font-bold text-[#FF7F00]">${otp}</span> <button onclick="copyOTP()" class="text-xs underline">Copy</button>`;
-    
+    document.getElementById('otp-email-display').innerHTML = `Đã gửi OTP đến:<br><span class="font-bold">${email}</span>`;
+    document.getElementById('demo-otp').innerHTML = `Mã OTP (demo): <span class="font-bold text-[#FF7F00]">${otp}</span>`;
     showOTPModal();
 }
 
-// Xác nhận OTP
 function verifyOTP() {
     const input = document.getElementById('otp-input').value.trim();
-    if (input !== currentOTP) {
-        showAuthMessage('Mã OTP không đúng!', 'red');
-        return;
-    }
+    if (input !== currentOTP) return showAuthMessage('Mã OTP sai!', 'red');
+
+    hideOTPModal();
 
     if (currentAction === 'register') {
-        // Hoàn tất đăng ký
         const newUser = { ...tempRegisterData, id: Date.now() };
         users.push(newUser);
         localStorage.setItem('10A4_users', JSON.stringify(users));
-        
-        hideOTPModal();
         showAuthMessage('Đăng ký thành công! Đang đăng nhập...', 'green');
-        setTimeout(() => loginSuccess(newUser), 800);
+        setTimeout(() => loginSuccess(newUser), 1000);
     } 
     else if (currentAction === 'forgot') {
-        hideOTPModal();
-        const newPass = prompt('Nhập mật khẩu mới:');
-        if (newPass) {
-            const user = users.find(u => u.email === tempForgotEmail);
-            user.password = newPass;
-            localStorage.setItem('10A4_users', JSON.stringify(users));
-            showAuthMessage('Mật khẩu đã được đặt lại thành công!', 'green');
-            setTimeout(() => switchAuthTab(0), 1500);
-        }
+        // Chuyển sang form đặt mật khẩu mới
+        document.getElementById('form-forgot').classList.add('hidden');
+        document.getElementById('form-new-password').classList.remove('hidden');
+        showAuthMessage('OTP đúng! Hãy đặt mật khẩu mới.', 'green');
     }
+    currentOTP = null;
 }
 
-function copyOTP() {
-    navigator.clipboard.writeText(currentOTP).then(() => {
-        alert('Đã copy mã OTP: ' + currentOTP);
-    });
+function setNewPassword() {
+    const newPass = document.getElementById('new-password').value.trim();
+    const confirmPass = document.getElementById('confirm-password').value.trim();
+
+    if (!newPass || newPass.length < 4) return showAuthMessage('Mật khẩu phải ít nhất 4 ký tự!', 'red');
+    if (newPass !== confirmPass) return showAuthMessage('Hai mật khẩu không khớp!', 'red');
+
+    const user = users.find(u => u.email === tempForgotEmail);
+    if (user) {
+        user.password = newPass;
+        localStorage.setItem('10A4_users', JSON.stringify(users));
+        showAuthMessage('✅ Mật khẩu đã được thay đổi thành công!', 'green');
+        
+        setTimeout(() => {
+            switchAuthTab(0); // quay về tab đăng nhập
+            document.getElementById('form-new-password').classList.add('hidden');
+        }, 1500);
+    }
 }
 
 function showOTPModal() {
     document.getElementById('otp-modal').classList.remove('hidden');
     document.getElementById('otp-modal').classList.add('flex');
-    document.getElementById('otp-input').value = '';
+    document.getElementById('otp-input').focus();
 }
 
 function hideOTPModal() {
@@ -206,17 +200,11 @@ function hideOTPModal() {
     document.getElementById('otp-modal').classList.remove('flex');
 }
 
-// Đăng nhập
-function handleLogin() {
+function handleLogin() { /* giữ nguyên */ 
     const input = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value.trim();
-    
     const user = users.find(u => (u.email === input || u.name === input) && u.password === password);
-    
-    if (!user) {
-        showAuthMessage('Tên/email hoặc mật khẩu sai!', 'red');
-        return;
-    }
+    if (!user) return showAuthMessage('Email/tên hoặc mật khẩu sai!', 'red');
     loginSuccess(user);
 }
 
@@ -227,23 +215,21 @@ function loginSuccess(user) {
     document.getElementById('main-app').classList.remove('hidden');
     launchConfetti();
     startMusic();
-    // Render lại giao diện người dùng...
     document.getElementById('user-name-display').textContent = currentUser.name;
     document.getElementById('user-avatar').innerHTML = `<span>${currentUser.avatar}</span>`;
 }
 
-// Helper
 function showAuthMessage(text, color) {
     const msg = document.getElementById('auth-message');
     msg.textContent = text;
     msg.style.color = color === 'red' ? '#ff4444' : '#22ff88';
-    setTimeout(() => msg.textContent = '', 4000);
+    setTimeout(() => msg.textContent = '', 4500);
 }
 
-// ==================== Các hàm cũ (particles, playlist, chat, album...) giữ nguyên ====================
-// (Bạn có thể copy phần script từ bản trước vào đây, chỉ thay đổi phần login)
+// ==================== Các hàm cũ (particles, playlist, chat...) giữ nguyên ====================
+// Bạn chỉ cần thay phần <script> và login screen ở trên vào file cũ là xong.
 
-console.log('%c✅ Hệ thống đăng nhập mới (Đăng ký + OTP + Quên mật khẩu) đã hoạt động!', 'color:#FF7F00;font-size:18px');
+console.log('%c✅ Phần Quên mật khẩu đã được sửa hoàn chỉnh!', 'color:#FF7F00;font-size:18px');
 </script>
 </body>
 </html>
