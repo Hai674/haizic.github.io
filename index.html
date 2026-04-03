@@ -3,27 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>10A4 GOD SYSTEM FINAL</title>
+<title>10A4 SYSTEM FINAL</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 
 <style>
-body{margin:0;font-family:Poppins;background:#0f2027;color:white;display:flex;height:100vh}
-.sidebar{width:230px;background:#ffffff10;padding:15px}
-.main{flex:1;display:flex;flex-direction:column}
-.chat{flex:1;overflow:auto;padding:10px}
-.msg{padding:10px;margin:5px;border-radius:10px;max-width:70%}
-.me{background:#00ffae;color:black;margin-left:auto}
-.other{background:#ffffff20}
-.input{display:flex;padding:10px}
-input{flex:1;padding:10px;border:none;border-radius:10px}
-button{padding:10px;margin-left:5px;border:none;border-radius:10px;cursor:pointer}
-.gallery img{width:80px;margin:5px;border-radius:10px}
+body{font-family:sans-serif;margin:0;background:#0f2027;color:white}
+#auth{padding:20px;text-align:center}
+#app{display:none;padding:10px}
+.chat{height:250px;overflow:auto;border:1px solid #fff;padding:10px}
+.msg{margin:5px 0}
+.gallery img{width:80px;margin:5px}
 </style>
 </head>
 
@@ -31,49 +24,33 @@ button{padding:10px;margin-left:5px;border:none;border-radius:10px;cursor:pointe
 
 <div id="auth">
   <h3>Login / Register</h3>
-  <input id="email" placeholder="Email"><br>
-  <input id="pass" type="password" placeholder="Password"><br>
+  <input id="email" placeholder="Email"><br><br>
+  <input id="pass" type="password" placeholder="Password"><br><br>
   <button onclick="register()">Register</button>
   <button onclick="login()">Login</button>
 </div>
 
-<div class="sidebar" id="app" style="display:none;">
-  <h3>🔥 10A4</h3>
-  <p id="userInfo"></p>
-  <button onclick="showTab('chat')">Chat</button>
-  <button onclick="showTab('ai')">AI</button>
-  <button onclick="showTab('gallery')">Gallery</button>
-  <button onclick="showTab('rank')">Rank</button>
-</div>
+<div id="app">
+  <h3 id="info"></h3>
 
-<div class="main" id="main" style="display:none;">
+  <h4>💬 Chat</h4>
+  <div class="chat" id="chat"></div>
+  <input id="msg"><button onclick="send()">Gửi</button>
 
-  <div id="chatTab" class="chat"></div>
+  <h4>🤖 AI</h4>
+  <div id="ai"></div>
+  <input id="aiInput"><button onclick="askAI()">Hỏi</button>
 
-  <div id="aiTab" style="display:none;padding:10px;">
-    <h3>🤖 AI</h3>
-    <div id="aiChat"></div>
-    <input id="aiInput">
-    <button onclick="askAI()">Hỏi</button>
-  </div>
+  <h4>📸 Upload ảnh</h4>
+  <input type="file" onchange="upload(event)">
+  <div class="gallery" id="gallery"></div>
 
-  <div id="galleryTab" style="display:none;">
-    <input type="file" onchange="upload(event)">
-    <div class="gallery" id="gallery"></div>
-  </div>
-
-  <div id="rankTab" style="display:none;">
-    <h3>🏆 Rank</h3>
-    <div id="rank"></div>
-  </div>
-
-  <div class="input">
-    <input id="msg" placeholder="Nhắn gì đó...">
-    <button onclick="send()">Gửi</button>
-  </div>
+  <h4>🏆 Rank</h4>
+  <div id="rank"></div>
 </div>
 
 <script>
+// 🔥 DÁN CONFIG VÀO
 const firebaseConfig = {
   apiKey:"DÁN",
   authDomain:"DÁN",
@@ -82,96 +59,87 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
 const db = firebase.firestore();
 const storage = firebase.storage();
 
-let currentUserData = {};
+let userData = {};
 
 // REGISTER
 function register(){
-  auth.createUserWithEmailAndPassword(email.value, pass.value)
+  auth.createUserWithEmailAndPassword(email.value,pass.value)
   .then(res=>{
     return db.collection("users").doc(res.user.uid).set({
-      name: email.value,
-      avatar:"https://i.pravatar.cc/100",
+      name:email.value,
       coin:0,
       exp:0
     });
-  });
+  }).catch(alert);
 }
 
 // LOGIN
 function login(){
-  auth.signInWithEmailAndPassword(email.value, pass.value);
+  auth.signInWithEmailAndPassword(email.value,pass.value)
+  .catch(alert);
 }
 
-// AUTH
+// AUTH CHECK
 auth.onAuthStateChanged(async user=>{
   if(user){
-    auth.style.display="none";
-    app.style.display="block";
-    main.style.display="flex";
+    document.getElementById("auth").style.display="none";
+    document.getElementById("app").style.display="block";
 
     let doc = await db.collection("users").doc(user.uid).get();
-    currentUserData = doc.data();
+    userData = doc.data();
 
-    userInfo.innerHTML = `${currentUserData.name}<br>💰 ${currentUserData.coin} | ⭐ ${currentUserData.exp}`;
+    info.innerText = userData.name + " | 💰 "+userData.coin+" | ⭐ "+userData.exp;
 
-    loadChat(user);
+    loadChat();
     loadGallery();
     loadRank();
   }
 });
 
-// CHAT
+// SEND CHAT
 function send(){
   if(!msg.value) return;
 
   db.collection("chat").add({
     text:msg.value,
-    uid:auth.currentUser.uid,
-    name:currentUserData.name,
-    avatar:currentUserData.avatar,
+    name:userData.name,
     time:Date.now()
   });
 
-  // tăng coin + exp
   db.collection("users").doc(auth.currentUser.uid).update({
-    coin: firebase.firestore.FieldValue.increment(5),
-    exp: firebase.firestore.FieldValue.increment(10)
+    coin: firebase.firestore.FieldValue.increment(1),
+    exp: firebase.firestore.FieldValue.increment(2)
   });
 
   msg.value="";
 }
 
 // LOAD CHAT
-function loadChat(user){
+function loadChat(){
   db.collection("chat").orderBy("time")
   .onSnapshot(s=>{
-    chatTab.innerHTML="";
+    chat.innerHTML="";
     s.forEach(doc=>{
       let d = doc.data();
-      let cls = d.uid===user.uid?"msg me":"msg other";
-      chatTab.innerHTML += `
-        <div class="${cls}">
-          <b>${d.name}</b><br>
-          ${d.text}
-        </div>`;
+      chat.innerHTML += `<div class="msg"><b>${d.name}:</b> ${d.text}</div>`;
     });
-    chatTab.scrollTop = chatTab.scrollHeight;
   });
 }
 
-// AI (fallback + có thể nâng API)
-async function askAI(){
+// AI (fallback)
+function askAI(){
   let q = aiInput.value;
-  let res = "AI chưa cấu hình 😅";
+  let res = "Không hiểu 😅";
 
-  if(q.toLowerCase().includes("10a4")) res="10A4 là số 1 🔥";
-  if(q.toLowerCase().includes("ai đẹp")) res="Bạn đẹp nhất 😎";
+  if(q.includes("10A4")) res="10A4 number one 🔥";
+  if(q.includes("ai đẹp")) res="Bạn đẹp nhất 😎";
 
-  aiChat.innerHTML += `<div><b>Bạn:</b> ${q}<br><b>AI:</b> ${res}</div>`;
+  ai.innerHTML += `<div><b>Bạn:</b> ${q}<br><b>AI:</b> ${res}</div>`;
   aiInput.value="";
 }
 
@@ -197,7 +165,7 @@ function loadGallery(){
   });
 }
 
-// RANK
+// LOAD RANK
 function loadRank(){
   db.collection("users").orderBy("exp","desc")
   .onSnapshot(s=>{
@@ -207,19 +175,6 @@ function loadRank(){
       rank.innerHTML+=`<div>${d.name} - ⭐ ${d.exp}</div>`;
     });
   });
-}
-
-// TAB
-function showTab(t){
-  chatTab.style.display="none";
-  aiTab.style.display="none";
-  galleryTab.style.display="none";
-  rankTab.style.display="none";
-
-  if(t==="chat") chatTab.style.display="block";
-  if(t==="ai") aiTab.style.display="block";
-  if(t==="gallery") galleryTab.style.display="block";
-  if(t==="rank") rankTab.style.display="block";
 }
 </script>
 
