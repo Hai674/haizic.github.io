@@ -6,11 +6,9 @@
     <title>10A4 • THPT Gia Viễn • Nơi chúng ta tỏa sáng!</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Poppins + Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Inter:wght@400;500&amp;display=swap');
-        
         :root {
             --tw-color-primary: #003087;
             --tw-color-accent: #FF7F00;
@@ -24,7 +22,7 @@
         }
         
         body {
-            font-family: 'Inter', system_ui, sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
         }
         
         .title-font {
@@ -34,11 +32,11 @@
         .glass {
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .neon-text {
-            text-shadow: 0 0 10px #A020F0,
-                         0 0 20px #A020F0;
+            text-shadow: 0 0 10px #A020F0, 0 0 20px #A020F0;
         }
 
         .hero-bg {
@@ -70,9 +68,21 @@
             column-gap: 1rem;
         }
         
+        @media (max-width: 1024px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+        
         @media (max-width: 768px) {
             .masonry-grid {
                 column-count: 2;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .masonry-grid {
+                column-count: 1;
             }
         }
 
@@ -85,11 +95,37 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .photo-item {
+            break-inside: avoid;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            cursor: pointer;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.05);
+        }
+
         .confetti {
             position: absolute;
             width: 10px;
             height: 10px;
             animation: confetti-fall 3s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
     </style>
 </head>
@@ -99,13 +135,13 @@
     <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center hero-bg">
         <canvas id="particle-canvas" class="absolute inset-0 pointer-events-none"></canvas>
         
-        <div class="max-w-md w-full mx-4 glass rounded-3xl p-10 shadow-2xl border border-white/20 relative">
+        <div class="max-w-md w-full mx-4 glass rounded-3xl p-8 md:p-10 shadow-2xl relative">
             <!-- Logo -->
             <div class="flex justify-center mb-6">
                 <div class="w-20 h-20 bg-[#FF7F00] rounded-2xl flex items-center justify-center text-5xl shadow-inner neon-text">🏫</div>
             </div>
             
-            <h1 class="title-font text-4xl font-bold text-center mb-2 neon-text">CYBERSECR</h1>
+            <h1 class="title-font text-3xl md:text-4xl font-bold text-center mb-2 neon-text">CYBERSECR</h1>
             <p class="text-center text-white/80 text-lg mb-8">Đăng nhập • Lớp 10A4 THPT Gia Viễn</p>
             
             <!-- Login Form -->
@@ -115,7 +151,7 @@
                     <input id="username" 
                            type="text" 
                            placeholder="Ví dụ: Nguyễn Văn An"
-                           class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl focus:outline-none focus:border-[#FF7F00] text-white placeholder-white/50 text-lg">
+                           class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl focus:outline-none focus:border-[#FF7F00] focus:ring-2 focus:ring-[#FF7F00]/50 text-white placeholder-white/50 text-lg transition-all">
                 </div>
                 
                 <div>
@@ -123,11 +159,11 @@
                     <input id="password" 
                            type="password" 
                            placeholder="Mật khẩu lớp (10A4)"
-                           class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl focus:outline-none focus:border-[#FF7F00] text-white placeholder-white/50 text-lg">
+                           class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl focus:outline-none focus:border-[#FF7F00] focus:ring-2 focus:ring-[#FF7F00]/50 text-white placeholder-white/50 text-lg transition-all">
                 </div>
                 
                 <button type="submit"
-                        class="w-full py-4 bg-[#FF7F00] hover:bg-[#FF9F33] text-[#003087] font-bold text-xl rounded-2xl shadow-lg flex items-center justify-center gap-3">
+                        class="w-full py-4 bg-[#FF7F00] hover:bg-[#FF9F33] active:bg-[#FF7F00] text-[#003087] font-bold text-xl rounded-2xl shadow-lg flex items-center justify-center gap-3 transition-all duration-200">
                     <span>ĐĂNG NHẬP NGAY</span>
                     <span class="text-2xl">🚀</span>
                 </button>
@@ -153,95 +189,102 @@
     <div id="main-app" class="hidden">
         
         <!-- NAVBAR -->
-        <nav class="fixed top-0 left-0 right-0 z-50 bg-[#003087]/90 backdrop-blur-lg border-b border-white/10">
-            <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <nav class="fixed top-0 left-0 right-0 z-50 bg-[#003087]/95 backdrop-blur-lg border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
                 <!-- Logo + Class name -->
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-[#FF7F00] text-[#003087] rounded-2xl flex items-center justify-center text-3xl shadow-inner">🏫</div>
+                    <div class="w-10 h-10 bg-[#FF7F00] text-[#003087] rounded-2xl flex items-center justify-center text-2xl shadow-inner">🏫</div>
                     <div>
-                        <h1 class="title-font text-2xl font-bold tracking-tight">10A4</h1>
-                        <p class="text-[10px] text-white/60 -mt-1">THPT Gia Viễn • 2025-2026</p>
+                        <h1 class="title-font text-xl md:text-2xl font-bold tracking-tight">10A4</h1>
+                        <p class="text-xs md:text-[10px] text-white/60 -mt-1">THPT Gia Viễn • 2025-2026</p>
                     </div>
                 </div>
                 
-                <!-- Menu -->
-                <div class="hidden md:flex items-center gap-8 text-lg font-medium">
-                    <a onclick="navigateTo('home')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00]">
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center gap-6 lg:gap-8 text-base lg:text-lg font-medium">
+                    <a onclick="navigateTo('home')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00] py-2">
                         <span>🏠</span> Trang chủ
                     </a>
-                    <a onclick="navigateTo('album')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00]">
-                        <span>📸</span> Nơi lưu giữ hình ảnh
+                    <a onclick="navigateTo('album')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00] py-2">
+                        <span>📸</span> Album
                     </a>
-                    <a onclick="navigateTo('achievements')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00]">
+                    <a onclick="navigateTo('achievements')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00] py-2">
                         <span>🏆</span> Thành tích
                     </a>
-                    <a onclick="navigateTo('students')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00]">
-                        <span>👥</span> Danh sách học sinh
+                    <a onclick="navigateTo('students')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00] py-2">
+                        <span>👥</span> Học sinh
                     </a>
-                    <a onclick="navigateTo('chat')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00]">
-                        <span>💬</span> Chat chung &amp; Nhắn riêng
-                    </a>
-                    <a onclick="navigateTo('profile')" id="profile-menu-link" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00] hidden">
-                        <span>👤</span> Hồ sơ cá nhân
+                    <a onclick="navigateTo('chat')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00] py-2">
+                        <span>💬</span> Chat
                     </a>
                 </div>
                 
-                <div class="flex items-center gap-4">
-                    <!-- Dark mode toggle -->
-                    <button onclick="toggleDarkMode()" 
-                            class="w-10 h-10 flex items-center justify-center text-2xl rounded-2xl hover:bg-white/10">
-                        🌗
-                    </button>
-                    
+                <div class="flex items-center gap-3 lg:gap-4">
                     <!-- Music control -->
-                    <div onclick="toggleMusic()" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-3xl cursor-pointer">
-                        <span id="music-icon" class="text-2xl">🎵</span>
-                        <span id="music-status" class="text-sm font-medium">Nhạc đang phát</span>
+                    <div onclick="toggleMusic()" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-3 py-2 rounded-2xl lg:rounded-3xl cursor-pointer transition-all">
+                        <span id="music-icon" class="text-xl lg:text-2xl">🎵</span>
+                        <span id="music-status" class="text-xs lg:text-sm font-medium hidden sm:inline">Nhạc</span>
                     </div>
                     
                     <!-- User info + Logout -->
-                    <div class="flex items-center gap-3">
-                        <div id="user-avatar" onclick="navigateTo('profile')" class="w-9 h-9 bg-[#FF7F00] rounded-2xl flex items-center justify-center text-xl cursor-pointer shadow-inner"></div>
-                        <div>
-                            <p id="user-name-display" class="font-semibold text-sm"></p>
-                            <p class="text-[10px] text-white/60">Lớp 10A4</p>
+                    <div class="flex items-center gap-2 lg:gap-3" id="user-info">
+                        <div id="user-avatar" onclick="navigateTo('profile')" class="w-8 h-8 lg:w-9 lg:h-9 bg-[#FF7F00] rounded-2xl flex items-center justify-center text-lg cursor-pointer shadow-inner hover:scale-110 transition-transform"></div>
+                        <div class="hidden lg:block">
+                            <p id="user-name-display" class="font-semibold text-xs"></p>
+                            <p class="text-[8px] text-white/60">Lớp 10A4</p>
                         </div>
                         <button onclick="logout()" 
-                                class="px-5 py-2 text-sm font-medium bg-red-500/80 hover:bg-red-600 rounded-2xl flex items-center gap-2">
+                                class="px-3 py-1.5 lg:px-5 lg:py-2 text-xs lg:text-sm font-medium bg-red-500/80 hover:bg-red-600 rounded-xl lg:rounded-2xl flex items-center gap-1 lg:gap-2 transition-all">
                             <span>🚪</span>
-                            Đăng xuất
+                            <span class="hidden lg:inline">Đăng xuất</span>
                         </button>
                     </div>
                 </div>
             </div>
         </nav>
 
+        <!-- MOBILE MENU BUTTON -->
+        <button id="mobile-menu-btn" class="fixed top-20 right-6 md:hidden z-40 w-12 h-12 bg-[#FF7F00]/90 hover:bg-[#FF7F00] rounded-2xl text-[#003087] text-2xl flex items-center justify-center shadow-2xl md:hidden">
+            ☰
+        </button>
+
+        <!-- MOBILE MENU -->
+        <div id="mobile-menu" class="fixed top-0 right-0 w-64 h-full bg-[#003087]/95 backdrop-blur-xl transform translate-x-full md:hidden z-40 transition-transform duration-300">
+            <div class="p-6 pt-24 space-y-4">
+                <h3 class="title-font text-xl font-bold mb-6">Menu</h3>
+                <a onclick="navigateTo('home'); closeMobileMenu()" class="block py-3 px-4 rounded-2xl hover:bg-white/10 nav-link">🏠 Trang chủ</a>
+                <a onclick="navigateTo('album'); closeMobileMenu()" class="block py-3 px-4 rounded-2xl hover:bg-white/10 nav-link">📸 Album</a>
+                <a onclick="navigateTo('achievements'); closeMobileMenu()" class="block py-3 px-4 rounded-2xl hover:bg-white/10 nav-link">🏆 Thành tích</a>
+                <a onclick="navigateTo('students'); closeMobileMenu()" class="block py-3 px-4 rounded-2xl hover:bg-white/10 nav-link">👥 Học sinh</a>
+                <a onclick="navigateTo('chat'); closeMobileMenu()" class="block py-3 px-4 rounded-2xl hover:bg-white/10 nav-link">💬 Chat</a>
+            </div>
+        </div>
+
         <!-- PAGE CONTAINER -->
-        <div class="pt-20 max-w-7xl mx-auto px-6 pb-12">
+        <div class="pt-20 lg:pt-24 max-w-7xl mx-auto px-4 sm:px-6 pb-12">
             
             <!-- HOME PAGE -->
             <div id="page-home" class="page">
-                <div class="hero-bg rounded-3xl p-12 relative overflow-hidden mb-12 shadow-2xl">
+                <div class="hero-bg rounded-3xl p-8 md:p-12 relative overflow-hidden mb-12 shadow-2xl">
                     <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(160,32,240,0.3),transparent)]"></div>
                     
-                    <!-- Parallax hero -->
                     <div id="hero-content" class="relative z-10">
                         <div class="max-w-2xl">
-                            <div class="inline-flex items-center gap-2 bg-white/10 text-white/90 text-sm px-6 py-2 rounded-full mb-6">
+                            <div class="inline-flex items-center gap-2 bg-white/10 text-white/90 text-sm px-4 md:px-6 py-2 rounded-full mb-6">
                                 🔥 GEN Z 10A4 • THPT GIA VIỄN
                             </div>
-                            <h1 id="hero-title" class="title-font text-6xl md:text-7xl font-bold leading-none mb-6">
-                                Chào mừng đến với<br>10A4 – Nơi chúng ta<br><span class="text-[#FF7F00]">tỏa sáng!</span>
+                            <h1 class="title-font text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
+                                Chào mừng đến với<br class="hidden md:block">10A4 – Nơi chúng ta<br><span class="text-[#FF7F00]">tỏa sáng!</span>
                             </h1>
-                            <p class="text-2xl text-white/80 mb-10">Cùng nhau học tập, cùng nhau bùng nổ, cùng nhau tạo nên lịch sử!</p>
+                            <p class="text-xl md:text-2xl text-white/80 mb-10">Cùng nhau học tập, cùng nhau bùng nổ, cùng nhau tạo nên lịch sử!</p>
                             
-                            <div class="flex items-center gap-4">
+                            <div class="flex flex-col sm:flex-row items-center gap-4">
                                 <button onclick="navigateTo('chat')" 
-                                        class="px-8 py-5 bg-[#FF7F00] text-[#003087] font-bold text-xl rounded-3xl flex items-center gap-3 hover:scale-105 active:scale-95">
+                                        class="px-6 md:px-8 py-4 md:py-5 bg-[#FF7F00] text-[#003087] font-bold text-lg md:text-xl rounded-2xl md:rounded-3xl flex items-center gap-3 hover:scale-105 active:scale-95 transition-all">
                                     💬 Vào chat ngay
                                 </button>
                                 <button onclick="navigateTo('album')" 
-                                        class="px-8 py-5 border-2 border-white/70 text-white font-medium text-xl rounded-3xl flex items-center gap-3 hover:bg-white/10">
+                                        class="px-6 md:px-8 py-4 md:py-5 border-2 border-white/70 text-white font-medium text-lg md:text-xl rounded-2xl md:rounded-3xl flex items-center gap-3 hover:bg-white/10 transition-all">
                                     📸 Xem ảnh lớp
                                 </button>
                             </div>
@@ -249,130 +292,33 @@
                     </div>
                     
                     <!-- Floating icons -->
-                    <div class="absolute bottom-10 right-10 text-7xl animate-bounce">🚀</div>
-                    <div class="absolute top-20 right-32 text-6xl rotate-12 animate-pulse" style="animation-delay: 800ms;">🏆</div>
-                    <div class="absolute bottom-32 left-20 text-5xl -rotate-12 animate-bounce" style="animation-delay: 1200ms;">📸</div>
+                    <div class="absolute bottom-6 md:bottom-10 right-6 md:right-10 text-4xl md:text-7xl animate-bounce">🚀</div>
+                    <div class="absolute top-16 md:top-20 right-16 md:right-32 text-3xl md:text-6xl rotate-12 animate-pulse" style="animation-delay: 800ms;">🏆</div>
+                    <div class="absolute bottom-20 md:bottom-32 left-6 md:left-20 text-3xl md:text-5xl -rotate-12 animate-bounce" style="animation-delay: 1200ms;">📸</div>
                 </div>
                 
                 <!-- Stats -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <div class="glass rounded-3xl p-8 text-center">
-                        <p class="text-[#FF7F00] text-5xl font-bold" id="today-visits">248</p>
-                        <p class="text-white/70 text-lg">Lượt truy cập hôm nay</p>
+                    <div class="glass rounded-3xl p-6 md:p-8 text-center">
+                        <p class="text-[#FF7F00] text-4xl md:text-5xl font-bold" id="today-visits">248</p>
+                        <p class="text-white/70 text-base md:text-lg">Lượt truy cập hôm nay</p>
                     </div>
-                    <div class="glass rounded-3xl p-8 text-center">
-                        <p class="text-[#FF7F00] text-5xl font-bold" id="total-visits">12468</p>
-                        <p class="text-white/70 text-lg">Tổng lượt truy cập</p>
+                    <div class="glass rounded-3xl p-6 md:p-8 text-center">
+                        <p class="text-[#FF7F00] text-4xl md:text-5xl font-bold" id="total-visits">12468</p>
+                        <p class="text-white/70 text-base md:text-lg">Tổng lượt truy cập</p>
                     </div>
-                    <div class="glass rounded-3xl p-8 text-center">
-                        <p class="text-[#A020F0] text-5xl font-bold">42</p>
-                        <p class="text-white/70 text-lg">Bạn đang online cùng 10A4</p>
+                    <div class="glass rounded-3xl p-6 md:p-8 text-center">
+                        <p class="text-[#A020F0] text-4xl md:text-5xl font-bold">42</p>
+                        <p class="text-white/70 text-base md:text-lg">Bạn đang online cùng 10A4</p>
                     </div>
                 </div>
                 
                 <!-- Lịch học tuần này -->
                 <div class="mb-12">
-                    <h2 class="title-font text-3xl font-semibold mb-6 flex items-center gap-3">
+                    <h2 class="title-font text-2xl md:text-3xl font-semibold mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-3">
                         📅 Lịch học tuần này
-                        <span class="text-xs bg-[#FF7F00] text-[#003087] px-4 py-1 rounded-full">Tuần 12 • 06-12/04/2026</span>
+                        <span class="text-xs bg-[#FF7F00] text-[#003087] px-3 py-1 rounded-full whitespace-nowrap">Tuần 12 • 06-12/04/2026</span>
                     </h2>
                     <div class="grid grid-cols-2 md:grid-cols-7 gap-4">
-                        <div class="glass rounded-3xl p-6 text-center">
-                            <p class="font-bold text-[#FF7F00]">Thứ 2</p>
-                            <p class="text-sm mt-3">Toán • Lý • Văn</p>
-                            <p class="text-xs text-white/60">7h30 - 15h30</p>
-                        </div>
-                        <div class="glass rounded-3xl p-6 text-center">
-                            <p class="font-bold text-[#FF7F00]">Thứ 3</p>
-                            <p class="text-sm mt-3">Hóa • Anh • Sử</p>
-                            <p class="text-xs text-white/60">7h30 - 15h30</p>
-                        </div>
-                        <div class="glass rounded-3xl p-6 text-center">
-                            <p class="font-bold text-[#FF7F00]">Thứ 4</p>
-                            <p class="text-sm mt-3">Sinh • Địa • GDQP</p>
-                            <p class="text-xs text-white/60">7h30 - 15h30</p>
-                        </div>
-                        <div class="glass rounded-3xl p-6 text-center bg-gradient-to-br from-[#A020F0] to-[#003087]">
-                            <p class="font-bold text-white">Thứ 5</p>
-                            <p class="text-sm mt-3">Tin học • Thể dục</p>
-                            <p class="text-xs text-white/90">7h30 - 15h30 • Hoạt động lớp</p>
-                        </div>
-                        <div class="glass rounded-3xl p-6 text-center">
-                            <p class="font-bold text-[#FF7F00]">Thứ 6</p>
-                            <p class="text-sm mt-3">Toán • Văn • Anh</p>
-                            <p class="text-xs text-white/60">7h30 - 15h30</p>
-                        </div>
-                        <div class="glass rounded-3xl p-6 text-center">
-                            <p class="font-bold text-[#FF7F00]">Thứ 7</p>
-                            <p class="text-sm mt-3">Tự học • CLB</p>
-                            <p class="text-xs text-white/60">Nghỉ</p>
-                        </div>
-                        <div class="glass rounded-3xl p-6 text-center">
-                            <p class="font-bold text-[#FF7F00]">Chủ nhật</p>
-                            <p class="text-sm mt-3">Nghỉ ngơi 💪</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Tin tức lớp -->
-                <div>
-                    <h2 class="title-font text-3xl font-semibold mb-6">📰 Tin tức nóng lớp 10A4</h2>
-                    <div class="space-y-6">
-                        <div class="glass rounded-3xl p-7 flex gap-6">
-                            <div class="text-4xl">🏆</div>
-                            <div class="flex-1">
-                                <p class="font-bold">Lan vừa đạt giải Nhất cuộc thi Tiếng Anh cấp tỉnh!</p>
-                                <p class="text-white/70 text-sm mt-1">Hôm nay • 02/04/2026 • 14:20</p>
-                            </div>
-                        </div>
-                        <div class="glass rounded-3xl p-7 flex gap-6">
-                            <div class="text-4xl">📸</div>
-                            <div class="flex-1">
-                                <p class="font-bold">Album chuyến đi dã ngoại Vườn Quốc gia Cúc Phương đã lên sóng!</p>
-                                <p class="text-white/70 text-sm mt-1">Hôm qua • 01/04/2026 • 19:45</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- ALBUM PAGE -->
-            <div id="page-album" class="page hidden">
-                <div class="flex justify-between items-baseline mb-8">
-                    <h2 class="title-font text-4xl font-semibold">📸 Nơi lưu giữ hình ảnh 10A4</h2>
-                    <label class="cursor-pointer bg-[#FF7F00] text-[#003087] px-8 py-4 rounded-3xl font-bold flex items-center gap-3 hover:scale-105">
-                        <span>Tải ảnh lên</span>
-                        <input type="file" id="upload-photo" accept="image/*" class="hidden" onchange="uploadPhoto(event)">
-                        <span class="text-2xl">📤</span>
-                    </label>
-                </div>
-                
-                <div id="photo-grid" class="masonry-grid gap-6"></div>
-                
-                <!-- Preview modal -->
-                <div onclick="if(event.target.id==='photo-modal')hidePhotoModal()" id="photo-modal" class="hidden fixed inset-0 bg-black/80 z-[9999] flex items-center justify-center">
-                    <div onclick="event.stopImmediatePropagation()" class="max-w-4xl w-full mx-4 glass rounded-3xl p-6">
-                        <img id="modal-image" class="w-full rounded-3xl" alt="">
-                        <div class="mt-6 flex justify-between">
-                            <div>
-                                <p id="modal-uploader" class="font-semibold"></p>
-                                <div id="modal-comments" class="mt-4 space-y-3 max-h-64 overflow-auto"></div>
-                            </div>
-                            <div class="text-right">
-                                <button onclick="likeCurrentPhoto()" class="text-3xl mb-4">❤️ <span id="modal-likes" class="text-xl"></span></button>
-                                <input id="comment-input" placeholder="Viết bình luận..." class="w-80 px-6 py-4 bg-white/10 rounded-3xl text-sm">
-                                <button onclick="addCommentToPhoto()" class="ml-3 px-8 py-4 bg-[#A020F0] rounded-3xl text-sm">Gửi</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- THÀNH TÍCH PAGE -->
-            <div id="page-achievements" class="page hidden">
-                <h2 class="title-font text-4xl font-semibold mb-8">🏆 Thành tích tự hào của 10A4</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div onclick="this.classList.add('scale-110')" class="glass rounded-3xl p-8 hover:shadow-2xl hover:-translate-y-2 cursor-pointer">
-                        <div class="text-6xl mb-6">🥇</div>
-                        <h3 class="font-bold text-2xl mb-2">Giải Nhất Toán cấp tỉnh</h3>
-                        <p class="text-white/70">Nguyễn Văn An • Tháng 3/2026
+                        <div class="glass rounded-2xl md:rounded-3xl p-4 md:p-6 text-center hover:scale-105 transition-all">
+                            <
