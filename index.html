@@ -1,324 +1,891 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>10A4 • THPT Gia Viễn • Nơi chúng ta tỏa sáng!</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --tw-color-primary: #003087;
-            --tw-color-accent: #FF7F00;
-            --tw-color-neon: #A020F0;
-        }
-        
-        * {
-            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-            transition-duration: 150ms;
-        }
-        
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-        }
-        
-        .title-font {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .glass {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .neon-text {
-            text-shadow: 0 0 10px #A020F0, 0 0 20px #A020F0;
-        }
-
-        .hero-bg {
-            background: linear-gradient(135deg, #003087 0%, #001F5A 100%);
-        }
-
-        .nav-link {
-            position: relative;
-        }
-        
-        .nav-link:after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 3px;
-            bottom: -2px;
-            left: 50%;
-            background: #FF7F00;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-link:hover:after {
-            width: 100%;
-            left: 0;
-        }
-
-        .masonry-grid {
-            column-count: 4;
-            column-gap: 1rem;
-        }
-        
-        @media (max-width: 1024px) {
-            .masonry-grid {
-                column-count: 3;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .masonry-grid {
-                column-count: 2;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .masonry-grid {
-                column-count: 1;
-            }
-        }
-
-        .page {
-            animation: fadeIn 0.4s ease forwards;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .photo-item {
-            break-inside: avoid;
-            margin-bottom: 1rem;
-            position: relative;
-            overflow: hidden;
-            border-radius: 1.5rem;
-            cursor: pointer;
-        }
-
-        .photo-item img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 1.5rem;
-            transition: transform 0.3s ease;
-        }
-
-        .photo-item:hover img {
-            transform: scale(1.05);
-        }
-
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            animation: confetti-fall 3s linear forwards;
-        }
-
-        @keyframes confetti-fall {
-            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
-    </style>
-</head>
-<body class="bg-[#003087] text-white min-h-screen overflow-x-hidden">
-
-    <!-- LOGIN SCREEN -->
-    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center hero-bg">
-        <canvas id="particle-canvas" class="absolute inset-0 pointer-events-none"></canvas>
-        
-        <div class="max-w-md w-full mx-4 glass rounded-3xl p-8 md:p-10 shadow-2xl relative">
-            <!-- Logo -->
-            <div class="flex justify-center mb-6">
-                <div class="w-20 h-20 bg-[#FF7F00] rounded-2xl flex items-center justify-center text-5xl shadow-inner neon-text">🏫</div>
-            </div>
-            
-            <h1 class="title-font text-3xl md:text-4xl font-bold text-center mb-2 neon-text">CYBERSECR</h1>
-            <p class="text-center text-white/80 text-lg mb-8">Đăng nhập • Lớp 10A4 THPT Gia Viễn</p>
-            
-            <!-- Login Form -->
-            <form id="login-form" class="space-y-6">
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-white/90">Tên học sinh</label>
-                    <input id="username" 
-                           type="text" 
-                           placeholder="Ví dụ: Nguyễn Văn An"
-                           class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl focus:outline-none focus:border-[#FF7F00] focus:ring-2 focus:ring-[#FF7F00]/50 text-white placeholder-white/50 text-lg transition-all">
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-white/90">Mật khẩu</label>
-                    <input id="password" 
-                           type="password" 
-                           placeholder="Mật khẩu lớp (10A4)"
-                           class="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-2xl focus:outline-none focus:border-[#FF7F00] focus:ring-2 focus:ring-[#FF7F00]/50 text-white placeholder-white/50 text-lg transition-all">
-                </div>
-                
-                <button type="submit"
-                        class="w-full py-4 bg-[#FF7F00] hover:bg-[#FF9F33] active:bg-[#FF7F00] text-[#003087] font-bold text-xl rounded-2xl shadow-lg flex items-center justify-center gap-3 transition-all duration-200">
-                    <span>ĐĂNG NHẬP NGAY</span>
-                    <span class="text-2xl">🚀</span>
-                </button>
-            </form>
-            
-            <div class="mt-6 text-center text-xs text-white/60 flex items-center justify-center gap-2">
-                <div class="h-px bg-white/30 flex-1"></div>
-                Mật khẩu chung cho cả lớp
-                <div class="h-px bg-white/30 flex-1"></div>
-            </div>
-            
-            <p id="login-error" class="text-red-400 text-center mt-4 hidden"></p>
-            
-            <!-- Demo accounts hint -->
-            <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white/10 text-[10px] px-4 py-1 rounded-full text-white/70 flex items-center gap-1">
-                <span class="text-[#FF7F00]">💡</span>
-                Thử: Nguyễn Văn An • 10A4
-            </div>
-        </div>
-    </div>
-
-    <!-- MAIN APP (hidden until login) -->
-    <div id="main-app" class="hidden">
-        
-        <!-- NAVBAR -->
-        <nav class="fixed top-0 left-0 right-0 z-50 bg-[#003087]/95 backdrop-blur-lg border-b border-white/10">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-                <!-- Logo + Class name -->
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-[#FF7F00] text-[#003087] rounded-2xl flex items-center justify-center text-2xl shadow-inner">🏫</div>
-                    <div>
-                        <h1 class="title-font text-xl md:text-2xl font-bold tracking-tight">10A4</h1>
-                        <p class="text-xs md:text-[10px] text-white/60 -mt-1">THPT Gia Viễn • 2025-2026</p>
-                    </div>
-                </div>
-                
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center gap-6 lg:gap-8 text-base lg:text-lg font-medium">
-                    <a onclick="navigateTo('home')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00] py-2">
-                        <span>🏠</span> Trang chủ
-                    </a>
-                    <a onclick="navigateTo('album')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00] py-2">
-                        <span>📸</span> Album
-                    </a>
-                    <a onclick="navigateTo('achievements')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00] py-2">
-                        <span>🏆</span> Thành tích
-                    </a>
-                    <a onclick="navigateTo('students')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00] py-2">
-                        <span>👥</span> Học sinh
-                    </a>
-                    <a onclick="navigateTo('chat')" class="nav-link cursor-pointer flex items-center gap-1 hover:text-[#FF7F00] py-2">
-                        <span>💬</span> Chat
-                    </a>
-                </div>
-                
-                <div class="flex items-center gap-3 lg:gap-4">
-                    <!-- Music control -->
-                    <div onclick="toggleMusic()" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-3 py-2 rounded-2xl lg:rounded-3xl cursor-pointer transition-all">
-                        <span id="music-icon" class="text-xl lg:text-2xl">🎵</span>
-                        <span id="music-status" class="text-xs lg:text-sm font-medium hidden sm:inline">Nhạc</span>
-                    </div>
-                    
-                    <!-- User info + Logout -->
-                    <div class="flex items-center gap-2 lg:gap-3" id="user-info">
-                        <div id="user-avatar" onclick="navigateTo('profile')" class="w-8 h-8 lg:w-9 lg:h-9 bg-[#FF7F00] rounded-2xl flex items-center justify-center text-lg cursor-pointer shadow-inner hover:scale-110 transition-transform"></div>
-                        <div class="hidden lg:block">
-                            <p id="user-name-display" class="font-semibold text-xs"></p>
-                            <p class="text-[8px] text-white/60">Lớp 10A4</p>
-                        </div>
-                        <button onclick="logout()" 
-                                class="px-3 py-1.5 lg:px-5 lg:py-2 text-xs lg:text-sm font-medium bg-red-500/80 hover:bg-red-600 rounded-xl lg:rounded-2xl flex items-center gap-1 lg:gap-2 transition-all">
-                            <span>🚪</span>
-                            <span class="hidden lg:inline">Đăng xuất</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </nav>
-
-        <!-- MOBILE MENU BUTTON -->
-        <button id="mobile-menu-btn" class="fixed top-20 right-6 md:hidden z-40 w-12 h-12 bg-[#FF7F00]/90 hover:bg-[#FF7F00] rounded-2xl text-[#003087] text-2xl flex items-center justify-center shadow-2xl md:hidden">
-            ☰
-        </button>
-
-        <!-- MOBILE MENU -->
-        <div id="mobile-menu" class="fixed top-0 right-0 w-64 h-full bg-[#003087]/95 backdrop-blur-xl transform translate-x-full md:hidden z-40 transition-transform duration-300">
-            <div class="p-6 pt-24 space-y-4">
-                <h3 class="title-font text-xl font-bold mb-6">Menu</h3>
-                <a onclick="navigateTo('home'); closeMobileMenu()" class="block py-3 px-4 rounded-2xl hover:bg-white/10 nav-link">🏠 Trang chủ</a>
-                <a onclick="navigateTo('album'); closeMobileMenu()" class="block py-3 px-4 rounded-2xl hover:bg-white/10 nav-link">📸 Album</a>
-                <a onclick="navigateTo('achievements'); closeMobileMenu()" class="block py-3 px-4 rounded-2xl hover:bg-white/10 nav-link">🏆 Thành tích</a>
-                <a onclick="navigateTo('students'); closeMobileMenu()" class="block py-3 px-4 rounded-2xl hover:bg-white/10 nav-link">👥 Học sinh</a>
-                <a onclick="navigateTo('chat'); closeMobileMenu()" class="block py-3 px-4 rounded-2xl hover:bg-white/10 nav-link">💬 Chat</a>
-            </div>
-        </div>
-
-        <!-- PAGE CONTAINER -->
-        <div class="pt-20 lg:pt-24 max-w-7xl mx-auto px-4 sm:px-6 pb-12">
-            
-            <!-- HOME PAGE -->
-            <div id="page-home" class="page">
-                <div class="hero-bg rounded-3xl p-8 md:p-12 relative overflow-hidden mb-12 shadow-2xl">
-                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(160,32,240,0.3),transparent)]"></div>
-                    
-                    <div id="hero-content" class="relative z-10">
-                        <div class="max-w-2xl">
-                            <div class="inline-flex items-center gap-2 bg-white/10 text-white/90 text-sm px-4 md:px-6 py-2 rounded-full mb-6">
-                                🔥 GEN Z 10A4 • THPT GIA VIỄN
-                            </div>
-                            <h1 class="title-font text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
-                                Chào mừng đến với<br class="hidden md:block">10A4 – Nơi chúng ta<br><span class="text-[#FF7F00]">tỏa sáng!</span>
-                            </h1>
-                            <p class="text-xl md:text-2xl text-white/80 mb-10">Cùng nhau học tập, cùng nhau bùng nổ, cùng nhau tạo nên lịch sử!</p>
-                            
-                            <div class="flex flex-col sm:flex-row items-center gap-4">
-                                <button onclick="navigateTo('chat')" 
-                                        class="px-6 md:px-8 py-4 md:py-5 bg-[#FF7F00] text-[#003087] font-bold text-lg md:text-xl rounded-2xl md:rounded-3xl flex items-center gap-3 hover:scale-105 active:scale-95 transition-all">
-                                    💬 Vào chat ngay
-                                </button>
-                                <button onclick="navigateTo('album')" 
-                                        class="px-6 md:px-8 py-4 md:py-5 border-2 border-white/70 text-white font-medium text-lg md:text-xl rounded-2xl md:rounded-3xl flex items-center gap-3 hover:bg-white/10 transition-all">
-                                    📸 Xem ảnh lớp
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Floating icons -->
-                    <div class="absolute bottom-6 md:bottom-10 right-6 md:right-10 text-4xl md:text-7xl animate-bounce">🚀</div>
-                    <div class="absolute top-16 md:top-20 right-16 md:right-32 text-3xl md:text-6xl rotate-12 animate-pulse" style="animation-delay: 800ms;">🏆</div>
-                    <div class="absolute bottom-20 md:bottom-32 left-6 md:left-20 text-3xl md:text-5xl -rotate-12 animate-bounce" style="animation-delay: 1200ms;">📸</div>
-                </div>
-                
-                <!-- Stats -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <div class="glass rounded-3xl p-6 md:p-8 text-center">
-                        <p class="text-[#FF7F00] text-4xl md:text-5xl font-bold" id="today-visits">248</p>
-                        <p class="text-white/70 text-base md:text-lg">Lượt truy cập hôm nay</p>
-                    </div>
-                    <div class="glass rounded-3xl p-6 md:p-8 text-center">
-                        <p class="text-[#FF7F00] text-4xl md:text-5xl font-bold" id="total-visits">12468</p>
-                        <p class="text-white/70 text-base md:text-lg">Tổng lượt truy cập</p>
-                    </div>
-                    <div class="glass rounded-3xl p-6 md:p-8 text-center">
-                        <p class="text-[#A020F0] text-4xl md:text-5xl font-bold">42</p>
-                        <p class="text-white/70 text-base md:text-lg">Bạn đang online cùng 10A4</p>
-                    </div>
-                </div>
-                
-                <!-- Lịch học tuần này -->
-                <div class="mb-12">
-                    <h2 class="title-font text-2xl md:text-3xl font-semibold mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-3">
-                        📅 Lịch học tuần này
-                        <span class="text-xs bg-[#FF7F00] text-[#003087] px-3 py-1 rounded-full whitespace-nowrap">Tuần 12 • 06-12/04/2026</span>
-                    </h2>
-                    <div class="grid grid-cols-2 md:grid-cols-7 gap-4">
-                        <div class="glass rounded-2xl md:rounded-3xl p-4 md:p-6 text-center hover:scale-105 transition-all">
-                            <
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/10A4-SieuPham.html b/10A4-SieuPham.html
+new file mode 100644
+index 0000000000000000000000000000000000000000..3de68a8122ea64816ecb8d7c9b34da615eb78b48
+--- /dev/null
++++ b/10A4-SieuPham.html
+@@ -0,0 +1,881 @@
++<!DOCTYPE html>
++<html lang="vi">
++<head>
++  <meta charset="UTF-8" />
++  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++  <title>10A4 Siêu Phẩm - THPT Gia Viễn</title>
++  <script src="https://cdn.tailwindcss.com"></script>
++  <link rel="preconnect" href="https://fonts.googleapis.com" />
++  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
++  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
++  <style>
++    :root {
++      --blue: #003087;
++      --orange: #FF7F00;
++      --purple: #A020F0;
++      --glass: rgba(255,255,255,.08);
++      --text: #e7ecff;
++    }
++    html,body { height: 100%; }
++    body {
++      font-family: Inter, sans-serif;
++      color: var(--text);
++      background: radial-gradient(circle at 20% 20%, #0a1b4e, #040817 55%, #04050d 100%);
++      overflow-x: hidden;
++    }
++    .font-poppins { font-family: Poppins, sans-serif; }
++    .glass {
++      background: var(--glass);
++      backdrop-filter: blur(12px);
++      -webkit-backdrop-filter: blur(12px);
++      border: 1px solid rgba(255,255,255,.15);
++      box-shadow: 0 8px 30px rgba(0,0,0,.35);
++    }
++    .neon-text {
++      text-shadow: 0 0 8px rgba(160,32,240,.75), 0 0 16px rgba(0,48,135,.85);
++    }
++    .neon-border {
++      border: 1px solid rgba(160,32,240,.75);
++      box-shadow: 0 0 10px rgba(160,32,240,.45), inset 0 0 10px rgba(0,48,135,.35);
++    }
++    .tab-btn.active { background: linear-gradient(135deg, rgba(0,48,135,.6), rgba(160,32,240,.6)); }
++    .smooth { transition: all .33s cubic-bezier(.4,0,.2,1); }
++    .hover-scale:hover { transform: scale(1.03); }
++    .scrollbar-thin::-webkit-scrollbar { width: 7px; height: 7px; }
++    .scrollbar-thin::-webkit-scrollbar-thumb { background: linear-gradient(var(--purple), var(--blue)); border-radius: 999px; }
++    .ripple { position: relative; overflow: hidden; }
++    .ripple span {
++      position: absolute;
++      border-radius: 50%;
++      transform: scale(0);
++      animation: ripple .65s linear;
++      background: rgba(255,255,255,.45);
++      pointer-events: none;
++    }
++    @keyframes ripple { to { transform: scale(4); opacity: 0; } }
++    .hidden-mobile { display: none; }
++    @media (min-width: 1024px) {
++      .hidden-mobile { display: block; }
++    }
++  </style>
++</head>
++<body>
++  <canvas id="particles" class="fixed inset-0 -z-10"></canvas>
++  <canvas id="confetti" class="fixed inset-0 pointer-events-none z-50"></canvas>
++
++  <div id="app" class="min-h-screen">
++    <!-- Auth screen -->
++    <section id="authScreen" class="min-h-screen flex items-center justify-center p-4">
++      <div class="glass neon-border rounded-3xl p-6 md:p-8 w-full max-w-md">
++        <h1 class="font-poppins text-2xl md:text-3xl font-extrabold neon-text text-center mb-2">10A4 - Siêu Phẩm</h1>
++        <p class="text-center text-sm text-indigo-100 mb-6">THPT Gia Viễn (2025–2026)</p>
++
++        <div class="flex rounded-xl overflow-hidden mb-5 border border-indigo-300/20">
++          <button id="showLogin" class="tab-btn active flex-1 py-2 text-sm font-semibold smooth">Đăng nhập</button>
++          <button id="showRegister" class="tab-btn flex-1 py-2 text-sm font-semibold smooth">Đăng ký</button>
++        </div>
++
++        <form id="loginForm" class="space-y-3">
++          <input id="loginName" type="text" placeholder="Tên đăng nhập" class="w-full rounded-xl bg-indigo-950/50 p-3 outline-none border border-white/10 focus:border-orange-400" required />
++          <input id="loginPassword" type="password" placeholder="Mật khẩu" class="w-full rounded-xl bg-indigo-950/50 p-3 outline-none border border-white/10 focus:border-orange-400" required />
++          <button type="submit" class="ripple hover-scale smooth w-full bg-gradient-to-r from-[#003087] to-[#A020F0] py-3 rounded-xl font-bold">Vào lớp ngay</button>
++          <button type="button" id="forgotBtn" class="text-orange-300 text-sm hover:underline">Quên mật khẩu?</button>
++        </form>
++
++        <form id="registerForm" class="space-y-3 hidden">
++          <input id="regName" type="text" placeholder="Tên tài khoản" class="w-full rounded-xl bg-indigo-950/50 p-3 outline-none border border-white/10 focus:border-orange-400" required />
++          <input id="regPassword" type="password" placeholder="Mật khẩu (>=6 ký tự)" class="w-full rounded-xl bg-indigo-950/50 p-3 outline-none border border-white/10 focus:border-orange-400" required />
++          <select id="regRole" class="w-full rounded-xl bg-indigo-950/50 p-3 outline-none border border-white/10 focus:border-orange-400" required>
++            <option value="Thành viên">Thành viên</option>
++            <option value="Phó học tập">Phó học tập</option>
++            <option value="Lớp trưởng">Lớp trưởng</option>
++            <option value="Giáo viên">Giáo viên</option>
++          </select>
++          <button type="submit" class="ripple hover-scale smooth w-full bg-gradient-to-r from-[#FF7F00] to-[#A020F0] py-3 rounded-xl font-bold">Tạo tài khoản</button>
++        </form>
++      </div>
++    </section>
++
++    <!-- Main app -->
++    <section id="mainScreen" class="hidden min-h-screen">
++      <header class="sticky top-0 z-30 glass border-b border-white/10">
++        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
++          <div class="flex items-center gap-2">
++            <button id="burger" class="ripple p-2 rounded-lg bg-indigo-900/50">☰</button>
++            <h2 class="font-poppins text-lg md:text-xl font-bold neon-text">10A4 Hub</h2>
++          </div>
++          <div class="flex items-center gap-2">
++            <button id="musicToggle" class="ripple px-3 py-2 rounded-lg bg-indigo-900/40 text-sm">🎵 Nhạc: Tắt</button>
++            <button id="notifBtn" class="relative ripple p-2 rounded-lg bg-indigo-900/50">🔔<span id="notifCount" class="absolute -top-1 -right-1 text-xs bg-orange-500 px-1.5 rounded-full">0</span></button>
++            <button id="logoutBtn" class="ripple px-3 py-2 rounded-lg bg-red-500/80 text-sm">Đăng xuất</button>
++          </div>
++        </div>
++      </header>
++
++      <div class="max-w-7xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-4">
++        <aside id="sidebar" class="glass rounded-2xl p-3 h-fit lg:sticky lg:top-20 hidden lg:block">
++          <div class="text-sm mb-4">
++            <div class="font-bold">📌 Tổng quan lớp</div>
++            <p id="overviewText" class="text-indigo-100 mt-1"></p>
++          </div>
++          <nav id="tabs" class="space-y-2 text-sm"></nav>
++          <div class="mt-4 p-3 rounded-xl bg-indigo-900/40 text-xs">Footer: <b>Được tạo bởi Haibdos</b></div>
++        </aside>
++
++        <main class="space-y-4">
++          <div id="tabContent"></div>
++          <footer class="text-center text-xs text-indigo-100/80 py-4">Được tạo bởi Haibdos</footer>
++        </main>
++      </div>
++    </section>
++  </div>
++
++  <!-- Forgot password modal -->
++  <div id="forgotModal" class="hidden fixed inset-0 z-40 bg-black/60 p-4 flex items-center justify-center">
++    <div class="glass rounded-2xl p-5 w-full max-w-sm">
++      <h3 class="font-bold text-lg mb-2">Khôi phục mật khẩu</h3>
++      <p class="text-sm mb-3">Nhập tên tài khoản để xem mật khẩu đã lưu local.</p>
++      <input id="forgotName" class="w-full rounded-xl bg-indigo-950/50 p-3 border border-white/10" placeholder="Tên tài khoản" />
++      <div class="mt-3 flex gap-2 justify-end">
++        <button id="forgotClose" class="px-3 py-2 rounded-lg bg-white/10">Đóng</button>
++        <button id="forgotSubmit" class="px-3 py-2 rounded-lg bg-orange-500">Xem</button>
++      </div>
++      <p id="forgotResult" class="text-sm mt-3"></p>
++    </div>
++  </div>
++
++  <audio id="bgm" loop>
++    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_f356f11dbf.mp3?filename=technology-music-112194.mp3" type="audio/mpeg">
++  </audio>
++
++  <script>
++    // ===== Utilities =====
++    const $ = (s) => document.querySelector(s);
++    const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
++    const now = () => new Date().toISOString();
++    const AVATARS = ["😎","🦊","🐼","🐯","🐧","🦄","🐬","🦁","🐻","🐵"];
++    const ROLES = ["Thành viên", "Phó học tập", "Lớp trưởng", "Giáo viên"];
++
++    const DB_KEYS = {
++      users: "a10_users",
++      messages: "a10_messages",
++      posts: "a10_posts",
++      friends: "a10_friends",
++      notifications: "a10_notifications",
++      schedule: "a10_schedule",
++      currentUser: "a10_currentUser",
++      musicOn: "a10_musicOn"
++    };
++
++    const Store = {
++      get(key, fallback = []) {
++        try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
++        catch { return fallback; }
++      },
++      set(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
++    };
++
++    const seedDemo = () => {
++      const users = Store.get(DB_KEYS.users, []);
++      if (users.length === 0) {
++        Store.set(DB_KEYS.users, [
++          { id: uid(), name: "admin10A4", password: "123456", role: "Lớp trưởng", avatar: "😎", nickname: "Boss", bio: "Lead lớp", interests: "Code, bóng đá", goals: "Đỗ đại học", online: false, lastActive: now() },
++          { id: uid(), name: "gvcn", password: "123456", role: "Giáo viên", avatar: "👩‍🏫", nickname: "Cô chủ nhiệm", bio: "Always with class", interests: "Đọc sách", goals: "Lớp hạnh phúc", online: false, lastActive: now() }
++        ]);
++      }
++      [DB_KEYS.messages, DB_KEYS.posts, DB_KEYS.friends, DB_KEYS.notifications, DB_KEYS.schedule].forEach(k => {
++        if (!localStorage.getItem(k)) Store.set(k, []);
++      });
++    };
++
++    const App = {
++      state: {
++        currentUser: null,
++        activeTab: "feed",
++        activeChat: "global",
++        typing: {},
++        mediaRecorder: null,
++        audioChunks: [],
++        sidebarOpen: false
++      },
++
++      init() {
++        seedDemo();
++        this.bindAuth();
++        this.bindGlobal();
++        this.initEffects();
++        const existing = localStorage.getItem(DB_KEYS.currentUser);
++        if (existing) {
++          this.state.currentUser = existing;
++          this.enterApp();
++        }
++      },
++
++      // ===== Auth =====
++      bindAuth() {
++        $("#showLogin").onclick = () => this.toggleAuth("login");
++        $("#showRegister").onclick = () => this.toggleAuth("register");
++
++        $("#loginForm").onsubmit = (e) => {
++          e.preventDefault();
++          const name = $("#loginName").value.trim();
++          const password = $("#loginPassword").value;
++          const user = Store.get(DB_KEYS.users).find(u => u.name === name && u.password === password);
++          if (!user) return alert("Sai tài khoản hoặc mật khẩu!");
++          this.login(user.name);
++        };
++
++        $("#registerForm").onsubmit = (e) => {
++          e.preventDefault();
++          const name = $("#regName").value.trim();
++          const password = $("#regPassword").value;
++          const role = $("#regRole").value;
++          if (name.length < 3) return alert("Tên phải >=3 ký tự");
++          if (password.length < 6) return alert("Mật khẩu phải >=6 ký tự");
++          const users = Store.get(DB_KEYS.users);
++          if (users.some(u => u.name.toLowerCase() === name.toLowerCase())) return alert("Tên đã tồn tại");
++          users.push({ id: uid(), name, password, role, avatar: AVATARS[Math.floor(Math.random()*AVATARS.length)], nickname: "", bio: "", interests: "", goals: "", online: false, lastActive: now() });
++          Store.set(DB_KEYS.users, users);
++          this.notify(name, "welcome", "🎉 Đăng ký thành công!");
++          confettiBurst();
++          alert("Đăng ký thành công, hãy đăng nhập!");
++          this.toggleAuth("login");
++        };
++
++        $("#forgotBtn").onclick = () => $("#forgotModal").classList.remove("hidden");
++        $("#forgotClose").onclick = () => $("#forgotModal").classList.add("hidden");
++        $("#forgotSubmit").onclick = () => {
++          const name = $("#forgotName").value.trim();
++          const user = Store.get(DB_KEYS.users).find(u => u.name === name);
++          $("#forgotResult").textContent = user ? `Mật khẩu: ${user.password}` : "Không tìm thấy tài khoản";
++        };
++      },
++
++      toggleAuth(type) {
++        const login = $("#loginForm");
++        const reg = $("#registerForm");
++        const lbtn = $("#showLogin");
++        const rbtn = $("#showRegister");
++        if (type === "login") {
++          login.classList.remove("hidden"); reg.classList.add("hidden");
++          lbtn.classList.add("active"); rbtn.classList.remove("active");
++        } else {
++          reg.classList.remove("hidden"); login.classList.add("hidden");
++          rbtn.classList.add("active"); lbtn.classList.remove("active");
++        }
++      },
++
++      login(name) {
++        this.state.currentUser = name;
++        localStorage.setItem(DB_KEYS.currentUser, name);
++        const users = Store.get(DB_KEYS.users).map(u => u.name === name ? { ...u, online: true, lastActive: now() } : u);
++        Store.set(DB_KEYS.users, users);
++        this.enterApp();
++      },
++
++      logout() {
++        const me = this.user();
++        const users = Store.get(DB_KEYS.users).map(u => u.name === me.name ? { ...u, online: false, lastActive: now() } : u);
++        Store.set(DB_KEYS.users, users);
++        localStorage.removeItem(DB_KEYS.currentUser);
++        this.state.currentUser = null;
++        $("#mainScreen").classList.add("hidden");
++        $("#authScreen").classList.remove("hidden");
++      },
++
++      // ===== App shell =====
++      bindGlobal() {
++        $("#logoutBtn").onclick = () => this.logout();
++        $("#notifBtn").onclick = () => { this.state.activeTab = "notifications"; this.render(); };
++        $("#burger").onclick = () => {
++          const sb = $("#sidebar");
++          sb.classList.toggle("hidden");
++          sb.classList.toggle("block");
++        };
++
++        document.addEventListener("click", (e) => {
++          const target = e.target.closest(".ripple");
++          if (!target) return;
++          const span = document.createElement("span");
++          const rect = target.getBoundingClientRect();
++          const d = Math.max(rect.width, rect.height);
++          span.style.width = span.style.height = `${d}px`;
++          span.style.left = `${e.clientX - rect.left - d/2}px`;
++          span.style.top = `${e.clientY - rect.top - d/2}px`;
++          target.appendChild(span);
++          setTimeout(() => span.remove(), 650);
++        });
++
++        $("#musicToggle").onclick = () => {
++          const audio = $("#bgm");
++          const on = localStorage.getItem(DB_KEYS.musicOn) === "1";
++          if (on) {
++            audio.pause();
++            localStorage.setItem(DB_KEYS.musicOn, "0");
++            $("#musicToggle").textContent = "🎵 Nhạc: Tắt";
++          } else {
++            audio.play().catch(() => alert("Trình duyệt chặn autoplay, nhấn lại để bật."));
++            localStorage.setItem(DB_KEYS.musicOn, "1");
++            $("#musicToggle").textContent = "🎵 Nhạc: Bật";
++          }
++        };
++      },
++
++      enterApp() {
++        $("#authScreen").classList.add("hidden");
++        $("#mainScreen").classList.remove("hidden");
++        this.render();
++        this.runPresenceLoop();
++        const on = localStorage.getItem(DB_KEYS.musicOn) === "1";
++        if (on) { $("#bgm").play().catch(() => {}); $("#musicToggle").textContent = "🎵 Nhạc: Bật"; }
++      },
++
++      runPresenceLoop() {
++        clearInterval(this._presenceInt);
++        this._presenceInt = setInterval(() => {
++          const users = Store.get(DB_KEYS.users).map(u => u.name === this.state.currentUser ? { ...u, online: true, lastActive: now() } : u);
++          Store.set(DB_KEYS.users, users);
++          this.renderCounters();
++        }, 10000);
++      },
++
++      user() { return Store.get(DB_KEYS.users).find(u => u.name === this.state.currentUser); },
++      isAdmin() { const r = this.user()?.role; return r === "Lớp trưởng" || r === "Giáo viên"; },
++
++      tabs() {
++        const list = [
++          ["feed", "📰 Feed"], ["chat", "💬 Chat"], ["friends", "🤝 Bạn bè"],
++          ["profile", "👤 Hồ sơ"], ["schedule", "📅 Lịch học"], ["notifications", "🔔 Thông báo"]
++        ];
++        if (this.isAdmin()) list.push(["admin", "🛠 Admin"]);
++        return list;
++      },
++
++      render() {
++        const tabsEl = $("#tabs");
++        tabsEl.innerHTML = this.tabs().map(([k, label]) =>
++          `<button data-tab="${k}" class="tab-btn ${this.state.activeTab===k?'active':''} smooth w-full text-left px-3 py-2 rounded-xl bg-indigo-900/30 hover-scale">${label}</button>`
++        ).join("");
++        tabsEl.querySelectorAll("button").forEach(btn => btn.onclick = () => { this.state.activeTab = btn.dataset.tab; this.render(); });
++
++        const map = {
++          feed: this.viewFeed.bind(this), chat: this.viewChat.bind(this), friends: this.viewFriends.bind(this),
++          profile: this.viewProfile.bind(this), schedule: this.viewSchedule.bind(this), notifications: this.viewNotifications.bind(this), admin: this.viewAdmin.bind(this)
++        };
++        $("#tabContent").innerHTML = map[this.state.activeTab]();
++        this.bindViewEvents();
++        this.renderCounters();
++      },
++
++      renderCounters() {
++        const users = Store.get(DB_KEYS.users);
++        const posts = Store.get(DB_KEYS.posts);
++        const online = users.filter(u => u.online).length;
++        $("#overviewText").textContent = `${users.length} thành viên • ${online} online • ${posts.length} bài đăng`;
++        const myNotifs = Store.get(DB_KEYS.notifications).filter(n => n.to === this.state.currentUser && !n.read).length;
++        $("#notifCount").textContent = String(myNotifs);
++      },
++
++      roleBadge(role) {
++        const color = role === "Lớp trưởng" ? "bg-purple-500" : role === "Giáo viên" ? "bg-orange-500" : role === "Phó học tập" ? "bg-blue-500" : "bg-slate-500";
++        return `<span class="text-xs px-2 py-0.5 rounded-full ${color}">${role}</span>`;
++      },
++
++      // ===== Feed =====
++      viewFeed() {
++        const posts = Store.get(DB_KEYS.posts).sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt));
++        return `
++          <section class="space-y-4">
++            <div class="glass rounded-2xl p-4">
++              <h3 class="font-bold mb-2">Tạo bài đăng</h3>
++              <textarea id="postText" class="w-full rounded-xl bg-indigo-950/50 p-3 min-h-[90px]" placeholder="Bạn đang nghĩ gì?"></textarea>
++              <input id="postFiles" type="file" multiple accept="image/*,video/*" class="mt-2 text-sm" />
++              <div id="postPreview" class="grid grid-cols-2 gap-2 mt-2"></div>
++              <button id="postBtn" class="ripple hover-scale mt-3 px-4 py-2 rounded-xl bg-gradient-to-r from-[#003087] to-[#FF7F00] font-semibold">Đăng bài</button>
++            </div>
++            <div class="space-y-3">${posts.map(p => this.renderPostCard(p)).join("") || `<div class='glass p-4 rounded-xl'>Chưa có bài đăng.</div>`}</div>
++          </section>`;
++      },
++
++      renderPostCard(p) {
++        const user = Store.get(DB_KEYS.users).find(u => u.name === p.author);
++        return `<article class="glass rounded-2xl p-4" data-post-id="${p.id}">
++          <div class="flex justify-between items-start"><div><div class="font-semibold">${user?.avatar||"🙂"} ${p.author}</div><div class="text-xs opacity-70">${new Date(p.createdAt).toLocaleString()}</div></div>${this.roleBadge(user?.role||"Thành viên")}</div>
++          <p class="mt-2 whitespace-pre-wrap">${escapeHtml(p.text)}</p>
++          <div class="grid md:grid-cols-2 gap-2 mt-3">${p.media.map(m=> m.type.startsWith("image") ? `<img class='rounded-xl w-full object-cover max-h-64' src='${m.data}'/>` : `<video class='rounded-xl w-full max-h-64' controls src='${m.data}'></video>`).join("")}</div>
++          <div class="flex gap-2 mt-3 text-sm">
++            <button class="likePost ripple px-3 py-1 rounded-lg bg-white/10">👍 Like (${p.likes.length})</button>
++            <button class="sharePost ripple px-3 py-1 rounded-lg bg-white/10">🔁 Share</button>
++          </div>
++          <div class="mt-3 space-y-2">${p.comments.map(c=>`<div class='text-sm bg-black/20 p-2 rounded-lg'><b>${c.author}:</b> ${escapeHtml(c.text)}</div>`).join("")}</div>
++          <div class="mt-2 flex gap-2"><input class="commentInput flex-1 rounded-lg bg-indigo-950/40 p-2" placeholder="Viết bình luận..."/><button class="commentPost ripple px-3 rounded-lg bg-indigo-700">Gửi</button></div>
++        </article>`;
++      },
++
++      // ===== Chat =====
++      viewChat() {
++        const users = Store.get(DB_KEYS.users).filter(u => u.name !== this.state.currentUser);
++        const friends = this.getFriends(this.state.currentUser);
++        const side = [
++          `<button data-chat='global' class='chatSel w-full text-left px-3 py-2 rounded-xl ${this.state.activeChat==='global'?'bg-purple-700/60':'bg-indigo-900/30'}'>🌐 Chat chung</button>`,
++          ...friends.map(name => {
++            const u = users.find(x=>x.name===name);
++            return `<button data-chat='${name}' class='chatSel w-full text-left px-3 py-2 rounded-xl ${this.state.activeChat===name?'bg-purple-700/60':'bg-indigo-900/30'}'>${u?.avatar||"🙂"} ${name}</button>`;
++          })
++        ].join('');
++
++        const msgs = this.getMessagesForChat();
++        return `<section class='grid md:grid-cols-[230px_1fr] gap-3'>
++          <div class='glass rounded-2xl p-3 space-y-2 max-h-[70vh] overflow-y-auto scrollbar-thin'>${side}</div>
++          <div class='glass rounded-2xl p-3'>
++            <div id='msgBox' class='h-[48vh] overflow-y-auto space-y-2 scrollbar-thin'>${msgs.map(m=>this.renderMsg(m)).join('') || '<p class="text-sm opacity-80">Chưa có tin nhắn.</p>'}</div>
++            <div id='typingIndicator' class='text-xs mt-1 text-orange-300'></div>
++            <div class='mt-2 flex gap-2'>
++              <input id='msgInput' class='flex-1 rounded-xl p-2 bg-indigo-950/40' placeholder='Nhập tin nhắn...' />
++              <input id='chatFile' type='file' accept='image/*,video/*,audio/*' class='text-xs w-28'/>
++              <button id='voiceBtn' class='ripple px-3 rounded-lg bg-white/10'>🎙️</button>
++              <button id='sendMsg' class='ripple px-3 rounded-lg bg-indigo-700'>Gửi</button>
++            </div>
++          </div>
++        </section>`;
++      },
++
++      renderMsg(m) {
++        const mine = m.from === this.state.currentUser;
++        const base = `max-w-[85%] rounded-xl p-2 ${mine?'ml-auto bg-indigo-700/70':'bg-white/10'}`;
++        const media = m.type === 'image' ? `<img src='${m.data}' class='rounded-lg max-h-48'/>` :
++          m.type === 'video' ? `<video src='${m.data}' controls class='rounded-lg max-h-48'></video>` :
++          m.type === 'audio' ? `<audio controls src='${m.data}'></audio>` : '';
++        return `<div class='${base}' data-mid='${m.id}'><div class='text-xs opacity-75 mb-1'>${m.from} • ${new Date(m.createdAt).toLocaleTimeString()}</div>${m.text?`<div>${escapeHtml(m.text)}</div>`:''}${media}
++          <div class='mt-1 flex items-center gap-1 text-xs'>
++            <button class='reactMsg' data-react='❤️'>❤️</button><button class='reactMsg' data-react='👍'>👍</button><button class='reactMsg' data-react='🔥'>🔥</button>
++            <span>${m.reactions.join(' ')}</span>
++            <span class='ml-auto opacity-80'>${m.seen ? '✓✓ seen' : '✓ sent'}</span>
++          </div>
++        </div>`;
++      },
++
++      getMessagesForChat() {
++        const all = Store.get(DB_KEYS.messages);
++        const me = this.state.currentUser;
++        const target = this.state.activeChat;
++        return all.filter(m => target === 'global' ? m.to === 'global' : ((m.from===me&&m.to===target)||(m.from===target&&m.to===me)));
++      },
++
++      // ===== Friends =====
++      viewFriends() {
++        const users = Store.get(DB_KEYS.users).filter(u => u.name !== this.state.currentUser);
++        const myFriends = this.getFriends(this.state.currentUser);
++        return `<section class='glass rounded-2xl p-4'>
++          <h3 class='font-bold mb-3'>Danh sách thành viên</h3>
++          <div class='grid md:grid-cols-2 gap-3'>${users.map(u=>{
++            const isF = myFriends.includes(u.name);
++            const status = u.online ? '🟢 Online' : ((Date.now()-new Date(u.lastActive).getTime())<3600000 ? '🟡 Recently active' : '⚪ Offline');
++            return `<div class='bg-black/20 rounded-xl p-3'>
++              <div class='font-semibold'>${u.avatar} ${u.name}</div>
++              <div class='my-1'>${this.roleBadge(u.role)}</div>
++              <div class='text-sm opacity-80'>${status}</div>
++              <div class='mt-2 flex gap-2'>
++                <button class='addFriend ripple px-2 py-1 rounded bg-indigo-700/70' data-user='${u.name}' ${isF?'disabled':''}>${isF?'Đã là bạn':'Kết bạn'}</button>
++                <button class='msgFriend ripple px-2 py-1 rounded bg-purple-700/70' data-user='${u.name}'>Nhắn tin</button>
++              </div>
++            </div>`;
++          }).join('')}</div>
++        </section>`;
++      },
++
++      getFriends(name) {
++        return Store.get(DB_KEYS.friends).filter(f => (f.from===name||f.to===name)&&f.status==='accepted').map(f=>f.from===name?f.to:f.from);
++      },
++
++      // ===== Profile =====
++      viewProfile() {
++        const me = this.user();
++        return `<section class='glass rounded-2xl p-4'>
++          <h3 class='font-bold mb-3'>Hồ sơ cá nhân</h3>
++          <div class='grid md:grid-cols-2 gap-3'>
++            <div>
++              <label class='text-sm'>Avatar emoji hiện tại</label>
++              <div class='text-4xl my-2'>${me.avatar}</div>
++              <input id='avatarFile' type='file' accept='image/*' class='text-xs' />
++              <img id='avatarPreview' class='mt-2 max-h-36 rounded-xl ${me.avatarData?'':'hidden'}' src='${me.avatarData||''}' />
++            </div>
++            <div class='space-y-2'>
++              <input id='pfName' class='w-full rounded-lg p-2 bg-indigo-950/40' placeholder='Tên' value='${escapeAttr(me.name)}' />
++              <input id='pfNick' class='w-full rounded-lg p-2 bg-indigo-950/40' placeholder='Nickname' value='${escapeAttr(me.nickname||'')}' />
++              <input id='pfRole' class='w-full rounded-lg p-2 bg-indigo-950/40' list='roleList' value='${escapeAttr(me.role)}' />
++              <datalist id='roleList'>${ROLES.map(r=>`<option value='${r}'/>`).join('')}</datalist>
++              <textarea id='pfBio' class='w-full rounded-lg p-2 bg-indigo-950/40' placeholder='Bio'>${escapeHtml(me.bio||'')}</textarea>
++              <input id='pfInterests' class='w-full rounded-lg p-2 bg-indigo-950/40' placeholder='Sở thích' value='${escapeAttr(me.interests||'')}' />
++              <input id='pfGoals' class='w-full rounded-lg p-2 bg-indigo-950/40' placeholder='Mục tiêu' value='${escapeAttr(me.goals||'')}' />
++              <button id='saveProfile' class='ripple px-4 py-2 rounded-lg bg-indigo-700'>Lưu hồ sơ</button>
++            </div>
++          </div>
++        </section>`;
++      },
++
++      // ===== Schedule =====
++      viewSchedule() {
++        const schRaw = Store.get(DB_KEYS.schedule);
++        const sch = Array.isArray(schRaw) ? { rows: schRaw, image: "" } : (schRaw || { rows: [], image: "" });
++        const days = ["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7"];
++        const table = days.map(d=> {
++          const row = (sch.rows || []).find(x=>x.day===d) || { day:d, morning:'', afternoon:'' };
++          return `<tr><td class='p-2'>${d}</td><td class='p-2'><input data-day='${d}' data-field='morning' value='${escapeAttr(row.morning)}' class='schInput w-full bg-indigo-950/40 rounded p-1'/></td><td class='p-2'><input data-day='${d}' data-field='afternoon' value='${escapeAttr(row.afternoon)}' class='schInput w-full bg-indigo-950/40 rounded p-1'/></td></tr>`;
++        }).join('');
++        return `<section class='glass rounded-2xl p-4'>
++          <h3 class='font-bold mb-3'>Lịch học tuần</h3>
++          <input id='scheduleImage' type='file' accept='image/*' class='text-xs mb-2'/>
++          <img id='schedulePreview' class='rounded-xl max-h-44 ${sch.image ? '' : 'hidden'}' src='${sch.image || ''}' />
++          <div class='overflow-x-auto mt-3'>
++            <table class='w-full text-sm border border-white/10'><thead><tr class='bg-white/10'><th class='p-2'>Ngày</th><th>Sáng</th><th>Chiều</th></tr></thead><tbody>${table}</tbody></table>
++          </div>
++          <button id='saveSchedule' class='ripple mt-3 px-4 py-2 rounded-lg bg-purple-700'>Lưu lịch</button>
++        </section>`;
++      },
++
++      // ===== Notifications =====
++      viewNotifications() {
++        const list = Store.get(DB_KEYS.notifications).filter(n=>n.to===this.state.currentUser).sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt));
++        return `<section class='glass rounded-2xl p-4'>
++          <h3 class='font-bold mb-3'>Thông báo</h3>
++          <div class='space-y-2'>${list.map(n=>`<button data-go='${n.goto||''}' data-id='${n.id}' class='notifItem w-full text-left p-3 rounded-xl ${n.read?'bg-black/20':'bg-orange-500/20'}'>${n.text}<div class='text-xs opacity-70 mt-1'>${new Date(n.createdAt).toLocaleString()}</div></button>`).join('') || '<p>Không có thông báo.</p>'}</div>
++        </section>`;
++      },
++
++      notify(to, type, text, goto = "") {
++        const list = Store.get(DB_KEYS.notifications);
++        list.push({ id: uid(), to, type, text, goto, read: false, createdAt: now() });
++        Store.set(DB_KEYS.notifications, list);
++      },
++
++      // ===== Admin =====
++      viewAdmin() {
++        if (!this.isAdmin()) return `<div class='glass rounded-xl p-4'>Bạn không có quyền.</div>`;
++        const users = Store.get(DB_KEYS.users);
++        const posts = Store.get(DB_KEYS.posts);
++        const msgs = Store.get(DB_KEYS.messages);
++        return `<section class='space-y-3'>
++          <div class='glass rounded-2xl p-4 grid grid-cols-3 gap-2 text-center'>
++            <div class='bg-black/20 rounded-xl p-3'><div class='text-xs'>Tổng user</div><div class='text-xl font-bold'>${users.length}</div></div>
++            <div class='bg-black/20 rounded-xl p-3'><div class='text-xs'>Online</div><div class='text-xl font-bold'>${users.filter(u=>u.online).length}</div></div>
++            <div class='bg-black/20 rounded-xl p-3'><div class='text-xs'>Posts</div><div class='text-xl font-bold'>${posts.length}</div></div>
++          </div>
++          <div class='glass rounded-2xl p-4'><h4 class='font-bold mb-2'>Quản lý user</h4>${users.map(u=>`<div class='flex flex-wrap items-center justify-between gap-2 border-b border-white/10 py-2'><span>${u.avatar} ${u.name} ${this.roleBadge(u.role)}</span><div class='flex gap-2'><select class='adminRole bg-black/30 rounded p-1' data-user='${u.name}'>${ROLES.map(r=>`<option ${u.role===r?'selected':''}>${r}</option>`).join('')}</select><button data-user='${u.name}' class='adminDel px-2 py-1 rounded bg-red-600/70'>Xóa</button></div></div>`).join('')}</div>
++          <div class='glass rounded-2xl p-4'><h4 class='font-bold mb-2'>Toàn bộ chat</h4><div class='max-h-52 overflow-auto text-sm space-y-1'>${msgs.map(m=>`<div class='bg-black/20 p-2 rounded'>${m.from} ➜ ${m.to}: ${escapeHtml(m.text||("["+m.type+"]"))}</div>`).join('') || 'No messages'}</div></div>
++          <div class='glass rounded-2xl p-4'><h4 class='font-bold mb-2'>Quản lý bài đăng</h4>${posts.map(p=>`<div class='flex justify-between items-center py-1 border-b border-white/10'><span>${p.author}: ${escapeHtml((p.text||'').slice(0,35))}</span><button class='adminDelPost px-2 py-1 rounded bg-red-600/70' data-id='${p.id}'>Xóa</button></div>`).join('') || 'No posts'}</div>
++        </section>`;
++      },
++
++      // ===== Event bindings per-view =====
++      bindViewEvents() {
++        // Feed post preview
++        const postFiles = $("#postFiles");
++        if (postFiles) {
++          postFiles.onchange = async () => {
++            const preview = $("#postPreview"); preview.innerHTML = "";
++            [...postFiles.files].forEach(file => {
++              const r = new FileReader();
++              r.onload = () => {
++                const el = file.type.startsWith("image") ? document.createElement("img") : document.createElement("video");
++                el.src = r.result; el.className = "rounded-xl max-h-32 w-full object-cover";
++                if (el.tagName === "VIDEO") el.controls = true;
++                preview.appendChild(el);
++              };
++              r.readAsDataURL(file);
++            });
++          };
++        }
++
++        const postBtn = $("#postBtn");
++        if (postBtn) postBtn.onclick = async () => {
++          const text = $("#postText").value.trim();
++          const files = [...($("#postFiles")?.files || [])];
++          if (!text && files.length===0) return alert("Bài đăng rỗng!");
++          const media = await Promise.all(files.map(f => readFile(f).then(data => ({type:f.type, data}))));
++          const posts = Store.get(DB_KEYS.posts);
++          posts.push({ id: uid(), author: this.state.currentUser, text, media, likes: [], comments: [], shares: 0, createdAt: now() });
++          Store.set(DB_KEYS.posts, posts);
++          confettiBurst();
++          Store.get(DB_KEYS.users).filter(u=>u.name!==this.state.currentUser).forEach(u=> this.notify(u.name, "post", `📰 ${this.state.currentUser} vừa đăng bài mới`, "feed"));
++          this.render();
++        };
++
++        document.querySelectorAll(".likePost").forEach(btn => btn.onclick = () => {
++          const article = btn.closest("article"); const id = article.dataset.postId;
++          const posts = Store.get(DB_KEYS.posts).map(p => {
++            if (p.id !== id) return p;
++            const has = p.likes.includes(this.state.currentUser);
++            if (has) p.likes = p.likes.filter(n => n !== this.state.currentUser); else p.likes.push(this.state.currentUser);
++            if (!has && p.author !== this.state.currentUser) this.notify(p.author, "like", `👍 ${this.state.currentUser} đã thích bài của bạn`, "feed");
++            return p;
++          });
++          Store.set(DB_KEYS.posts, posts); this.render();
++        });
++
++        document.querySelectorAll(".commentPost").forEach(btn => btn.onclick = () => {
++          const article = btn.closest("article"); const id = article.dataset.postId;
++          const text = article.querySelector(".commentInput").value.trim();
++          if (!text) return;
++          const posts = Store.get(DB_KEYS.posts).map(p => {
++            if (p.id===id) {
++              p.comments.push({ id: uid(), author: this.state.currentUser, text, createdAt: now() });
++              if (p.author !== this.state.currentUser) this.notify(p.author, "comment", `💬 ${this.state.currentUser} bình luận bài của bạn`, "feed");
++            }
++            return p;
++          });
++          Store.set(DB_KEYS.posts, posts); this.render();
++        });
++
++        document.querySelectorAll(".sharePost").forEach(btn => btn.onclick = () => {
++          const id = btn.closest("article").dataset.postId;
++          const posts = Store.get(DB_KEYS.posts).map(p => p.id===id ? { ...p, shares: p.shares+1 } : p);
++          Store.set(DB_KEYS.posts, posts);
++          alert("Đã share nội bộ lớp!");
++        });
++
++        // Chat
++        document.querySelectorAll(".chatSel").forEach(b => b.onclick = () => { this.state.activeChat = b.dataset.chat; this.render(); });
++        const msgInput = $("#msgInput");
++        if (msgInput) {
++          msgInput.oninput = () => {
++            this.state.typing[this.state.activeChat] = `${this.state.currentUser} đang nhập...`;
++            $("#typingIndicator").textContent = this.state.activeChat !== 'global' ? this.state.typing[this.state.activeChat] : "";
++            clearTimeout(this._typingTO);
++            this._typingTO = setTimeout(() => { this.state.typing[this.state.activeChat] = ""; if ($("#typingIndicator")) $("#typingIndicator").textContent = ""; }, 1200);
++          };
++        }
++
++        const send = async () => {
++          const text = $("#msgInput")?.value.trim() || "";
++          const file = $("#chatFile")?.files[0];
++          if (!text && !file) return;
++          const list = Store.get(DB_KEYS.messages);
++          let msg = { id: uid(), from: this.state.currentUser, to: this.state.activeChat==='global'?'global':this.state.activeChat, text, type:'text', data:'', reactions:[], seen:false, createdAt: now() };
++          if (file) {
++            msg.data = await readFile(file);
++            msg.type = file.type.startsWith("image") ? "image" : file.type.startsWith("video") ? "video" : "audio";
++            msg.text = text || (msg.type==='audio' ? "🎵 Tin nhắn nhạc" : "📎 File đính kèm");
++          }
++          list.push(msg);
++          if (msg.to !== 'global') {
++            this.notify(msg.to, "message", `📩 ${this.state.currentUser}: ${msg.text.slice(0,30)}`, "chat");
++          }
++          Store.set(DB_KEYS.messages, list);
++          if ($("#msgInput")) $("#msgInput").value = "";
++          if ($("#chatFile")) $("#chatFile").value = "";
++          this.render();
++        };
++        if ($("#sendMsg")) $("#sendMsg").onclick = send;
++
++        if ($("#voiceBtn")) $("#voiceBtn").onclick = async () => {
++          if (!navigator.mediaDevices || !window.MediaRecorder) return alert("Trình duyệt không hỗ trợ ghi âm");
++          if (this.state.mediaRecorder && this.state.mediaRecorder.state === "recording") {
++            this.state.mediaRecorder.stop();
++            $("#voiceBtn").textContent = "🎙️";
++            return;
++          }
++          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
++          this.state.audioChunks = [];
++          const recorder = new MediaRecorder(stream);
++          this.state.mediaRecorder = recorder;
++          recorder.ondataavailable = e => this.state.audioChunks.push(e.data);
++          recorder.onstop = async () => {
++            const blob = new Blob(this.state.audioChunks, { type: "audio/webm" });
++            const data = await blobToDataURL(blob);
++            const list = Store.get(DB_KEYS.messages);
++            list.push({ id: uid(), from: this.state.currentUser, to: this.state.activeChat==='global'?'global':this.state.activeChat, text: "🎵 Voice message", type:'audio', data, reactions:[], seen:false, createdAt: now() });
++            Store.set(DB_KEYS.messages, list);
++            stream.getTracks().forEach(t => t.stop());
++            this.render();
++          };
++          recorder.start();
++          $("#voiceBtn").textContent = "⏹️";
++        };
++
++        document.querySelectorAll(".reactMsg").forEach(btn => btn.onclick = () => {
++          const id = btn.closest("[data-mid]").dataset.mid;
++          const emoji = btn.dataset.react;
++          const msgs = Store.get(DB_KEYS.messages).map(m => m.id===id ? { ...m, reactions: [...m.reactions, emoji] } : m);
++          Store.set(DB_KEYS.messages, msgs); this.render();
++        });
++
++        // Seen auto mark
++        const msgs = Store.get(DB_KEYS.messages).map(m => {
++          if (this.state.activeChat!=='global' && m.from===this.state.activeChat && m.to===this.state.currentUser) m.seen = true;
++          return m;
++        });
++        Store.set(DB_KEYS.messages, msgs);
++
++        // Friends
++        document.querySelectorAll(".addFriend").forEach(btn => btn.onclick = () => {
++          const to = btn.dataset.user;
++          const fr = Store.get(DB_KEYS.friends);
++          const exists = fr.some(f => (f.from===this.state.currentUser&&f.to===to)||(f.from===to&&f.to===this.state.currentUser));
++          if (exists) return;
++          fr.push({ id: uid(), from: this.state.currentUser, to, status: "accepted", createdAt: now() });
++          Store.set(DB_KEYS.friends, fr);
++          this.notify(to, "friend", `🤝 ${this.state.currentUser} đã kết bạn với bạn`, "friends");
++          this.render();
++        });
++        document.querySelectorAll(".msgFriend").forEach(btn => btn.onclick = () => {
++          this.state.activeTab = "chat"; this.state.activeChat = btn.dataset.user; this.render();
++        });
++
++        // Profile
++        if ($("#avatarFile")) $("#avatarFile").onchange = async () => {
++          const f = $("#avatarFile").files[0]; if (!f) return;
++          const data = await readFile(f);
++          const img = $("#avatarPreview"); img.src = data; img.classList.remove("hidden");
++        };
++        if ($("#saveProfile")) $("#saveProfile").onclick = () => {
++          const users = Store.get(DB_KEYS.users).map(u => {
++            if (u.name !== this.state.currentUser) return u;
++            const newName = $("#pfName").value.trim();
++            if (!newName) return u;
++            return {
++              ...u,
++              name: newName,
++              nickname: $("#pfNick").value.trim(),
++              role: $("#pfRole").value.trim() || u.role,
++              bio: $("#pfBio").value.trim(),
++              interests: $("#pfInterests").value.trim(),
++              goals: $("#pfGoals").value.trim(),
++              avatarData: $("#avatarPreview").src && !$("#avatarPreview").classList.contains("hidden") ? $("#avatarPreview").src : u.avatarData
++            };
++          });
++          const old = this.state.currentUser;
++          const meUpdated = users.find(u => u.name===$("#pfName").value.trim()) || users.find(u=>u.name===old);
++          Store.set(DB_KEYS.users, users);
++          if (old !== meUpdated.name) {
++            this.renameAcrossData(old, meUpdated.name);
++            this.state.currentUser = meUpdated.name;
++            localStorage.setItem(DB_KEYS.currentUser, meUpdated.name);
++          }
++          alert("Đã lưu hồ sơ");
++          this.render();
++        };
++
++        // Schedule
++        if ($("#scheduleImage")) $("#scheduleImage").onchange = async () => {
++          const f = $("#scheduleImage").files[0]; if (!f) return;
++          const data = await readFile(f); const img = $("#schedulePreview"); img.src = data; img.classList.remove("hidden");
++        };
++        if ($("#saveSchedule")) $("#saveSchedule").onclick = () => {
++          const rows = {};
++          document.querySelectorAll(".schInput").forEach(i => {
++            const d = i.dataset.day; rows[d] = rows[d] || { day:d, morning:'', afternoon:'' }; rows[d][i.dataset.field] = i.value;
++          });
++          const arr = Object.values(rows);
++          const image = $("#schedulePreview") && !$("#schedulePreview").classList.contains("hidden") ? $("#schedulePreview").src : "";
++          Store.set(DB_KEYS.schedule, { rows: arr, image });
++          alert("Đã lưu lịch học");
++        };
++
++        // Notifications
++        document.querySelectorAll(".notifItem").forEach(btn => btn.onclick = () => {
++          const id = btn.dataset.id;
++          const list = Store.get(DB_KEYS.notifications).map(n => n.id===id ? { ...n, read: true } : n);
++          Store.set(DB_KEYS.notifications, list);
++          if (btn.dataset.go) this.state.activeTab = btn.dataset.go;
++          this.render();
++        });
++
++        // Admin
++        document.querySelectorAll(".adminRole").forEach(sel => sel.onchange = () => {
++          const name = sel.dataset.user; const users = Store.get(DB_KEYS.users).map(u => u.name===name ? { ...u, role: sel.value } : u); Store.set(DB_KEYS.users, users); this.render();
++        });
++        document.querySelectorAll(".adminDel").forEach(btn => btn.onclick = () => {
++          const name = btn.dataset.user;
++          if (name === this.state.currentUser) return alert("Không thể tự xóa chính mình");
++          if (!confirm(`Xóa user ${name}?`)) return;
++          Store.set(DB_KEYS.users, Store.get(DB_KEYS.users).filter(u => u.name!==name));
++          [DB_KEYS.messages, DB_KEYS.posts, DB_KEYS.notifications, DB_KEYS.friends].forEach(k => {
++            const d = Store.get(k).filter(x => JSON.stringify(x).includes(name) ? (x.from!==name&&x.to!==name&&x.author!==name) : true);
++            Store.set(k, d);
++          });
++          this.render();
++        });
++        document.querySelectorAll(".adminDelPost").forEach(btn => btn.onclick = () => {
++          const id = btn.dataset.id;
++          Store.set(DB_KEYS.posts, Store.get(DB_KEYS.posts).filter(p=>p.id!==id));
++          this.render();
++        });
++      },
++
++      renameAcrossData(oldName, newName) {
++        [DB_KEYS.messages, DB_KEYS.posts, DB_KEYS.friends, DB_KEYS.notifications].forEach(k => {
++          const upd = Store.get(k).map(item => JSON.parse(JSON.stringify(item).replaceAll(`"${oldName}"`, `"${newName}"`)));
++          Store.set(k, upd);
++        });
++      },
++
++      // ===== Visual effects =====
++      initEffects() {
++        initParticles();
++      }
++    };
++
++    // ===== Helpers =====
++    function readFile(file) {
++      return new Promise((res, rej) => {
++        const r = new FileReader();
++        r.onload = () => res(r.result);
++        r.onerror = rej;
++        r.readAsDataURL(file);
++      });
++    }
++    function blobToDataURL(blob) {
++      return new Promise((res) => {
++        const r = new FileReader();
++        r.onload = () => res(r.result);
++        r.readAsDataURL(blob);
++      });
++    }
++    function escapeHtml(s='') { return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
++    function escapeAttr(s='') { return escapeHtml(s).replace(/'/g, '&#39;'); }
++
++    // ===== Particle background =====
++    function initParticles() {
++      const c = document.getElementById('particles');
++      const ctx = c.getContext('2d');
++      const state = { w:0,h:0, dots:[] };
++      const resize = () => { c.width = innerWidth; c.height = innerHeight; state.w = c.width; state.h = c.height; };
++      resize(); addEventListener('resize', resize);
++      state.dots = Array.from({length: innerWidth < 700 ? 50 : 100}, () => ({ x: Math.random()*state.w, y: Math.random()*state.h, r: Math.random()*1.8+0.8, vx: (Math.random()-.5)*.35, vy: (Math.random()-.5)*.35 }));
++      const draw = () => {
++        ctx.clearRect(0,0,state.w,state.h);
++        for (const p of state.dots) {
++          p.x += p.vx; p.y += p.vy;
++          if (p.x<0||p.x>state.w) p.vx*=-1;
++          if (p.y<0||p.y>state.h) p.vy*=-1;
++          ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(160,32,240,.75)'; ctx.fill();
++        }
++        requestAnimationFrame(draw);
++      };
++      draw();
++    }
++
++    // ===== Confetti =====
++    function confettiBurst() {
++      const c = document.getElementById('confetti');
++      const ctx = c.getContext('2d');
++      c.width = innerWidth; c.height = innerHeight;
++      const arr = Array.from({length:120}, () => ({ x: innerWidth/2, y: innerHeight/3, w: 6+Math.random()*5, h: 8+Math.random()*6, color: ["#FF7F00", "#A020F0", "#003087", "#f8d66d"][Math.floor(Math.random()*4)], vx:(Math.random()-.5)*8, vy:Math.random()*-7-2, rot:Math.random()*360 }));
++      let t = 0;
++      const anim = () => {
++        ctx.clearRect(0,0,c.width,c.height);
++        arr.forEach(p => {
++          p.x += p.vx; p.y += p.vy; p.vy += .15; p.rot += 7;
++          ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180); ctx.fillStyle = p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
++        });
++        t++; if (t<90) requestAnimationFrame(anim); else ctx.clearRect(0,0,c.width,c.height);
++      };
++      anim();
++    }
++
++    // Start app
++    App.init();
++  </script>
++</body>
++</html>
+ 
+EOF
+)
