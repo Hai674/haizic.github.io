@@ -1,641 +1,550 @@
+```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>10A4 | Welcome to our Class</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>ZicZacMC - Server Minecraft 1.21+ | Survival/Lifesteal/PvP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
-        /* ================= VARIABLES & RESET ================= */
+        /* ==========================================================================
+           ROOT VARIABLES & RESET
+        ========================================================================== */
         :root {
-            --bg-color: #0b0f19;
-            --primary: #3b82f6;
-            --secondary: #8b5cf6;
-            --accent: #ec4899;
-            --text-main: #ffffff;
-            --text-muted: #94a3b8;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --neon-glow: 0 0 20px rgba(139, 92, 246, 0.4);
-            --gradient: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            --neon-blue: #00f5ff;
+            --neon-purple: #aa00ff;
+            --neon-pink: #ff00ff;
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a2e;
+            --bg-card: rgba(26, 26, 46, 0.9);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --glow-blue: 0 0 20px #00f5ff, 0 0 40px #00f5ff, 0 0 60px #00f5ff;
+            --glow-purple: 0 0 20px #aa00ff, 0 0 40px #aa00ff, 0 0 60px #aa00ff;
+            --gradient-main: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            --gradient-neon: linear-gradient(45deg, #00f5ff, #aa00ff, #ff00ff, #00f5ff);
+            --shadow-neon: 0 10px 30px rgba(0, 245, 255, 0.3);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        body, html {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            overflow-x: hidden;
+        html {
             scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 10px; }
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: var(--gradient-main);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
 
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-        
-        /* ================= CUSTOM CURSOR ================= */
-        .cursor-dot, .cursor-outline {
+        /* ==========================================================================
+           LOADING SCREEN
+        ========================================================================== */
+        .loading-screen {
             position: fixed;
-            top: 0; left: 0;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             z-index: 9999;
-            pointer-events: none;
-        }
-        .cursor-dot {
-            width: 8px; height: 8px;
-            background: var(--accent);
-        }
-        .cursor-outline {
-            width: 40px; height: 40px;
-            border: 2px solid var(--secondary);
-            transition: width 0.2s, height 0.2s, background 0.2s;
-        }
-        @media (max-width: 768px) { .cursor-dot, .cursor-outline { display: none; } }
-
-        /* ================= LOADING SCREEN ================= */
-        #loader {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--bg-color); z-index: 10000;
-            display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.5s ease;
-        }
-        .spinner {
-            width: 50px; height: 50px;
-            border: 4px solid var(--glass-border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+            transition: opacity 0.8s ease-out;
         }
 
-        /* ================= BACKGROUND ANIMATION ================= */
-        .bg-shapes {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; overflow: hidden; pointer-events: none;
-        }
-        .shape {
-            position: absolute; filter: blur(80px); opacity: 0.5;
-            border-radius: 50%; animation: float 10s infinite alternate;
-        }
-        .shape-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: var(--primary); }
-        .shape-2 { bottom: -10%; right: -10%; width: 500px; height: 500px; background: var(--secondary); animation-delay: -5s; }
-        .shape-3 { top: 40%; left: 50%; width: 300px; height: 300px; background: var(--accent); animation-delay: -2s; }
-
-        /* ================= REUSABLE GLASS & NEON ================= */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 30px;
-            transition: all 0.4s ease;
-        }
-        .glass-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--neon-glow);
-            border-color: rgba(255,255,255,0.2);
-        }
-        .text-gradient {
-            background: var(--gradient);
+        .loading-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2rem, 8vw, 6rem);
+            font-weight: 900;
+            background: var(--gradient-neon);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glowPulse 2s ease-in-out infinite alternate;
+            text-shadow: var(--glow-blue);
+            margin-bottom: 2rem;
         }
 
-        /* ================= HEADER ================= */
-        header {
-            position: fixed; top: 0; width: 100%; z-index: 1000;
-            padding: 20px 5%;
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: var(--gradient-neon);
+            width: 0%;
+            border-radius: 2px;
+            animation: loadingFill 3s ease-out forwards;
+            box-shadow: var(--glow-blue);
+        }
+
+        @keyframes glowPulse {
+            0% { filter: drop-shadow(var(--glow-blue)); }
+            100% { filter: drop-shadow(var(--glow-purple)); }
+        }
+
+        @keyframes loadingFill {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* ==========================================================================
+           PARTICLE BACKGROUND
+        ========================================================================== */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ==========================================================================
+           HEADER & NAVIGATION
+        ========================================================================== */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
             transition: all 0.3s ease;
         }
-        header.sticky {
-            padding: 15px 5%; background: rgba(11, 15, 25, 0.8);
-            backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border);
-        }
+
         .nav-container {
-            display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .logo { font-size: 28px; font-weight: 800; letter-spacing: 2px; }
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a { font-weight: 600; font-size: 15px; position: relative; transition: color 0.3s; }
-        .nav-links a:hover { color: var(--accent); }
-        .nav-links a::after {
-            content: ''; position: absolute; width: 0; height: 2px;
-            bottom: -5px; left: 0; background: var(--gradient); transition: width 0.3s;
-        }
-        .nav-links a:hover::after { width: 100%; }
-        .controls { display: flex; gap: 15px; align-items: center; }
-        .icon-btn {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            color: white; width: 40px; height: 40px; border-radius: 50%;
-            cursor: pointer; transition: all 0.3s; display: flex; justify-content: center; align-items: center;
-        }
-        .icon-btn:hover { background: var(--gradient); box-shadow: var(--neon-glow); transform: scale(1.1); }
-        .menu-toggle { display: none; }
 
-        /* ================= HERO SECTION ================= */
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: var(--gradient-neon);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: var(--glow-blue);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-neon);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        .nav-link:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--neon-blue);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .mode-toggle, .music-toggle {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--neon-blue);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .mode-toggle:hover, .music-toggle:hover {
+            background: rgba(0, 245, 255, 0.2);
+            box-shadow: var(--glow-blue);
+            transform: scale(1.1);
+        }
+
+        /* ==========================================================================
+           HERO SECTION
+        ========================================================================== */
         .hero {
-            height: 100vh; display: flex; align-items: center; justify-content: center;
-            text-align: center; padding: 0 20px; position: relative;
-        }
-        .hero-content { max-width: 800px; z-index: 1; }
-        .hero-badge {
-            display: inline-block; padding: 8px 20px; border-radius: 30px;
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            font-size: 14px; font-weight: 600; margin-bottom: 20px; letter-spacing: 1px;
-            animation: fadeInDown 1s ease;
-        }
-        .hero h1 {
-            font-size: clamp(3rem, 6vw, 5.5rem); line-height: 1.1; margin-bottom: 20px;
-            animation: fadeInUp 1s ease 0.2s both;
-        }
-        .hero p {
-            font-size: clamp(1.1rem, 2vw, 1.3rem); color: var(--text-muted); margin-bottom: 40px;
-            animation: fadeInUp 1s ease 0.4s both;
-        }
-        .btn-glow {
-            padding: 15px 40px; font-size: 18px; font-weight: 600; color: white;
-            background: var(--gradient); border: none; border-radius: 30px;
-            cursor: pointer; position: relative; overflow: hidden; z-index: 1;
-            transition: transform 0.3s, box-shadow 0.3s;
-            animation: fadeInUp 1s ease 0.6s both;
-        }
-        .btn-glow::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.5s; z-index: -1;
-        }
-        .btn-glow:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(236, 72, 153, 0.6); }
-        .btn-glow:hover::before { left: 100%; }
-
-        /* ================= SECTION LAYOUT ================= */
-        section { padding: 100px 5%; max-width: 1200px; margin: 0 auto; }
-        .section-title {
-            text-align: center; font-size: 2.5rem; margin-bottom: 50px;
-            font-weight: 800; position: relative; display: inline-block;
-            left: 50%; transform: translateX(-50%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Reveal Animation */
-        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s ease; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        .hero-content h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 900;
+            background: var(--gradient-neon);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: var(--glow-purple);
+            animation: heroFloat 6s ease-in-out infinite;
+        }
 
-        /* ================= INFO SECTION ================= */
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .info-card { text-align: center; }
-        .info-card i { font-size: 40px; margin-bottom: 20px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .info-card h3 { font-size: 24px; margin-bottom: 10px; }
-        .info-card p { color: var(--text-muted); }
+        .hero-content .subtitle {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
 
-        /* ================= MEMBERS SECTION ================= */
-        .member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
-        .member-card {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            border-radius: 20px; padding: 20px; text-align: center; cursor: pointer;
-            transition: all 0.3s;
+        .server-ip {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem 3rem;
+            border-radius: 20px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            font-weight: 700;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+            margin-bottom: 2rem;
+            position: relative;
+            box-shadow: var(--shadow-neon);
         }
-        .member-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-5px); box-shadow: var(--neon-glow); }
-        .member-img {
-            width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 15px;
-            background: #ccc; border: 3px solid var(--primary); object-fit: cover;
-        }
-        .member-name { font-weight: 600; font-size: 16px; margin-bottom: 5px; }
-        .member-role { font-size: 12px; color: var(--accent); }
 
-        /* ================= NEWS FEED ================= */
-        .news-container { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px; }
-        .news-card { padding: 0; overflow: hidden; }
-        .news-header { padding: 20px; display: flex; align-items: center; gap: 15px; }
-        .news-avatar { width: 40px; height: 40px; border-radius: 50%; }
-        .news-meta h4 { font-size: 15px; }
-        .news-meta span { font-size: 12px; color: var(--text-muted); }
-        .news-content { padding: 0 20px 20px; font-size: 15px; line-height: 1.6; color: #ddd; }
-        .news-image { width: 100%; height: auto; max-height: 400px; object-fit: cover; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
-        .news-actions { padding: 15px 20px; display: flex; gap: 20px; }
-        .action-btn { background: none; border: none; color: var(--text-muted); font-size: 16px; cursor: pointer; transition: 0.3s; display: flex; gap: 8px; align-items: center;}
-        .action-btn:hover { color: var(--accent); }
+        .server-ip::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-neon);
+            padding: 2px;
+            border-radius: 20px;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            -webkit-mask-composite: xor;
+        }
 
-        /* ================= GALLERY ================= */
-        .gallery-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+        .btn-primary {
+            background: var(--gradient-neon);
+            background-size: 300% 300%;
+            animation: gradientShift 3s ease infinite;
+            border: none;
+            padding: 1.2rem 3rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #000;
+            border-radius: 50px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Orbitron', monospace;
+            box-shadow: var(--glow-blue);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
-        .gallery-item {
-            position: relative; border-radius: 20px; overflow: hidden;
-            height: 250px; cursor: pointer;
-        }
-        .gallery-item img {
-            width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;
-        }
-        .gallery-overlay {
-            position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            display: flex; align-items: flex-end; padding: 20px; opacity: 0; transition: opacity 0.3s;
-        }
-        .gallery-item:hover img { transform: scale(1.1); filter: blur(2px); }
-        .gallery-item:hover .gallery-overlay { opacity: 1; }
 
-        /* ================= CHAT BOX ================= */
-        .chat-widget { position: fixed; bottom: 30px; right: 30px; z-index: 999; }
-        .chat-btn {
-            width: 60px; height: 60px; border-radius: 50%; background: var(--gradient);
-            color: white; font-size: 24px; border: none; cursor: pointer;
-            box-shadow: var(--neon-glow); transition: transform 0.3s;
+        .btn-primary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 245, 255, 0.4);
         }
-        .chat-btn:hover { transform: scale(1.1); }
-        .chat-box {
-            position: absolute; bottom: 80px; right: 0; width: 320px; height: 450px;
-            background: rgba(11, 15, 25, 0.95); backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); border-radius: 20px;
-            display: flex; flex-direction: column; opacity: 0; pointer-events: none;
-            transform: translateY(20px); transition: all 0.3s ease; overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+
+        .btn-primary:active {
+            transform: translateY(-2px) scale(1.02);
         }
-        .chat-box.open { opacity: 1; pointer-events: all; transform: translateY(0); }
-        .chat-header { padding: 15px 20px; background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--glass-border); font-weight: 600; display: flex; justify-content: space-between;}
-        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-        .msg { padding: 10px 15px; border-radius: 15px; font-size: 14px; max-width: 80%; }
-        .msg-received { background: var(--glass-bg); align-self: flex-start; border-bottom-left-radius: 0; border: 1px solid var(--glass-border); }
-        .msg-sent { background: var(--gradient); align-self: flex-end; border-bottom-right-radius: 0; }
+
+        @keyframes heroFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* ==========================================================================
+           STATUS CARD
+        ========================================================================== */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+        }
+
+        .status-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .status-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .status-card:hover::before {
+            left: 100%;
+        }
+
+        .status-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: var(--glow-purple);
+        }
+
+        .status-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 20px var(--neon-blue));
+        }
+
+        .status-online {
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
+        }
+
+        .status-offline {
+            color: #ff4444;
+            text-shadow: 0 0 10px #ff4444;
+        }
+
+        /* ==========================================================================
+           LEADERBOARD
+        ========================================================================== */
+        .leaderboard {
+            max-width: 1200px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-neon);
+        }
+
+        .leaderboard-header {
+            background: var(--gradient-neon);
+            color: #000;
+            padding: 1.5rem;
+            font-weight: 700;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .leaderboard-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 120px 150px;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-row:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: scale(1.01);
+        }
+
+        .rank-badge {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: #000;
+        }
+
+        .rank-1 { background: linear-gradient(45deg, #ffd700, #ffed4e); box-shadow: 0 0 20px #ffd700; }
+        .rank-2 { background: linear-gradient(45deg, #c0c0c0, #e5e5e5); box-shadow: 0 0 20px #c0c0c0; }
+        .rank-3 { background: linear-gradient(45deg, #cd7f32, #deb887); box-shadow: 0 0 20px #cd7f32; }
+
+        .rank-vip { background: linear-gradient(45deg, #00ff88, #00cc66); }
+        .rank-mvp { background: linear-gradient(45deg, var(--neon-blue), #00aaff); }
+        .rank-god { background: linear-gradient(45deg, var(--neon-purple), var(--neon-pink)); box-shadow: var(--glow-purple); }
+
+        /* ==========================================================================
+           CHAT SECTION
+        ========================================================================== */
+        .chat-section {
+            max-width: 800px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+        }
+
+        .chat-container {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            box-shadow: var(--shadow-neon);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-message {
+            margin-bottom: 1rem;
+            animation: messageSlide 0.3s ease;
+        }
+
+        .chat-message strong {
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+
         .chat-input {
-            padding: 15px; border-top: 1px solid var(--glass-border); display: flex; gap: 10px;
+            display: flex;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.5);
         }
+
         .chat-input input {
-            flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
-            border-radius: 20px; padding: 10px 15px; color: white; outline: none;
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 0.8rem 1.5rem;
+            color: var(--text-primary);
+            outline: none;
+            backdrop-filter: blur(10px);
         }
+
+        .chat-input input::placeholder {
+            color: var(--text-secondary);
+        }
+
         .chat-input button {
-            background: transparent; border: none; color: var(--primary);
-            font-size: 20px; cursor: pointer; transition: 0.3s;
-        }
-        .chat-input button:hover { color: var(--accent); }
-
-        /* ================= FOOTER ================= */
-        footer {
-            border-top: 1px solid var(--glass-border); background: rgba(0,0,0,0.3);
-            padding: 50px 5% 20px; margin-top: 50px;
-        }
-        .footer-content {
-            max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between;
-            flex-wrap: wrap; gap: 30px; margin-bottom: 30px;
-        }
-        .footer-logo h2 { font-size: 30px; margin-bottom: 10px; }
-        .social-links { display: flex; gap: 15px; margin-top: 20px; }
-        .social-links a {
-            width: 40px; height: 40px; border-radius: 50%; background: var(--glass-bg);
-            display: flex; justify-content: center; align-items: center; border: 1px solid var(--glass-border);
-            transition: 0.3s;
-        }
-        .social-links a:hover { background: var(--gradient); box-shadow: var(--neon-glow); transform: translateY(-5px); }
-        .copyright { text-align: center; color: var(--text-muted); font-size: 14px; border-top: 1px solid var(--glass-border); padding-top: 20px; }
-
-        /* ================= RESPONSIVE ================= */
-        @media (max-width: 768px) {
-            .nav-links {
-                position: fixed; top: 70px; right: -100%; width: 250px; height: 100vh;
-                background: rgba(11,15,25,0.95); backdrop-filter: blur(20px);
-                flex-direction: column; padding: 40px 20px; transition: 0.4s;
-                border-left: 1px solid var(--glass-border);
-            }
-            .nav-links.active { right: 0; }
-            .menu-toggle { display: block; background: none; border: none; color: white; font-size: 24px; }
+            margin-left: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--gradient-neon);
+            border: none;
+            border-radius: 25px;
+            color: #000;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        /* ================= KEYFRAMES ================= */
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes float { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(-30px) scale(1.1); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-40px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Click Ripple Sparkle Effect */
-        .sparkle {
-            position: absolute; width: 10px; height: 10px; border-radius: 50%;
-            background: var(--accent); pointer-events: none;
-            animation: sparkleAnim 0.6s ease-out forwards;
-        }
-        @keyframes sparkleAnim {
-            0% { transform: scale(1); opacity: 1; box-shadow: 0 0 20px var(--accent); }
-            100% { transform: scale(3); opacity: 0; }
-        }
-    </style>
-</head>
-<body>
-
-    <div id="loader">
-        <div class="spinner"></div>
-    </div>
-
-    <div class="cursor-dot" id="cursor-dot"></div>
-    <div class="cursor-outline" id="cursor-outline"></div>
-
-    <div class="bg-shapes">
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-        <div class="shape shape-3"></div>
-    </div>
-
-    <audio id="bg-music" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
-
-    <header id="header">
-        <div class="nav-container">
-            <div class="logo text-gradient">10A4</div>
-            <ul class="nav-links" id="nav-links">
-                <li><a href="#home">Trang chủ</a></li>
-                <li><a href="#info">Thông tin</a></li>
-                <li><a href="#members">Thành viên</a></li>
-                <li><a href="#news">Bảng tin</a></li>
-                <li><a href="#gallery">Thư viện</a></li>
-            </ul>
-            <div class="controls">
-                <button class="icon-btn" id="music-toggle" title="Play/Pause Music">
-                    <i class="fas fa-music"></i>
-                </button>
-                <button class="menu-toggle" id="menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <div class="hero-badge"><i class="fas fa-star" style="color: var(--accent); margin-right: 5px;"></i> Niên khóa 2025 - 2026</div>
-            <h1>Welcome to <br><span class="text-gradient">Class 10A4</span></h1>
-            <p>Nơi lưu giữ thanh xuân, kết nối đam mê và cùng nhau kiến tạo tương lai. Chúng ta không chỉ là một lớp học, chúng ta là một gia đình.</p>
-            <button class="btn-glow" onclick="document.getElementById('info').scrollIntoView()">Khám phá ngay <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></button>
-        </div>
-    </section>
-
-    <section id="info">
-        <h2 class="section-title text-gradient reveal">Thông tin chung</h2>
-        <div class="info-grid">
-            <div class="glass-card info-card reveal">
-                <i class="fas fa-chalkboard-teacher"></i>
-                <h3>Đinh Trung Thiện</h3>
-                <p>Giáo viên chủ nhiệm</p>
-            </div>
-            <div class="glass-card info-card reveal" style="transition-delay: 0.2s;">
-                <i class="fas fa-users"></i>
-                <h3>38 Học sinh</h3>
-                <p>Sĩ số hiện tại</p>
-            </div>
-            <div class="glass-card info-card reveal" style="transition-delay: 0.4s;">
-                <i class="fas fa-calendar-alt"></i>
-                <h3>2025 - 2026</h3>
-                <p>Niên khóa</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="members">
-        <h2 class="section-title text-gradient reveal">Thành viên tiêu biểu</h2>
-        <div class="member-grid" id="member-grid">
-            </div>
-    </section>
-
-    <section id="news">
-        <h2 class="section-title text-gradient reveal">Bảng tin</h2>
-        <div class="news-container">
-            <div class="glass-card news-card reveal">
-                <div class="news-header">
-                    <img src="https://ui-avatars.com/api/?name=Admin&background=8b5cf6&color=fff" class="news-avatar" alt="Admin">
-                    <div class="news-meta">
-                        <h4>Ban Cán Sự Lớp</h4>
-                        <span>2 giờ trước</span>
-                    </div>
-                </div>
-                <div class="news-content">
-                    <p>Chuẩn bị cho hội thao trường sắp tới! Các bạn đăng ký tham gia các môn điền kinh, kéo co và bóng đá liên hệ lớp phó văn thể mỹ nhé. Quyết tâm 10A4 mang cup về! 🏆🔥</p>
-                </div>
-                <img src="https://picsum.photos/seed/sports/800/400" class="news-image" alt="Post image">
-                <div class="news-actions">
-                    <button class="action-btn"><i class="far fa-heart"></i> 24</button>
-                    <button class="action-btn"><i class="far fa-comment"></i> 5</button>
-                    <button class="action-btn"><i class="far fa-share-square"></i> Chia sẻ</button>
-                </div>
-            </div>
-
-            <div class="glass-card news-card reveal">
-                <div class="news-header">
-                    <img src="https://ui-avatars.com/api/?name=Teacher&background=ec4899&color=fff" class="news-avatar" alt="Teacher">
-                    <div class="news-meta">
-                        <h4>Thầy Đinh Trung Thiện</h4>
-                        <span>Hôm qua lúc 19:00</span>
-                    </div>
-                </div>
-                <div class="news-content">
-                    <p>Nhắc nhở lớp: Ngày mai có tiết kiểm tra 15 phút môn Toán. Các em ôn bài kỹ nhé, thầy chúc cả lớp đạt điểm cao! 📚✍️</p>
-                </div>
-                <div class="news-actions">
-                    <button class="action-btn"><i class="far fa-heart"></i> 38</button>
-                    <button class="action-btn"><i class="far fa-comment"></i> 12</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="gallery">
-        <h2 class="section-title text-gradient reveal">Thư viện ảnh</h2>
-        <div class="gallery-grid">
-            <div class="glass-card gallery-item reveal"><img src="https://picsum.photos/seed/1/400/300" alt="Hội trại"><div class="gallery-overlay"><h4>Hội trại mùa xuân</h4></div></div>
-            <div class="glass-card gallery-item reveal" style="transition-delay: 0.1s;"><img src="https://picsum.photos/seed/2/400/300" alt="Khai giảng"><div class="gallery-overlay"><h4>Lễ khai giảng</h4></div></div>
-            <div class="glass-card gallery-item reveal" style="transition-delay: 0.2s;"><img src="https://picsum.photos/seed/3/400/300" alt="Hoạt động ngoại khóa"><div class="gallery-overlay"><h4>Ngoại khóa kỹ năng</h4></div></div>
-            <div class="glass-card gallery-item reveal" style="transition-delay: 0.3s;"><img src="https://picsum.photos/seed/4/400/300" alt="Thi đấu"><div class="gallery-overlay"><h4>Thi đấu bóng đá</h4></div></div>
-        </div>
-    </section>
-
-    <div class="chat-widget">
-        <div class="chat-box" id="chat-box">
-            <div class="chat-header">
-                <span>Chat với 10A4</span>
-                <i class="fas fa-times" style="cursor: pointer;" onclick="toggleChat()"></i>
-            </div>
-            <div class="chat-messages" id="chat-messages">
-                <div class="msg msg-received">Xin chào! Bạn cần tìm hiểu thông tin gì về lớp 10A4?</div>
-            </div>
-            <div class="chat-input">
-                <input type="text" id="chat-input-text" placeholder="Nhập tin nhắn..." onkeypress="handleKeyPress(event)">
-                <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
-            </div>
-        </div>
-        <button class="chat-btn" onclick="toggleChat()">
-            <i class="fas fa-comment-dots"></i>
-        </button>
-    </div>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo">
-                <h2 class="text-gradient">10A4</h2>
-                <p>Niên khóa 2025 - 2026</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-tiktok"></i></a>
-                </div>
-            </div>
-            <div class="footer-links">
-                <h4 style="margin-bottom: 15px; color: var(--text-main);">Liên kết nhanh</h4>
-                <ul style="color: var(--text-muted); line-height: 2;">
-                    <li><a href="#home">Trang chủ</a></li>
-                    <li><a href="#info">Giới thiệu</a></li>
-                    <li><a href="#gallery">Thư viện</a></li>
-                </ul>
-            </div>
-            <div class="footer-contact">
-                <h4 style="margin-bottom: 15px; color: var(--text-main);">Liên hệ</h4>
-                <p style="color: var(--text-muted); line-height: 2;">
-                    <i class="fas fa-envelope" style="margin-right: 10px;"></i> 10a4.contact@school.edu.vn<br>
-                    <i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> Phòng 302, Dãy B
-                </p>
-            </div>
-        </div>
-        <div class="copyright">
-            &copy; 2025 Class 10A4. Designed with <i class="fas fa-heart" style="color: var(--accent);"></i>
-        </div>
-    </footer>
-
-    <script>
-        // --- 1. Loading Screen ---
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('loader');
-                loader.style.opacity = '0';
-                setTimeout(() => loader.style.display = 'none', 500);
-            }, 800);
-        });
-
-        // --- 2. Custom Cursor ---
-        const dot = document.getElementById("cursor-dot");
-        const outline = document.getElementById("cursor-outline");
-
-        window.addEventListener("mousemove", function(e) {
-            const posX = e.clientX;
-            const posY = e.clientY;
-            
-            dot.style.left = `${posX}px`;
-            dot.style.top = `${posY}px`;
-            
-            // Delay for outline
-            outline.animate({
-                left: `${posX}px`,
-                top: `${posY}px`
-            }, { duration: 500, fill: "forwards" });
-        });
-
-        // Hover effect for cursor
-        document.querySelectorAll('a, button, .member-card, .gallery-item').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                outline.style.width = '60px'; outline.style.height = '60px';
-                outline.style.background = 'rgba(236, 72, 153, 0.1)';
-            });
-            el.addEventListener('mouseleave', () => {
-                outline.style.width = '40px'; outline.style.height = '40px';
-                outline.style.background = 'transparent';
-            });
-        });
-
-        // --- 3. Sparkle Click Effect ---
-        document.addEventListener('click', function(e) {
-            let sparkle = document.createElement('div');
-            sparkle.classList.add('sparkle');
-            sparkle.style.left = e.clientX - 5 + 'px';
-            sparkle.style.top = e.clientY - 5 + 'px';
-            document.body.appendChild(sparkle);
-            setTimeout(() => { sparkle.remove(); }, 600);
-        });
-
-        // --- 4. Sticky Header & Mobile Menu ---
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) { header.classList.add('sticky'); }
-            else { header.classList.remove('sticky'); }
-        });
-
-        const menuToggle = document.getElementById('menu-toggle');
-        const navLinks = document.getElementById('nav-links');
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-
-        // --- 5. Scroll Reveal Animation ---
-        const reveals = document.querySelectorAll('.reveal');
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
-        reveals.forEach(reveal => revealObserver.observe(reveal));
-
-        // --- 6. Generate Fake Members Data ---
-        const memberGrid = document.getElementById('member-grid');
-        const roles = ['Lớp trưởng', 'Lớp phó học tập', 'Lớp phó kỷ luật', 'Bí thư', 'Thành viên', 'Thành viên', 'Thành viên', 'Thành viên'];
-        for(let i=0; i<8; i++) {
-            let delay = i * 0.1;
-            memberGrid.innerHTML += `
-                <div class="member-card reveal" style="transition-delay: ${delay}s">
-                    <img src="https://ui-avatars.com/api/?name=HS+${i+1}&background=random&color=fff" class="member-img" alt="Student">
-                    <div class="member-name">Học sinh ${i+1}</div>
-                    <div class="member-role">${roles[i]}</div>
-                </div>
-            `;
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        // --- 7. Music Toggle ---
-        const music = document.getElementById('bg-music');
-        const musicBtn = document.getElementById('music-toggle');
-        let isPlaying = false;
-        
-        music.volume = 0.3; // Giảm âm lượng nhạc nền
-        
-        musicBtn.addEventListener('click', () => {
-            if(isPlaying) {
-                music.pause();
-                musicBtn.innerHTML = '<i class="fas fa-music"></i>';
-                musicBtn.style.background = 'var(--glass-bg)';
-            } else {
-                music.play();
-                musicBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                musicBtn.style.background = 'var(--gradient)';
-            }
-            isPlaying = !isPlaying;
-        });
-
-        // --- 8. Chat Box Logic ---
-        function toggleChat() {
-            document.getElementById('chat-box').classList.toggle('open');
+        /* ==========================================================================
+           SHOP SECTION
+        ========================================================================== */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 5rem auto;
+            padding: 0 2rem;
         }
 
-        function handleKeyPress(e) {
-            if(e.key === 'Enter') sendMessage();
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('chat-input-text');
-            const messages = document.getElementById('chat-messages');
-            if(input.value.trim() !== '') {
-                // Add user message
-                messages.innerHTML += `<div class="msg msg-sent">${input.value}</div>`;
-                const userMsg = input.value;
-                input.value = '';
-                messages.scrollTop = messages.scrollHeight;
-
-                // Fake bot response
-                setTimeout(() => {
-                    messages.innerHTML += `<div class="msg msg-received">Cảm ơn bạn! Lời nhắn "${userMsg}" đã được gửi tới admin 10A4.</div>`;
-                    messages.scrollTop = messages.scrollHeight;
-                }, 1000);
-            }
-        }
-    </script>
-</body>
-</html>
+        .shop-item {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align
